@@ -1,0 +1,198 @@
+name: AI Daily Website Update
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Determine mode and build prompt
+        id: build_prompt
+        run: |
+          PROTECTED_REGEX='^(\.github/|\.ai-site-state\.json$)'
+
+          if [ -f .ai-site-state.json ]; then
+            MODE="incremental"
+            STATE_JSON=$(cat .ai-site-state.json)
+          else
+            MODE="bootstrap"
+            STATE_JSON='{"topic":null,"changelog":[]}'
+          fi
+          echo "🧭 Mode: $MODE"
+
+          # Snapshot every current site file (excludes protected/infra files) as JSON
+          FILES_JSON=$(git ls-files | grep -v -E "$PROTECTED_REGEX" | while read -r f; do
+            [ -f "$f" ] || continue
+            jq -n --arg path "$f" --arg content "$(cat "$f")" '{path:$path, content:$content}'
+          done | jq -s '.')
+
+          if [ "$MODE" = "bootstrap" ]; then
+            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/" in your output, under any circumstances — not to edit it, not to add a new file there, not for a CI badge, not for a deployment workflow, nothing. That folder contains the automation that runs you. If you include any ".github/" path, the entire update will be automatically rejected and nothing you built today will be published. If you think something in that folder needs to change, do not attempt it — just leave it alone and focus only on the website content.
+
+          This is the first run for this website. There is no existing content. Pick a topic — anything genuinely interesting, your choice, be specific rather than generic. Build a minimal initial static website about it: at minimum an index.html, and a CSS file if it improves the design. Keep it deliberately simple and small — this is a starting point that will be incrementally expanded once a day going forward, not a finished product.
+
+          Hard rules:
+          - Static files only: .html, .css, .js, .json, .svg, .md, .txt. No build step, no backend, no binary assets.
+          - External resources only from well-known public CDNs if needed. No tracking scripts, no ads.
+          - Content must be appropriate for a general audience: no sexual content, no graphic violence, no hate speech, no illegal/dangerous instructions, no harmful misinformation.
+          - Must include a file at path "index.html".
+          - Never create a file under ".github/" or a file named ".ai-site-state.json" — those are managed separately.
+
+          Return ONLY a single JSON object, no markdown fences, no commentary, in exactly this shape:
+          {"topic":"the topic you chose","summary":"one short sentence describing what you built","files":[{"path":"index.html","content":"..."}]}'
+          else
+            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/" in your output, under any circumstances — not to edit it, not to add a new file there, not for a CI badge, not for a deployment workflow, nothing. That folder contains the automation that runs you. If you include any ".github/" path, the entire update will be automatically rejected and nothing you built today will be published. If you think something in that folder needs to change, do not attempt it — just leave it alone and focus only on the website content.
+
+          This website already exists and has an established topic and history — see the state file and current files below. Make exactly ONE small, focused improvement today. Examples of an appropriately small change: fix a typo or bug from a previous day, add one new section, add more facts/content consistent with the topic, improve one piece of styling. Do NOT rewrite the site, do NOT change the topic, do NOT touch files that do not need to change for this one improvement.
+
+          Hard rules:
+          - Static files only: .html, .css, .js, .json, .svg, .md, .txt. No build step, no backend, no binary assets.
+          - External resources only from well-known public CDNs if needed. No tracking scripts, no ads.
+          - Content must be appropriate for a general audience: no sexual content, no graphic violence, no hate speech, no illegal/dangerous instructions, no harmful misinformation.
+          - Never create or modify a file under ".github/" or a file named ".ai-site-state.json" — those are managed separately.
+          - Only include files in your response that you are actually adding or changing. Do not resend unchanged files.
+
+          Return ONLY a single JSON object, no markdown fences, no commentary, in exactly this shape:
+          {"summary":"one short sentence describing today'\''s change","files":[{"path":"index.html","content":"..."}]}'
+          fi
+
+          FULL_PROMPT=$(jq -n \
+            --arg instructions "$INSTRUCTIONS" \
+            --arg state "$STATE_JSON" \
+            --arg files "$FILES_JSON" \
+            '$instructions + "\n\nCurrent state file:\n" + $state + "\n\nCurrent site files:\n" + $files')
+
+          echo "$FULL_PROMPT" > /tmp/prompt.txt
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+
+      - name: Call Gemini
+        id: generate_content
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          MODELS=(
+            "gemini-flash-latest"
+            "gemini-2.5-flash-lite"
+            "gemini-3.5-flash"
+            "gemini-3.6-flash"
+            "gemini-3.7-flash"
+          )
+
+          PROMPT=$(cat /tmp/prompt.txt)
+          RAW_JSON=""
+          for MODEL in "${MODELS[@]}"; do
+            echo "🔁 Trying model: $MODEL"
+            REQUEST_PAYLOAD=$(jq -n --arg prompt "$PROMPT" '{
+              contents: [ { parts: [ { text: $prompt } ] } ],
+              generationConfig: { responseMimeType: "application/json" }
+            }')
+            RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/$MODEL:generateContent?key=$GEMINI_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "$REQUEST_PAYLOAD")
+
+            BLOCK_REASON=$(echo "$RESPONSE" | jq -r '.promptFeedback.blockReason // empty')
+            if [ -n "$BLOCK_REASON" ]; then
+              echo "🚫 Model $MODEL blocked: $BLOCK_REASON — trying next"
+              continue
+            fi
+
+            CANDIDATE=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // ""')
+            if [ -z "$CANDIDATE" ] || [ "$CANDIDATE" = "null" ]; then
+              ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // "No error message provided"')
+              echo "❌ Model $MODEL failed: $ERROR_MSG"
+              continue
+            fi
+
+            if echo "$CANDIDATE" | jq -e '.files | type == "array"' > /dev/null 2>&1; then
+              RAW_JSON="$CANDIDATE"
+              echo "✅ Success with model: $MODEL"
+              break
+            else
+              echo "❌ Model $MODEL returned unparseable output — trying next"
+            fi
+          done
+
+          if [ -z "$RAW_JSON" ]; then
+            echo "❌ All models failed, were blocked, or returned invalid output."
+            exit 1
+          fi
+          echo "$RAW_JSON" > /tmp/response.json
+
+      - name: Write files (path-validated) and update state
+        run: |
+          MODE="${{ steps.build_prompt.outputs.mode }}"
+          COUNT=$(jq '.files | length' /tmp/response.json)
+          echo "Writing $COUNT file(s) in $MODE mode..."
+
+          for i in $(seq 0 $((COUNT - 1))); do
+            FPATH=$(jq -r ".files[$i].path" /tmp/response.json)
+            CONTENT=$(jq -r ".files[$i].content" /tmp/response.json)
+
+            if [[ "$FPATH" == .github/* ]] || [[ "$FPATH" == ".ai-site-state.json" ]]; then
+              echo "🚫 Model tried to touch protected path — skipping just this file: $FPATH"
+              continue
+            fi
+            if [[ "$FPATH" == /* ]] || [[ "$FPATH" == *".."* ]]; then
+              echo "🚫 Refusing unsafe path — skipping just this file: $FPATH"
+              continue
+            fi
+            case "$FPATH" in
+              *.html|*.css|*.js|*.json|*.svg|*.md|*.txt) ;;
+              *) echo "🚫 Refusing disallowed file type — skipping just this file: $FPATH"; continue ;;
+            esac
+
+            mkdir -p "$(dirname "$FPATH")"
+            echo "$CONTENT" > "$FPATH"
+            echo "  ✅ wrote $FPATH"
+          done
+
+          if [ "$MODE" = "bootstrap" ] && [ ! -f "index.html" ]; then
+            echo "❌ Bootstrap run did not produce index.html — aborting."
+            exit 1
+          fi
+
+          # Update state file
+          SUMMARY=$(jq -r '.summary // "No summary provided"' /tmp/response.json)
+          TOPIC=$(jq -r '.topic // ""' /tmp/response.json)
+
+          if [ -f .ai-site-state.json ]; then
+            OLD_STATE=$(cat .ai-site-state.json)
+          else
+            OLD_STATE='{"topic":null,"changelog":[]}'
+          fi
+
+          NEW_STATE=$(echo "$OLD_STATE" | jq \
+            --arg newtopic "$TOPIC" \
+            --arg date "$(date -u +%F)" \
+            --arg summary "$SUMMARY" \
+            '.topic = (if (.topic == null or .topic == "") and $newtopic != "" then $newtopic else .topic end)
+             | .changelog += [{date: $date, summary: $summary}]')
+
+          echo "$NEW_STATE" > .ai-site-state.json
+          echo "📓 State updated. Topic: $(echo "$NEW_STATE" | jq -r '.topic')"
+
+      - name: Commit and push — protected paths excluded
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A -- . ':!.github'
+
+          BLOCKED=$(git diff --staged --name-only | grep -E '^\.github/' || true)
+          if [ -n "$BLOCKED" ]; then
+            echo "🚫 Staged changes touch protected path(s), aborting commit:"
+            echo "$BLOCKED"
+            exit 1
+          fi
+
+          git diff --staged --quiet || git commit -m "AI daily site update 🌱"
+          git push
