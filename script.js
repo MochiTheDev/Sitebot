@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     bermeja: '22°33′N 91°22′W',
     hybrasil: '52°12′N 13°40′W',
     kong: '09°20′N 02°15′W',
-    sandy: '19°13′S 159°56′E'
+    sandy: '19°13′S 159°56′E',
+    crocker: '83°00′N 103°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
