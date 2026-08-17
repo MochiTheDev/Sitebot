@@ -34,7 +34,7 @@ jobs:
           fi
           echo "🧭 Mode: $MODE"
 
-          FILES_JSON=$(git ls-files | grep -v -E "$PROTECTED_REGEX" | while read -r f; do
+          FILES_JSON=$(git ls-files | { grep -v -E "$PROTECTED_REGEX" || true; } | while read -r f; do
             [ -f "$f" ] || continue
             jq -n --arg path "$f" --arg content "$(cat "$f")" '{path:$path, content:$content}'
           done | jq -s '.')
