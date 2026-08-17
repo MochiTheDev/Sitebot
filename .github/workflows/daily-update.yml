@@ -11,6 +11,11 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -196,3 +201,17 @@ jobs:
 
           git diff --staged --quiet || git commit -m "AI daily site update 🌱"
           git push
+
+      - name: Prepare Pages deploy folder
+        run: |
+          mkdir -p /tmp/pages-deploy
+          rsync -av --exclude='.git' --exclude='.github' --exclude='.ai-site-state.json' ./ /tmp/pages-deploy/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/pages-deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
