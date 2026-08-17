@@ -1,0 +1,70 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const coordsMap = {
+    bermeja: '22°33′N 91°22′W',
+    hybrasil: '52°12′N 13°40′W',
+    kong: '09°20′N 02°15′W'
+  };
+
+  const coordsDisplay = document.getElementById('selected-coords');
+  const tabs = document.querySelectorAll('.tab-btn');
+  const blips = document.querySelectorAll('.radar-blip');
+
+  function activateTarget(id) {
+    // Update readout
+    if (coordsMap[id]) {
+      coordsDisplay.textContent = coordsMap[id];
+    }
+
+    // Update tabs
+    tabs.forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.target === id);
+    });
+
+    // Update blips
+    blips.forEach(blip => {
+      blip.classList.toggle('active', blip.dataset.id === id);
+    });
+
+    // Highlight & scroll card smoothly
+    const card = document.getElementById(`card-${id}`);
+    if (card) {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active-target'));
+      card.classList.add('active-target');
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // Wire up tabs
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      activateTarget(tab.dataset.target);
+    });
+  });
+
+  // Wire up blips
+  blips.forEach(blip => {
+    blip.addEventListener('click', () => {
+      activateTarget(blip.dataset.id);
+    });
+  });
+
+  // Bookmark / Share button trigger
+  const bookmarkBtn = document.getElementById('bookmark-hint-btn');
+  if (bookmarkBtn) {
+    bookmarkBtn.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({
+          title: 'The Phantom Atlas',
+          text: 'Explore islands and mountain ranges that existed on maps for centuries, but never in reality.',
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        bookmarkBtn.textContent = 'Link Copied!';
+        setTimeout(() => {
+          bookmarkBtn.textContent = 'Bookmark Archive';
+        }, 2500);
+      }
+    });
+  }
+});

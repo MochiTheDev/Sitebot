@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Phantom Atlas // Cartographic Ghost Log</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise-overlay"></div>
+
+  <header class="masthead">
+    <div class="badge-row">
+      <span class="pulse-dot"></span>
+      <span class="status-tag">ARCHIVE LOG // ENTRY 001</span>
+      <span class="day-tag">UPDATED DAILY</span>
+    </div>
+    <h1 class="title">THE PHANTOM ATLAS</h1>
+    <p class="subtitle">Landmasses, phantom archipelagoes, and sovereign mountains that appeared on official maps for centuries — then evaporated into open water.</p>
+  </header>
+
+  <main class="container">
+    <!-- Interactive Scope / Radar Summary -->
+    <section class="radar-panel">
+      <div class="panel-header">
+        <span class="terminal-prompt">&gt; COORD_RADAR_ACTIVE</span>
+        <span id="selected-coords" class="coords-readout">22°33′N 91°22′W</span>
+      </div>
+      <div class="radar-display">
+        <div class="grid-rings"></div>
+        <div class="sweep-line"></div>
+        <div class="radar-blip blip-1 active" data-id="bermeja" title="Bermeja Island"></div>
+        <div class="radar-blip blip-2" data-id="hybrasil" title="Hy-Brasil"></div>
+        <div class="radar-blip blip-3" data-id="kong" title="Mountains of Kong"></div>
+      </div>
+      <div class="radar-footer">
+        <span class="ticker-label">SELECT TARGET //</span>
+        <div class="quick-select-tabs">
+          <button class="tab-btn active" data-target="bermeja">01. Bermeja</button>
+          <button class="tab-btn" data-target="hybrasil">02. Hy-Brasil</button>
+          <button class="tab-btn" data-target="kong">03. Kong Range</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dossier Feed -->
+    <section class="dossier-feed" id="dossiers">
+      <article class="card featured" id="card-bermeja">
+        <div class="card-meta">
+          <span class="case-num">CASE #001</span>
+          <span class="era-tag">MAPPED 1539 – 1997</span>
+        </div>
+        <h2 class="card-title">Isla Bermeja</h2>
+        <p class="location-tag">Gulf of Mexico // 100 nautical miles off Yucatán</p>
+        <p class="card-body">
+          For over 400 years, Spanish cartographers and international naval treaties plotted a coral-red speck northwest of the Yucatán Peninsula. In the late 1990s, when Mexico and the United States negotiated deep-sea oil rights in the "Doughnut Hole," Isla Bermeja should have pushed Mexico's maritime border outward by billions of barrels of crude.
+        </p>
+        <div class="evidence-box">
+          <strong>The Discovery:</strong> In 1997, the Mexican Navy dispatched an expedition to survey Bermeja. When their vessels reached the exact coordinates, they found nothing but deep, uninterrupted ocean. A second bathymetric sweep in 2009 confirmed water depth of 1,472 feet without a trace of a submerged reef.
+        </div>
+        <div class="card-footer-stats">
+          <div><span class="stat-label">Status</span><span class="stat-val alert">DELETED FROM MAPS</span></div>
+          <div><span class="stat-label">First Recorded</span><span class="stat-val">Alonso de Santa Cruz (1539)</span></div>
+          <div><span class="stat-label">Popular Theory</span><span class="stat-val">Cartographic Mirage / Espionage Sabotage</span></div>
+        </div>
+      </article>
+
+      <article class="card" id="card-hybrasil">
+        <div class="card-meta">
+          <span class="case-num">CASE #002</span>
+          <span class="era-tag">MAPPED 1325 – 1865</span>
+        </div>
+        <h2 class="card-title">Hy-Brasil</h2>
+        <p class="location-tag">North Atlantic // West of Galway Bay, Ireland</p>
+        <p class="card-body">
+          Long before the South American nation took its name, European mariners plotted a perfectly circular island off the Irish coast divided by a single straight river. Celtic folklore claimed it was cloaked in perpetual sea fog and only revealed itself once every seven years.
+        </p>
+        <p class="card-body">
+          In 1480 and 1481, Bristol merchants funded multiple armed voyages to locate it. In 1674, Captain John Nisbet claimed his crew anchored there after fog parted, reporting that it was inhabited by large black rabbits and an elderly sorcerer living in a stone castle.
+        </p>
+        <div class="card-footer-stats">
+          <div><span class="stat-label">Status</span><span class="stat-val alert">MYTHIC GEOGRAPHY</span></div>
+          <div><span class="stat-label">Real Geologic Anchor</span><span class="stat-val">Porcupine Bank (Shoal)</span></div>
+        </div>
+      </article>
+
+      <article class="card" id="card-kong">
+        <div class="card-meta">
+          <span class="case-num">CASE #003</span>
+          <span class="era-tag">MAPPED 1798 – 1889</span>
+        </div>
+        <h2 class="card-title">The Mountains of Kong</h2>
+        <p class="location-tag">West Africa // Supposed ridge from Guinea to Central Africa</p>
+        <p class="card-body">
+          In 1798, English cartographer James Rennell synthesized explorer Mungo Park's field notes and drew a massive, jagged mountain range spanning thousands of miles across Africa. For nearly a century, every major atlas on Earth depicted the Kong Range as an impassable alpine barrier.
+        </p>
+        <p class="card-body">
+          It dictated European colonial strategy and trade routes until French explorer Louis-Gustave Binger marched straight across the supposed crest in 1888, finding only gentle rolling hills.
+        </p>
+        <div class="card-footer-stats">
+          <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">91 YEARS</span></div>
+          <div><span class="stat-label">Total Mass</span><span class="stat-val">0 km³ (Pure Fabrication)</span></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Next Anomaly Incoming Notice -->
+    <section class="incoming-banner">
+      <div class="banner-glow"></div>
+      <div class="banner-content">
+        <span class="beacon-icon">✦</span>
+        <div>
+          <h3>NEXT SECTOR UNLOCKING TOMORROW</h3>
+          <p>Analyzing incoming survey: <em>Sandy Island (Coral Sea)</em> &amp; the 120-year Google Earth ghost island mystery.</p>
+        </div>
+      </div>
+      <button id="bookmark-hint-btn" class="action-btn">Bookmark Archive</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>THE PHANTOM ATLAS is updated daily with verified records of erased geography, historical cartographic errors, and oceanic anomalies.</p>
+    <p class="colophon">Built without frameworks. Pure HTML/CSS/JS. Permanent frequency.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
