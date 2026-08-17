@@ -1,0 +1,32 @@
+name: Redeploy Site (No AI Changes)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Prepare Pages deploy folder
+        run: |
+          mkdir -p /tmp/pages-deploy
+          rsync -av --exclude='.git' --exclude='.github' --exclude='.ai-site-state.json' ./ /tmp/pages-deploy/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/pages-deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
