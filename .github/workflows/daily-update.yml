@@ -23,7 +23,7 @@ jobs:
       - name: Determine mode and build prompt
         id: build_prompt
         run: |
-          PROTECTED_REGEX='^(\.github/|\.ai-site-state\.json$)'
+          PROTECTED_REGEX='^(\.github/|\.ai-site-state\.json$|CNAME$|LICENSE(\.[A-Za-z0-9]+)?$)'
 
           if [ -f .ai-site-state.json ]; then
             MODE="incremental"
@@ -34,36 +34,39 @@ jobs:
           fi
           echo "🧭 Mode: $MODE"
 
-          # Snapshot every current site file (excludes protected/infra files) as JSON
           FILES_JSON=$(git ls-files | grep -v -E "$PROTECTED_REGEX" | while read -r f; do
             [ -f "$f" ] || continue
             jq -n --arg path "$f" --arg content "$(cat "$f")" '{path:$path, content:$content}'
           done | jq -s '.')
 
           if [ "$MODE" = "bootstrap" ]; then
-            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/" in your output, under any circumstances — not to edit it, not to add a new file there, not for a CI badge, not for a deployment workflow, nothing. That folder contains the automation that runs you. If you include any ".github/" path, the entire update will be automatically rejected and nothing you built today will be published. If you think something in that folder needs to change, do not attempt it — just leave it alone and focus only on the website content.
+            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/", and you must never create or modify a file named exactly "CNAME" or "LICENSE" (with or without an extension) — under any circumstances. ".github/" contains the automation that runs you, "CNAME" controls the live domain, and "LICENSE" is a legal file outside your scope. If you include any of these, the entire update will be automatically rejected and nothing you built today will be published. Just leave them alone and focus only on the website content.
 
           This is the first run for this website. There is no existing content. Pick a topic — anything genuinely interesting, your choice, be specific rather than generic. Build a minimal initial static website about it: at minimum an index.html, and a CSS file if it improves the design. Keep it deliberately simple and small — this is a starting point that will be incrementally expanded once a day going forward, not a finished product.
+
+          Audience and style direction: build for someone who finds this by scrolling social media on their phone, clicks in out of curiosity, and decides in the first few seconds whether to keep scrolling. Design mobile-first and visually bold — strong typography, clear hierarchy, no clutter. The content itself should be genuinely worth reading for several minutes once someone stops to look, not just a skim: interesting facts, a satisfying structure, maybe something interactive or list-like. Since this site adds something new each day, give people a natural reason to check back in a day or two — a sense that it's an ongoing thing, not a finished, static page.
 
           Hard rules:
           - Static files only: .html, .css, .js, .json, .svg, .md, .txt. No build step, no backend, no binary assets.
           - External resources only from well-known public CDNs if needed. No tracking scripts, no ads.
           - Content must be appropriate for a general audience: no sexual content, no graphic violence, no hate speech, no illegal/dangerous instructions, no harmful misinformation.
           - Must include a file at path "index.html".
-          - Never create a file under ".github/" or a file named ".ai-site-state.json" — those are managed separately.
+          - Never create a file under ".github/", or a file named "CNAME", "LICENSE", or ".ai-site-state.json" — those are managed separately.
 
           Return ONLY a single JSON object, no markdown fences, no commentary, in exactly this shape:
           {"topic":"the topic you chose","summary":"one short sentence describing what you built","files":[{"path":"index.html","content":"..."}]}'
           else
-            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/" in your output, under any circumstances — not to edit it, not to add a new file there, not for a CI badge, not for a deployment workflow, nothing. That folder contains the automation that runs you. If you include any ".github/" path, the entire update will be automatically rejected and nothing you built today will be published. If you think something in that folder needs to change, do not attempt it — just leave it alone and focus only on the website content.
+            INSTRUCTIONS='ABSOLUTE RULE, READ FIRST: You must never include any file path starting with ".github/", and you must never create or modify a file named exactly "CNAME" or "LICENSE" (with or without an extension) — under any circumstances. ".github/" contains the automation that runs you, "CNAME" controls the live domain, and "LICENSE" is a legal file outside your scope. If you include any of these, the entire update will be automatically rejected and nothing you built today will be published. Just leave them alone and focus only on the website content.
 
           This website already exists and has an established topic and history — see the state file and current files below. Make exactly ONE small, focused improvement today. Examples of an appropriately small change: fix a typo or bug from a previous day, add one new section, add more facts/content consistent with the topic, improve one piece of styling. Do NOT rewrite the site, do NOT change the topic, do NOT touch files that do not need to change for this one improvement.
+
+          Audience and style direction: build for someone who finds this by scrolling social media on their phone, clicks in out of curiosity, and decides in the first few seconds whether to keep scrolling. Design mobile-first and visually bold — strong typography, clear hierarchy, no clutter. The content itself should be genuinely worth reading for several minutes once someone stops to look, not just a skim: interesting facts, a satisfying structure, maybe something interactive or list-like. Since this site adds something new each day, give people a natural reason to check back in a day or two — a sense that it's an ongoing thing, not a finished, static page.
 
           Hard rules:
           - Static files only: .html, .css, .js, .json, .svg, .md, .txt. No build step, no backend, no binary assets.
           - External resources only from well-known public CDNs if needed. No tracking scripts, no ads.
           - Content must be appropriate for a general audience: no sexual content, no graphic violence, no hate speech, no illegal/dangerous instructions, no harmful misinformation.
-          - Never create or modify a file under ".github/" or a file named ".ai-site-state.json" — those are managed separately.
+          - Never create or modify a file under ".github/", or a file named "CNAME", "LICENSE", or ".ai-site-state.json" — those are managed separately.
           - Only include files in your response that you are actually adding or changing. Do not resend unchanged files.
 
           Return ONLY a single JSON object, no markdown fences, no commentary, in exactly this shape:
@@ -142,7 +145,7 @@ jobs:
             FPATH=$(jq -r ".files[$i].path" /tmp/response.json)
             CONTENT=$(jq -r ".files[$i].content" /tmp/response.json)
 
-            if [[ "$FPATH" == .github/* ]] || [[ "$FPATH" == ".ai-site-state.json" ]]; then
+            if [[ "$FPATH" == .github/* ]] || [[ "$FPATH" == ".ai-site-state.json" ]] || [[ "$FPATH" == "CNAME" ]] || [[ "$FPATH" =~ ^LICENSE(\.[A-Za-z0-9]+)?$ ]]; then
               echo "🚫 Model tried to touch protected path — skipping just this file: $FPATH"
               continue
             fi
@@ -165,7 +168,6 @@ jobs:
             exit 1
           fi
 
-          # Update state file
           SUMMARY=$(jq -r '.summary // "No summary provided"' /tmp/response.json)
           TOPIC=$(jq -r '.topic // ""' /tmp/response.json)
 
@@ -190,9 +192,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add -A -- . ':!.github'
+          git add -A -- . ':!.github' ':!CNAME' ':!LICENSE' ':!LICENSE.*'
 
-          BLOCKED=$(git diff --staged --name-only | grep -E '^\.github/' || true)
+          BLOCKED=$(git diff --staged --name-only | grep -E '^(\.github/|CNAME$|LICENSE(\.[A-Za-z0-9]+)?$)' || true)
           if [ -n "$BLOCKED" ]; then
             echo "🚫 Staged changes touch protected path(s), aborting commit:"
             echo "$BLOCKED"
