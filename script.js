@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     hybrasil: '52°12′N 13°40′W',
     kong: '09°20′N 02°15′W',
     sandy: '19°13′S 159°56′E',
-    crocker: '83°00′N 103°00′W'
+    crocker: '83°00′N 103°00′W',
+    frisland: '60°30′N 25°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
