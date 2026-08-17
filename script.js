@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const coordsMap = {
     bermeja: '22°33′N 91°22′W',
     hybrasil: '52°12′N 13°40′W',
-    kong: '09°20′N 02°15′W'
+    kong: '09°20′N 02°15′W',
+    sandy: '19°13′S 159°56′E'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
