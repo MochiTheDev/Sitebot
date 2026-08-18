@@ -16,6 +16,10 @@
     {
       "date": "2026-08-17",
       "summary": "Unseal Case #006: Frisland (North Atlantic), add radar coordinate blip, and update the incoming sector preview."
+    },
+    {
+      "date": "2026-08-18",
+      "summary": "Unseal Case #007: The Aurora Islands (South Atlantic), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }

@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     kong: '09°20′N 02°15′W',
     sandy: '19°13′S 159°56′E',
     crocker: '83°00′N 103°00′W',
-    frisland: '60°30′N 25°00′W'
+    frisland: '60°30′N 25°00′W',
+    aurora: '52°30′S 47°40′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
