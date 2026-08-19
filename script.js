@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sandy: '19°13′S 159°56′E',
     crocker: '83°00′N 103°00′W',
     frisland: '60°30′N 25°00′W',
-    aurora: '52°30′S 47°40′W'
+    aurora: '52°30′S 47°40′W',
+    saxemberg: '30°45′S 19°30′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
