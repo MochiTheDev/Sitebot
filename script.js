@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     crocker: '83°00′N 103°00′W',
     frisland: '60°30′N 25°00′W',
     aurora: '52°30′S 47°40′W',
-    saxemberg: '30°45′S 19°30′W'
+    saxemberg: '30°45′S 19°30′W',
+    rupes: '90°00′N 00°00′E'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

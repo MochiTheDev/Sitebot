@@ -24,6 +24,10 @@
     {
       "date": "2026-08-19",
       "summary": "Unseal Case #008: Saxemberg Island (South Atlantic), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-08-20",
+      "summary": "Unseal Case #009: Rupes Nigra (Magnetic North Pole Mountain), update coordinate scope and incoming anomaly preview."
     }
   ]
 }
