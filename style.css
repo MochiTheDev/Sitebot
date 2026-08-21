@@ -118,8 +118,7 @@ body {
 }
 
 .panel-header {
-  display: flex;
-  justify-content: space-between;
+  display: flex;\n  justify-content: space-between;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   margin-bottom: 1rem;
@@ -194,6 +193,7 @@ body {
 .blip-7 { top: 82%; left: 42%; }
 .blip-8 { top: 65%; left: 47%; }
 .blip-9 { top: 8%; left: 50%; }
+.blip-10 { top: 32%; left: 60%; }
 
 .radar-footer {
   margin-top: 1rem;

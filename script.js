@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     frisland: '60°30′N 25°00′W',
     aurora: '52°30′S 47°40′W',
     saxemberg: '30°45′S 19°30′W',
-    rupes: '90°00′N 00°00′E'
+    rupes: '90°00′N 00°00′E',
+    mayda: '46°24′N 37°18′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
