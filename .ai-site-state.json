@@ -32,6 +32,10 @@
     {
       "date": "2026-08-21",
       "summary": "Unseal Case #010: Mayda (Isle of Mam), add radar coordinate blip, and update the incoming sector preview."
+    },
+    {
+      "date": "2026-08-22",
+      "summary": "Unseal Case #011: Pepys Island, add radar coordinate blip, and update the incoming sector preview."
     }
   ]
 }

@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     aurora: '52°30′S 47°40′W',
     saxemberg: '30°45′S 19°30′W',
     rupes: '90°00′N 00°00′E',
-    mayda: '46°24′N 37°18′W'
+    mayda: '46°24′N 37°18′W',
+    pepys: '47°00′S 64°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
