@@ -73,7 +73,7 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
+  0%, 100% { opacity: 1; transform: scale(1); } 
   50% { opacity: 0.3; transform: scale(0.75); }
 }
 
@@ -197,6 +197,7 @@ body {
 .blip-10 { top: 32%; left: 60%; }
 .blip-11 { top: 76%; left: 38%; }
 .blip-12 { top: 88%; left: 24%; }
+.blip-13 { top: 85%; left: 76%; }
 
 .radar-footer {
   margin-top: 1rem;

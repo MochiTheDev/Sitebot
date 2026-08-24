@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     rupes: '90°00′N 00°00′E',
     mayda: '46°24′N 37°18′W',
     pepys: '47°00′S 64°00′W',
-    dougherty: '59°20′S 120°20′W'
+    dougherty: '59°20′S 120°20′W',
+    emerald: '57°30′S 162°12′E'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bookmarkBtn.textContent = 'Link Copied!';
         setTimeout(() => {
           bookmarkBtn.textContent = 'Bookmark Archive';
-        }, 2505);
+        }, 2500);
       }
     });
   }
