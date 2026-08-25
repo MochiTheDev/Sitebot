@@ -44,6 +44,10 @@
     {
       "date": "2026-08-24",
       "summary": "Unseal Case #013: Emerald Island (Southern Ocean), add radar coordinate blip, and update the incoming sector preview."
+    },
+    {
+      "date": "2026-08-25",
+      "summary": "Unseal Case #014: Los Jardines (The Gardens), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
