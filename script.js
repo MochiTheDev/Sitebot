@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pepys: '47°00′S 64°00′W',
     dougherty: '59°20′S 120°20′W',
     emerald: '57°30′S 162°12′E',
-    jardines: '21°30′N 153°00′E'
+    jardines: '21°30′N 153°00′E',
+    byers: '28°32′N 177°04′E'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

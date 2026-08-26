@@ -48,6 +48,10 @@
     {
       "date": "2026-08-25",
       "summary": "Unseal Case #014: Los Jardines (The Gardens), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-08-26",
+      "summary": "Unseal Case #015: Byers Island (North Pacific), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
