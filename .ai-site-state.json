@@ -52,6 +52,10 @@
     {
       "date": "2026-08-26",
       "summary": "Unseal Case #015: Byers Island (North Pacific), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-08-27",
+      "summary": "Unseal Case #016: Groclant (Arctic North Atlantic), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }

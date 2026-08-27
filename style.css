@@ -200,6 +200,7 @@ body {
 .blip-13 { top: 85%; left: 76%; }
 .blip-14 { top: 44%; left: 88%; }
 .blip-15 { top: 36%; left: 86%; }
+.blip-16 { top: 16%; left: 32%; }
 
 .radar-footer {
   margin-top: 1rem;
@@ -261,8 +262,7 @@ body {
 }
 
 .card-meta {
-  display: flex;
-  justify-content: space-between;
+  display: flex;  justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
 }
