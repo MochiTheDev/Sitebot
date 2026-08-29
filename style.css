@@ -202,9 +202,10 @@ body {
 .blip-15 { top: 36%; left: 86%; }
 .blip-16 { top: 16%; left: 32%; }
 .blip-17 { top: 52%; left: 18%; }
+.blip-18 { top: 80%; left: 54%; }
 
 .radar-footer {
-  margin-top: 1rem;
+  margin-top: 1rem; 
   display: flex;
   align-items: center;
   gap: 0.75rem;

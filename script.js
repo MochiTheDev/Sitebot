@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     jardines: '21°30′N 153°00′E',
     byers: '28°32′N 177°04′E',
     groclant: '65°00′N 60°00′W',
-    sarahann: '04°00′N 154°22′W'
+    sarahann: '04°00′N 154°22′W',
+    thompson: '54°26′S 03°24′E'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
