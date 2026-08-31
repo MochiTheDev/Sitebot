@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     groclant: '65°00′N 60°00′W',
     sarahann: '04°00′N 154°22′W',
     thompson: '54°26′S 03°24′E',
-    demons: '50°45′N 55°30′W'
+    demons: '50°45′N 55°30′W',
+    antillia: '39°30′N 36°30′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

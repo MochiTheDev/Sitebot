@@ -68,6 +68,10 @@
     {
       "date": "2026-08-30",
       "summary": "Unseal Case #019: Isle of Demons (Isle des Démons), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-08-31",
+      "summary": "Unseal Case #020: Antillia (Isle of Seven Cities), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }

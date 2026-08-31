@@ -164,7 +164,7 @@ body {
 }
 
 @keyframes sweep {
-  from { transform: rotate(0deg); }
+  from { transform: rotate(0deg); } 
   to { transform: rotate(360deg); }
 }
 
@@ -204,6 +204,7 @@ body {
 .blip-17 { top: 52%; left: 18%; }
 .blip-18 { top: 80%; left: 54%; }
 .blip-19 { top: 24%; left: 36%; }
+.blip-20 { top: 38%; left: 48%; }
 
 .radar-footer {
   margin-top: 1rem; 
