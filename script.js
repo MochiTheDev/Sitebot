@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sarahann: '04°00′N 154°22′W',
     thompson: '54°26′S 03°24′E',
     demons: '50°45′N 55°30′W',
-    antillia: '39°30′N 36°30′W'
+    antillia: '39°30′N 36°30′W',
+    sanborondon: '28°00′N 20°30′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

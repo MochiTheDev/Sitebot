@@ -72,6 +72,10 @@
     {
       "date": "2026-08-31",
       "summary": "Unseal Case #020: Antillia (Isle of Seven Cities), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-01",
+      "summary": "Unseal Case #021: San Borondón (Saint Brendan's Isle), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
