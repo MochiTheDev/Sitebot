@@ -76,6 +76,10 @@
     {
       "date": "2026-09-01",
       "summary": "Unseal Case #021: San Borondón (Saint Brendan's Isle), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-02",
+      "summary": "Unseal Case #022: Satanazes (Isle of Devils / Hand of Satan), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
