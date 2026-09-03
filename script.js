@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     demons: '50°45′N 55°30′W',
     antillia: '39°30′N 36°30′W',
     sanborondon: '28°00′N 20°30′W',
-    satanazes: '41°30′N 36°30′W'
+    satanazes: '41°30′N 36°30′W',
+    morrell: '65°00′S 48°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
