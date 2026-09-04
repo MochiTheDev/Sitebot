@@ -84,6 +84,10 @@
     {
       "date": "2026-09-03",
       "summary": "Unseal Case #023: New South Greenland (Morrell's Land), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-04",
+      "summary": "Unseal Case #024: Buss Island (North Atlantic), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }

@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     antillia: '39°30′N 36°30′W',
     sanborondon: '28°00′N 20°30′W',
     satanazes: '41°30′N 36°30′W',
-    morrell: '65°00′S 48°00′W'
+    morrell: '65°00′S 48°00′W',
+    buss: '58°30′N 28°30′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
