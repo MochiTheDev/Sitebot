@@ -88,6 +88,10 @@
     {
       "date": "2026-09-04",
       "summary": "Unseal Case #024: Buss Island (North Atlantic), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-05",
+      "summary": "Unseal Case #025: Podesta Island (South Pacific), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
