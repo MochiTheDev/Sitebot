@@ -96,6 +96,10 @@
     {
       "date": "2026-09-06",
       "summary": "Unseal Case #026: Nimrod Islands (South Pacific), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-07",
+      "summary": "Unseal Case #027: Royal Company's Islands (Southern Ocean), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
