@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     buss: '58°30′N 28°30′W',
     podesta: '32°14′S 89°08′W',
     nimrod: '56°30′S 158°30′W',
-    royalcompany: '50°20′S 142°50′E'
+    royalcompany: '50°20′S 142°50′E',
+    islagrande: '45°00′S 45°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

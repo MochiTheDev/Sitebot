@@ -74,7 +74,7 @@ body {
 
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); } 
-  50% { opacity: 0.3; transform: scale(0.75); }
+  50% { opacity: 0.3; transform: scale(0.75); } 
 }
 
 .day-tag {
@@ -212,6 +212,7 @@ body {
 .blip-25 { top: 66%; left: 26%; }
 .blip-26 { top: 81%; left: 16%; }
 .blip-27 { top: 78%; left: 71%; }
+.blip-28 { top: 73%; left: 41%; }
 
 .radar-footer {
   margin-top: 1rem; 
