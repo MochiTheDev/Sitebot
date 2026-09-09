@@ -104,6 +104,10 @@
     {
       "date": "2026-09-08",
       "summary": "Unseal Case #028: Isla Grande (South Atlantic), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-09",
+      "summary": "Unseal Case #029: Davis Land (South Pacific), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
