@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     nimrod: '56°30′S 158°30′W',
     royalcompany: '50°20′S 142°50′E',
     islagrande: '45°00′S 45°00′W',
-    davis: '27°20′S 90°00′W'
+    davis: '27°20′S 90°00′W',
+    stmatthew: '01°50′S 08°00′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');

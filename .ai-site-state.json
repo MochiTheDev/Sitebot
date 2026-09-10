@@ -108,6 +108,10 @@
     {
       "date": "2026-09-09",
       "summary": "Unseal Case #029: Davis Land (South Pacific), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-10",
+      "summary": "Unseal Case #030: St. Matthew Island (South Atlantic), add radar coordinate blip, and update incoming sector preview."
     }
   ]
 }
