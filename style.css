@@ -215,6 +215,7 @@ body {
 .blip-28 { top: 73%; left: 41%; }
 .blip-29 { top: 60%; left: 22%; }
 .blip-30 { top: 54%; left: 50%; }
+.blip-31 { top: 69%; left: 14%; }
 
 .radar-footer {
   margin-top: 1rem; 
@@ -362,8 +363,7 @@ body {
   border: 1px dashed var(--accent);
   border-radius: 12px;
   padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
+  display: flex;flex-direction: column;
   gap: 1.25rem;
   align-items: flex-start;
 }
