@@ -15,7 +15,7 @@
   <header class="masthead">
     <div class="badge-row">
       <span class="pulse-dot"></span>
-      <span class="status-tag">ARCHIVE LOG // 033 CATALOGED</span>
+      <span class="status-tag">ARCHIVE LOG // 034 CATALOGED</span>
       <span class="day-tag">UPDATED DAILY</span>
     </div>
     <h1 class="title">THE PHANTOM ATLAS</h1>
@@ -27,7 +27,10 @@
     <section class="radar-panel">
       <div class="panel-header">
         <span class="terminal-prompt">&gt; COORD_RADAR_ACTIVE</span>
-        <span id="selected-coords" class="coords-readout">22°33′N 91°22′W</span>
+        <div class="panel-controls">
+          <button id="random-target-btn" class="random-btn" title="Jump to random phantom entity">🎲 RANDOM JUMP</button>
+          <span id="selected-coords" class="coords-readout">22°33′N 91°22′W</span>
+        </div>
       </div>
       <div class="radar-display">
         <div class="grid-rings"></div>
@@ -65,6 +68,7 @@
         <div class="radar-blip blip-31" data-id="mariatheresa" title="Maria Theresa Reef"></div>
         <div class="radar-blip blip-32" data-id="ernestlegouve" title="Ernest Legouvé Reef"></div>
         <div class="radar-blip blip-33" data-id="wachusett" title="Wachusett Reef"></div>
+        <div class="radar-blip blip-34" data-id="filippo" title="Filippo Reef"></div>
       </div>
       <div class="radar-footer">
         <span class="ticker-label">SELECT TARGET //</span>
@@ -102,6 +106,7 @@
           <button class="tab-btn" data-target="mariatheresa">31. Maria Theresa</button>
           <button class="tab-btn" data-target="ernestlegouve">32. Ernest Legouvé</button>
           <button class="tab-btn" data-target="wachusett">33. Wachusett</button>
+          <button class="tab-btn" data-target="filippo">34. Filippo Reef</button>
         </div>
       </div>
     </section>
@@ -110,7 +115,7 @@
     <div class="filter-bar">
       <span class="filter-label">FILTER BASIN:</span>
       <div class="filter-pills">
-        <button class="filter-pill active" data-filter="all">ALL (33)</button>
+        <button class="filter-pill active" data-filter="all">ALL (34)</button>
         <button class="filter-pill" data-filter="pacific">PACIFIC</button>
         <button class="filter-pill" data-filter="atlantic">ATLANTIC</button>
         <button class="filter-pill" data-filter="southern">SOUTHERN</button>
@@ -128,7 +133,7 @@
         <h2 class="card-title">Isla Bermeja</h2>
         <p class="location-tag">Gulf of Mexico // 100 nautical miles off Yucatán</p>
         <p class="card-body">
-          For over 400 years, Spanish cartographers and international naval treaties plotted a coral-red speck northwest of the Yucatán Peninsula. In the late 1990s, when Mexico and the United States negotiated deep-sea oil rights in the "Doughnut Hole," Isla Bermeja should have pushed Mexico's maritime border outward by billions of barrels of crude.
+          For over 400 years, Spanish cartographers and international naval treaties plotted a coral-red speck northwest of the Yucatán Peninsula. In the late 1990s, when Mexico and the United States negotiated deep-sea oil rights in the &quot;Doughnut Hole,&quot; Isla Bermeja should have pushed Mexico's maritime border outward by billions of barrels of crude.
         </p>
         <div class="evidence-box">
           <strong>The Discovery:</strong> In 1997, the Mexican Navy dispatched an expedition to survey Bermeja. When their vessels reached the exact coordinates, they found nothing but deep, uninterrupted ocean. A second bathymetric sweep in 2009 confirmed water depth of 1,472 feet without a trace of a submerged reef.
@@ -206,7 +211,7 @@
         <h2 class="card-title">Crocker Land</h2>
         <p class="location-tag">Arctic Ocean // North of Ellesmere Island, Nunavut</p>
         <p class="card-body">
-          In 1906, celebrated polar explorer Robert Peary claimed he spotted snow-capped peaks rising high above the Arctic pack ice, naming the subcontinent "Crocker Land" after his financial patron George Crocker. Believing it held the key to Northern Hemisphere meteorology and sovereign territory, the American Museum of Natural History launched a full-scale expedition in 1913 under Donald MacMillan.
+          In 1906, celebrated polar explorer Robert Peary claimed he spotted snow-capped peaks rising high above the Arctic pack ice, naming the subcontinent &quot;Crocker Land&quot; after his financial patron George Crocker. Believing it held the key to Northern Hemisphere meteorology and sovereign territory, the American Museum of Natural History launched a full-scale expedition in 1913 under Donald MacMillan.
         </p>
         <div class="evidence-box">
           <strong>The Optical Mirage:</strong> In April 1914, after dog-sledding over 125 miles across perilous shifting sea ice, MacMillan and his Inuit guide Piugaattoq reached the mapped location. Looking through binoculars, MacMillan saw vast mountains and valleys — until the sun shifted and the entire landmass dissolved into the horizon. It was a classic Arctic <em>Fata Morgana</em> atmospheric temperature inversion.
@@ -229,7 +234,7 @@
           In 1558, Venetian nobleman Nicolò Zeno published a map and travel letters claiming his ancestors had discovered a civilized northern empire named Frisland in the 1390s, complete with fortified cities and thriving ports. Master mapmakers of the Renaissance — including Gerardus Mercator and Abraham Ortelius — copied Frisland onto the definitive atlases of Europe.
         </p>
         <div class="evidence-box">
-          <strong>The Royal Sovereign Claim:</strong> The phantom island was so widely accepted that in 1578, English explorer Martin Frobisher mistook the southern coast of Greenland for Frisland. He landed, planted the royal standard, and claimed the entire phantom landmass for Queen Elizabeth I under the name "West England."
+          <strong>The Royal Sovereign Claim:</strong> The phantom island was so widely accepted that in 1578, English explorer Martin Frobisher mistook the southern coast of Greenland for Frisland. He landed, planted the royal standard, and claimed the entire phantom landmass for Queen Elizabeth I under the name &quot;West England.&quot;
         </div>
         <div class="card-footer-stats">
           <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">~300 YEARS</span></div>
@@ -326,7 +331,7 @@
         <h2 class="card-title">Pepys Island</h2>
         <p class="location-tag">South Atlantic // ~47°00′S 64°00′W (~230 miles north of Falklands)</p>
         <p class="card-body">
-          In December 1683, English buccaneer William Cowley aboard the privateer ship <em>Revenge</em> encountered an uncharted, forested coastline in the tempestuous South Atlantic. Seeking Royal favor and pardons for his crew's piracy, Cowley published an account in 1684 naming the newly sighted landmass "Pepys Island" in honor of Samuel Pepys, then Secretary to the Admiralty.
+          In December 1683, English buccaneer William Cowley aboard the privateer ship <em>Revenge</em> encountered an uncharted, forested coastline in the tempestuous South Atlantic. Seeking Royal favor and pardons for his crew's piracy, Cowley published an account in 1684 naming the newly sighted landmass &quot;Pepys Island&quot; in honor of Samuel Pepys, then Secretary to the Admiralty.
         </p>
         <div class="evidence-box">
           <strong>The Admiralty Hunt:</strong> British admirals coveted Pepys Island as a strategic naval staging post to command the passage around Cape Horn. In 1764, the British Admiralty dispatched Commodore John Byron aboard HMS <em>Dolphin</em> specifically to locate and fortify it. Byron crisscrossed the latitude and found nothing. Capt. James Cook and HMS <em>Beagle</em> captain Robert FitzRoy later demonstrated Cowley had simply miscalculated the coordinates of the northern Falkland Islands.
@@ -409,7 +414,7 @@
         <h2 class="card-title">Byers Island</h2>
         <p class="location-tag">North Pacific Ocean // ~28°32′N 177°04′E (West of Midway Atoll)</p>
         <p class="card-body">
-          In July 1825, American sealing captain Benjamin Morrell aboard the schooner <em>Tartar</em> claimed to have discovered a moderately elevated, moderately wooded island approximately 4 miles in circumference in the central North Pacific. Morrell named the landmass "Byers Island" in honor of his New York shipowner, James Byers, and logged extensive details of abundant fresh water, sea turtles, and rich seal rookeries.
+          In July 1825, American sealing captain Benjamin Morrell aboard the schooner <em>Tartar</em> claimed to have discovered a moderately elevated, moderately wooded island approximately 4 miles in circumference in the central North Pacific. Morrell named the landmass &quot;Byers Island&quot; in honor of his New York shipowner, James Byers, and logged extensive details of abundant fresh water, sea turtles, and rich seal rookeries.
         </p>
         <p class="card-body">
           Because Morrell was known for publishing sensationalized travel memoirs, maritime authorities treated his coordinates with suspicion. Yet because of the strategic value of coaling and emergency harbors in the mid-Pacific trade lanes, Byers Island was officially incorporated onto charts of the United States Navy Hydrographic Office and British Admiralty maps for nearly a century.
@@ -455,7 +460,7 @@
         <h2 class="card-title">Sarah Ann Island</h2>
         <p class="location-tag">Equatorial Pacific Ocean // ~04°00′N 154°22′W (Northwest of Christmas Island)</p>
         <p class="card-body">
-          In 1858, an American guano vessel reported discovering a low-lying coral atoll in the central equatorial Pacific, christening it "Sarah Ann Island." Under the Guano Islands Act of 1856, the United States formally claimed sovereign federal jurisdiction over the island, officially cataloging it with the Department of State and the US Navy Hydrographic Office.
+          In 1858, an American guano vessel reported discovering a low-lying coral atoll in the central equatorial Pacific, christening it &quot;Sarah Ann Island.&quot; Under the Guano Islands Act of 1856, the United States formally claimed sovereign federal jurisdiction over the island, officially cataloging it with the Department of State and the US Navy Hydrographic Office.
         </p>
         <p class="card-body">
           For nearly eight decades, Sarah Ann Island sat quietly on Pacific nautical charts as an American territorial possession. But in 1937, international astronomers realized that the total solar eclipse of June 8, 1937 — the longest duration eclipse in over a millennium — would cross precisely over Sarah Ann's charted coordinates.
@@ -478,7 +483,7 @@
         <h2 class="card-title">Thompson Island</h2>
         <p class="location-tag">Sub-Antarctic South Atlantic // ~54°26′S 03°24′E (~45 miles NE of Bouvet Island)</p>
         <p class="card-body">
-          On December 13, 1825, Captain George Norris of the Enderby &amp; Sons sealing vessel <em>Sprightly</em> sighted an uncharted volcanic island rising out of the howling Sub-Antarctic gale, claiming it for King George IV and naming it "Thompson Island" after his investor George Thompson. Norris described a bleak, steaming expanse of black basalt, basalt pillars named the "Chimnies," and cliffs crowded with seal colonies.
+          On December 13, 1825, Captain George Norris of the Enderby &amp; Sons sealing vessel <em>Sprightly</em> sighted an uncharted volcanic island rising out of the howling Sub-Antarctic gale, claiming it for King George IV and naming it &quot;Thompson Island&quot; after his investor George Thompson. Norris described a bleak, steaming expanse of black basalt, basalt pillars named the &quot;Chimnies,&quot; and cliffs crowded with seal colonies.
         </p>
         <p class="card-body">
           The island was subsequently spotted and confirmed in 1893 by Captain Joseph Fuller aboard the whaler <em>Francis Allyn</em>. Thompson Island was formally adopted onto British Admiralty charts and South Atlantic shipping routes as a hazardous navigation danger.
@@ -550,7 +555,7 @@
           First recorded in the 6th-century Latin account <em>Navigatio Sancti Brendani</em>, Irish monastic explorer Saint Brendan and his crew reportedly set sail into the western sea, landing on a lush, mist-shrouded island that began to shake and submerge when they lit a campfire — revealing itself to be a gargantuan sea beast named Jasconius. Over subsequent centuries, San Borondón evolved into Europe's most persistent 'wandering island.'
         </p>
         <p class="card-body">
-          The phantom isle was taken so seriously that in the 1519 Treaty of Alcáçovas, the Crown of Castile and Portugal legally codified "San Borondón" as sovereign Spanish territory within the Canary archipelago. Dozens of naval expeditions — including four official sweeps dispatched by the Royal Governor of El Hierro in 1721 — were launched after hundreds of witnesses in Palma and El Hierro swore they watched a high, mountainous landmass materialize on the western horizon.
+          The phantom isle was taken so seriously that in the 1519 Treaty of Alcáçovas, the Crown of Castile and Portugal legally codified &quot;San Borondón&quot; as sovereign Spanish territory within the Canary archipelago. Dozens of naval expeditions — including four official sweeps dispatched by the Royal Governor of El Hierro in 1721 — were launched after hundreds of witnesses in Palma and El Hierro swore they watched a high, mountainous landmass materialize on the western horizon.
         </p>
         <div class="evidence-box">
           <strong>The 1958 Photo Phantom:</strong> In October 1958, a photograph published by Spanish photographer Manuel Rodríguez Oliva off the coast of La Palma appeared to capture a massive mountainous island rising above the Atlantic horizon. The image sparked national media sensation until atmospheric optical physicists demonstrated it was a complex <em>Fata Morgana</em> mirage, created when temperature inversion layers bent light over long ocean distances.
@@ -573,7 +578,7 @@
           First inscribed in vermilion ink on the 1424 portolan chart of Venetian cartographer Zuane Pizzigano, <em>Satanazes</em> was depicted as a colossal, rectangular blue island lying sixty leagues north of Antillia. Portolan cartographers paired the two islands as cosmic foils: while Antillia represented a pious haven founded by Iberian bishops, Satanazes was depicted as an accursed dominion of sea demons, whirlpools, and stormy perils.
         </p>
         <p class="card-body">
-          The island was also famously labeled in Portuguese and Italian lore as <em>Ilha da Mão de Satanás</em> ("Island of the Hand of Satan"). Medieval mariners spoke in hushed terrors of an enormous, shadowy demonic claw that rose from the bottom of the ocean to snatch ships, dragging helpless sailors into the abyss. Cartographers Andrea Bianco (1436) and Grazioso Benincasa (1482) faithfully perpetuated Satanazes across 15th-century maritime atlases.
+          The island was also famously labeled in Portuguese and Italian lore as <em>Ilha da Mão de Satanás</em> (&quot;Island of the Hand of Satan&quot;). Medieval mariners spoke in hushed terrors of an enormous, shadowy demonic claw that rose from the bottom of the ocean to snatch ships, dragging helpless sailors into the abyss. Cartographers Andrea Bianco (1436) and Grazioso Benincasa (1482) faithfully perpetuated Satanazes across 15th-century maritime atlases.
         </p>
         <div class="evidence-box">
           <strong>The Cartographic Disappearance:</strong> When European navigators launched extensive caravels across the central Atlantic in the 1490s and early 1500s, charting the exact meridian positions of the Azores and the open ocean beyond, no trace of the monstrous island or its abyssal vortex was ever encountered. Satanazes quietly dissolved from maritime globes, leaving Antillia's name behind in the Caribbean while the Isle of Devils was banished to myth.
@@ -596,7 +601,7 @@
           In March 1823, controversial American sealing captain Benjamin Morrell aboard the schooner <em>Wasp</em> penetrated the pack ice of the Weddell Sea. In his dramatic 1832 published journal, Morrell claimed he encountered and sailed along more than 300 miles of an uncharted Antarctic coastline, christening it <em>New South Greenland</em>. He described majestic snow-crested mountain ranges, active volcanoes, and vast beaches teeming with fur seals and sea elephants.
         </p>
         <p class="card-body">
-          Despite Morrell's notorious reputation among contemporaries as an embellisher, European mapmakers could not ignore a potential continental coast. Prominent German, French, and British cartographers — including Justus Perthes and Keith Johnston — inscribed "Morrell's Land" or "New South Greenland" onto high-latitude Antarctic charts throughout the remainder of the 19th century.
+          Despite Morrell's notorious reputation among contemporaries as an embellisher, European mapmakers could not ignore a potential continental coast. Prominent German, French, and British cartographers — including Justus Perthes and Keith Johnston — inscribed &quot;Morrell's Land&quot; or &quot;New South Greenland&quot; onto high-latitude Antarctic charts throughout the remainder of the 19th century.
         </p>
         <div class="evidence-box">
           <strong>The Polar Proof of Nothingness:</strong> In 1903, Scottish polar oceanographer William Speirs Bruce aboard the <em>Scotia</em> sailed deep into the Weddell Sea directly across Morrell's reported coordinates, finding open ocean depths exceeding 15,000 feet (4,500 meters) with zero trace of shallow shelves or shoals. The absolute nail in the coffin came in June 1915, when Sir Ernest Shackleton's trapped ship <em>Endurance</em> drifted straight through Morrell's mapped mountain peaks while frozen in pack ice, recording soundings of over 11,000 feet of clear sea.
@@ -616,13 +621,13 @@
         <h2 class="card-title">Buss Island (The Sunken Land of Buss)</h2>
         <p class="location-tag">North Atlantic Ocean // ~58°30′N 28°30′W (Between Ireland &amp; Cape Farewell)</p>
         <p class="card-body">
-          In September 1578, on the return voyage of Martin Frobisher's third Arctic expedition, the fishing buss <em>Emmanuel</em> of Bridgwater became separated in heavy gales. Captain James Newton and his crew reported sighting a fertile, heavily forested island with gentle plains and rich fishing grounds, promptly naming the discovery "Buss Island."
+          In September 1578, on the return voyage of Martin Frobisher's third Arctic expedition, the fishing buss <em>Emmanuel</em> of Bridgwater became separated in heavy gales. Captain James Newton and his crew reported sighting a fertile, heavily forested island with gentle plains and rich fishing grounds, promptly naming the discovery &quot;Buss Island.&quot;
         </p>
         <p class="card-body">
           The island was immediately drafted into prestigious atlases, including those of John Seller (1671) and John Thornton (1673). In 1675, King Charles II granted the Hudson's Bay Company a royal monopoly patent to colonize and exploit the non-existent island. When later navigators failed to sight trees or peaks, cartographers ingeniously salvaged the error by claiming the entire island had suffered a catastrophic seismic earthquake and sunk beneath the waves, renaming it on navigational charts as <em>The Sunken Land of Buss</em>.
         </p>
         <div class="evidence-box">
-          <strong>The Hydrographic Bathymetric Search:</strong> For another century, navigation charts warned mariners of shallow rocky shoals at the "Sunken Land." In 1776, French hydrographer Jean-René de Verdun de la Crenne crisscrossed the area taking deep lead soundings, finding nothing shallower than 180 fathoms. Systematic deep-sea telegraph soundings in the 1850s confirmed an abyssal plain deeper than 10,000 feet (3,000 meters), officially purging the sunken phantom from maritime charts.
+          <strong>The Hydrographic Bathymetric Search:</strong> For another century, navigation charts warned mariners of shallow rocky shoals at the &quot;Sunken Land.&quot; In 1776, French hydrographer Jean-René de Verdun de la Crenne crisscrossed the area taking deep lead soundings, finding nothing shallower than 180 fathoms. Systematic deep-sea telegraph soundings in the 1850s confirmed an abyssal plain deeper than 10,000 feet (3,000 meters), officially purging the sunken phantom from maritime charts.
         </div>
         <div class="card-footer-stats">
           <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">~270 YEARS</span></div>
@@ -642,7 +647,7 @@
           In 1879, Captain Pinocchio of the Italian merchant barque <em>Barone Podestà</em> was navigating across the tempestuous expanse between Chile and Australia. He reported sighting an uncharted, oval-shaped island about three-quarters of a mile in circumference, dominated by a rocky central ridge and encircled by violent breakers crashing over a southwestern reef.
         </p>
         <p class="card-body">
-          Pinocchio submitted formal nautical observations upon reaching port, leading international maritime authorities to inscribe "Podesta Island" onto Pacific navigation charts. For more than half a century, it was cataloged in the United States Hydrographic Office gazetteers and British Admiralty sailing directions as a grave hazard to navigation in the South Pacific trade lanes.
+          Pinocchio submitted formal nautical observations upon reaching port, leading international maritime authorities to inscribe &quot;Podesta Island&quot; onto Pacific navigation charts. For more than half a century, it was cataloged in the United States Hydrographic Office gazetteers and British Admiralty sailing directions as a grave hazard to navigation in the South Pacific trade lanes.
         </p>
         <div class="evidence-box">
           <strong>The Abyssal Sweeps:</strong> Over the following decades, commercial steamers and naval patrol vessels crossing the coordinates found unbroken open swell. In 1935, systematic hydrographic sweeps recorded seafloor soundings exceeding 11,000 feet (3,400 meters) of depth, with no undersea guyot, seamount, or coral shelf within dozens of leagues. The United States Hydrographic Office formally purged Podesta Island from official Pacific charts in 1935.
@@ -711,10 +716,10 @@
           In April 1675, English-born merchant voyager Anthony de la Roché was blown far off course in violent Antarctic tempests after rounding Cape Horn. After sheltering at what is now recognized as South Georgia, de la Roché sailed north towards Brazil and reported sighting a very large, fertile, and heavily forested island around latitude 45°S with secure bays and abundant fresh water.
         </p>
         <p class="card-body">
-          Royal cartographers Guillaume Delisle, Edmond Halley, and John Green eagerly adopted the account, engraving "Isla Grande" into global navigation atlases. For a full century, British and French imperial planners coveted the supposed mid-latitude paradise as an invincible strategic naval bastion to command passage between the Atlantic and Pacific oceans.
+          Royal cartographers Guillaume Delisle, Edmond Halley, and John Green eagerly adopted the account, engraving &quot;Isla Grande&quot; into global navigation atlases. For a full century, British and French imperial planners coveted the supposed mid-latitude paradise as an invincible strategic naval bastion to command passage between the Atlantic and Pacific oceans.
         </p>
         <div class="evidence-box">
-          <strong>The Cook Hydrographic Sweep:</strong> In 1775, during his second world expedition aboard HMS <em>Resolution</em>, Captain James Cook sailed deliberately through the charted position of Isla Grande. Crisscrossing the exact coordinates under clear skies, Cook recorded sounding leads plunging into deep ocean abysses exceeding several thousand fathoms, dryly entering in his log: <em>"We found neither land nor signs of land... Isla Grande is entirely imaginary."</em>
+          <strong>The Cook Hydrographic Sweep:</strong> In 1775, during his second world expedition aboard HMS <em>Resolution</em>, Captain James Cook sailed deliberately through the charted position of Isla Grande. Crisscrossing the exact coordinates under clear skies, Cook recorded sounding leads plunging into deep ocean abysses exceeding several thousand fathoms, dryly entering in his log: <em>&quot;We found neither land nor signs of land... Isla Grande is entirely imaginary.&quot;</em>
         </div>
         <div class="card-footer-stats">
           <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">100 YEARS</span></div>
@@ -734,7 +739,7 @@
           In 1687, English buccaneer Captain Edward Davis aboard the privateer ship <em>Bachelor's Delight</em> was running south from the Galápagos Islands across the uncharted South Pacific. Near latitude 27°S, the crew logged sighting a small sandy island accompanied by a long, mountainous coastline extending along the northwestern horizon.
         </p>
         <p class="card-body">
-          The account ignited immense excitement among European cartographers, who eagerly integrated "Davis Land" onto world charts as the promised fringe of <em>Terra Australis Incognita</em> — the hypothetical southern continent long believed necessary to balance Earth's northern landmasses.
+          The account ignited immense excitement among European cartographers, who eagerly integrated &quot;Davis Land&quot; onto world charts as the promised fringe of <em>Terra Australis Incognita</em> — the hypothetical southern continent long believed necessary to balance Earth's northern landmasses.
         </p>
         <div class="evidence-box">
           <strong>The Accidental Discovery:</strong> In April 1722, Dutch navigator Jacob Roggeveen commanded three vessels on a Dutch West India Company expedition explicitly dispatched to locate and conquer Davis Land. Searching the charted coordinates, Roggeveen found no continent — but instead discovered a solitary volcanic speck: Easter Island (Rapa Nui). Subsequent searches by James Cook and Spanish expedition captain Felipe González de Ahedo proved Davis had likely observed Easter Island magnified by atmospheric loom, or mistaken bank clouds for alpine ridges.
@@ -803,7 +808,7 @@
           In 1902, the captain of the French merchant barque <em>Ernest-Legouvé</em> reported discovering a hazardous, uncharted coral reef approximately 100 meters long in the remote South Pacific abyss. Violent breakers and churning seafoam were logged breaking over the shallow crest, posing an immediate peril to trans-Pacific sailing vessels.
         </p>
         <p class="card-body">
-          French maritime authorities published notice of the discovery in the <em>Paris Notice to Mariners</em> (No. 164/1122/1902). Along with Maria Theresa Reef and Wachusett Reef, Ernest Legouvé formed the notorious "phantom reef triangle" of the South Pacific. Literary scholars also speculated that Verne's fictional <em>Lincoln Island</em> in <em>The Mysterious Island</em> shared nearly these exact coordinates.
+          French maritime authorities published notice of the discovery in the <em>Paris Notice to Mariners</em> (No. 164/1122/1902). Along with Maria Theresa Reef and Wachusett Reef, Ernest Legouvé formed the notorious &quot;phantom reef triangle&quot; of the South Pacific. Literary scholars also speculated that Verne's fictional <em>Lincoln Island</em> in <em>The Mysterious Island</em> shared nearly these exact coordinates.
         </p>
         <div class="evidence-box">
           <strong>The Satellite &amp; Sonar Sweep:</strong> The reef lingered on international hydrographic charts and the <em>Times Atlas of the World</em> for eight decades. In 1982 and 1983, research vessels including HMNZS <em>Tui</em> and French naval oceanographers conducted exhaustive sonar sounding sweeps across the coordinate grid. Soundings plunged straight into an unbroken oceanic abyss over 14,000 feet (4,200 meters) deep, leading to the definitive deletion of the reef from global hydrographic databases.
@@ -826,7 +831,7 @@
           On June 4, 1842, Captain Lambert of the American whaling ship <em>Wachusett</em> was cruising through the high-seas desert of the South Pacific. The lookout shouted down a warning of shallow coral reefs dead ahead. Lambert recorded a distinct coral formation spanning nearly 500 feet in length, over which ocean swells broke into frothing white combers, with surrounding waters discolored by subterranean shallows.
         </p>
         <p class="card-body">
-          Lambert estimated the water over the shoal was not deeper than 5 to 6 fathoms. Published in naval notices, the hazard was integrated into British Admiralty charts (Chart No. 783) and the official gazetteers of the United States Hydrographic Office. Together with Maria Theresa Reef and Ernest Legouvé Reef, Wachusett completed the notorious "phantom reef triad" of the South Pacific.
+          Lambert estimated the water over the shoal was not deeper than 5 to 6 fathoms. Published in naval notices, the hazard was integrated into British Admiralty charts (Chart No. 783) and the official gazetteers of the United States Hydrographic Office. Together with Maria Theresa Reef and Ernest Legouvé Reef, Wachusett completed the notorious &quot;phantom reef triad&quot; of the South Pacific.
         </p>
         <div class="evidence-box">
           <strong>The Abyssal Multi-Beam Sweep:</strong> For 141 years, navigators avoided the quadrant. In 1983, the Royal New Zealand Navy hydrographic vessel HMNZS <em>Tui</em> surveyed the entire 20-nautical-mile grid of Wachusett's coordinates with modern echo sounders and satellite navigation. Soundings revealed no seabed feature shallower than 13,800 feet (4,200 meters). The reef was definitively purged by the International Hydrographic Organization that year.
@@ -835,6 +840,29 @@
           <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">141 YEARS</span></div>
           <div><span class="stat-label">First Sighted</span><span class="stat-val">Capt. Lambert (Whaler Wachusett, 1842)</span></div>
           <div><span class="stat-label">Sounded Depth</span><span class="stat-val alert">13,800 FT OPEN ABYSS</span></div>
+        </div>
+      </article>
+
+      <article class="card" id="card-filippo" data-basin="pacific">
+        <div class="card-meta">
+          <span class="case-num">CASE #034</span>
+          <span class="era-tag">MAPPED 1886 – 2015</span>
+        </div>
+        <h2 class="card-title">Filippo Reef</h2>
+        <p class="location-tag">Central South Pacific // ~05°30′S 151°47′W (~280 miles east of Starbuck Island)</p>
+        <p class="card-body">
+          On June 28, 1886, Captain Lorenzo of the Italian barque <em>Filippo</em> was traversing the lonely equatorial waters of the Central Pacific. The ship abruptly encountered churning breakers and frothing turquoise combers crashing over a shallow coral reef extending nearly one nautical mile from northwest to southeast.
+        </p>
+        <p class="card-body">
+          The Italian master entered the alarming coordinates into his vessel's logbook. The report was formally accepted by the British Admiralty, who published <em>Notice to Mariners</em> No. 248/1886 and inscribed &quot;Filippo Reef (P.D.)&quot; [Position Doubtful] onto Admiralty Chart No. 2683. It remained cataloged as a grave maritime navigational peril in the sailing directions of the United States National Geospatial-Intelligence Agency (NGA) and world atlases for nearly 130 years.
+        </p>
+        <div class="evidence-box">
+          <strong>The Satellite Altimetry Sweep:</strong> In the early 21st century, continuous spaceborne radar altimetry and oceanographic research vessels participating in the General Bathymetric Chart of the Oceans (GEBCO) crisscrossed the reported site. Soundings verified an uninterrupted oceanic trench exceeding 17,400 feet (5,300 meters) of depth. With no guyot or seamount within hundreds of miles, the International Hydrographic Organization formally struck Filippo Reef from official charts in 2015.
+        </div>
+        <div class="card-footer-stats">
+          <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">129 YEARS</span></div>
+          <div><span class="stat-label">First Sighted</span><span class="stat-val">Italian Barque Filippo (1886)</span></div>
+          <div><span class="stat-label">Measured Depth</span><span class="stat-val alert">17,400 FT UNBROKEN ABYSS</span></div>
         </div>
       </article>
     </section>
@@ -846,7 +874,7 @@
         <span class="beacon-icon">✦</span>
         <div>
           <h3>NEXT SECTOR UNLOCKING TOMORROW</h3>
-          <p>Analyzing incoming survey: <em>Filippo Reef</em> — reported in 1886 by the Italian barque <em>Filippo</em> (~05°30′S 151°47′W); documented as churning breakers over a 1-mile coral reef before disappearing under satellite altimetry.</p>
+          <p>Analyzing incoming survey: <em>Bradley Land</em> — claimed in 1909 by polar explorer Frederick Cook (~85°N 102°W) as two high ice-covered masses separated by a strait, proving to be pack ice mirages during later aerial surveys.</p>
         </div>
       </div>
       <button id="bookmark-hint-btn" class="action-btn">Bookmark Archive</button>

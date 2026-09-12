@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     stmatthew: '01°50′S 08°00′W',
     mariatheresa: '37°00′S 151°13′W',
     ernestlegouve: '35°15′S 150°40′W',
-    wachusett: '32°18′S 151°08′W'
+    wachusett: '32°18′S 151°08′W',
+    filippo: '05°30′S 151°47′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const blips = document.querySelectorAll('.radar-blip');
   const cards = document.querySelectorAll('.card');
   const filterPills = document.querySelectorAll('.filter-pill');
+  const randomBtn = document.getElementById('random-target-btn');
 
   function activateTarget(id) {
     // Update readout
@@ -85,6 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
       activateTarget(blip.dataset.id);
     });
   });
+
+  // Random jump button handler
+  if (randomBtn) {
+    const targetKeys = Object.keys(coordsMap);
+    randomBtn.addEventListener('click', () => {
+      const currentTarget = coordsDisplay.textContent;
+      let available = targetKeys.filter(key => coordsMap[key] !== currentTarget);
+      if (available.length === 0) available = targetKeys;
+      const randomId = available[Math.floor(Math.random() * available.length)];
+      activateTarget(randomId);
+    });
+  }
 
   // Ocean Basin Filter
   filterPills.forEach(pill => {

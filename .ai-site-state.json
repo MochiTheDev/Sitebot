@@ -124,6 +124,10 @@
     {
       "date": "2026-09-12",
       "summary": "Unseal Case #033 Wachusett Reef (South Pacific) with radar blip and add an interactive Ocean Basin filter bar for rapid dossier navigation."
+    },
+    {
+      "date": "2026-09-12",
+      "summary": "Unseal Case #034 Filippo Reef (South Pacific) with radar coordinate blip, and add a 'Random Anomaly' fast-jump selector button with styling."
     }
   ]
 }

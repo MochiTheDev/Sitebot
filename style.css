@@ -120,10 +120,37 @@ body {
 .panel-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   margin-bottom: 1rem;
   color: var(--accent);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.random-btn {
+  background: #182333;
+  border: 1px solid var(--surface-border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.random-btn:hover {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 255, 194, 0.3);
 }
 
 .coords-readout {
@@ -218,6 +245,7 @@ body {
 .blip-31 { top: 69%; left: 14%; }
 .blip-32 { top: 67%; left: 15%; }
 .blip-33 { top: 63%; left: 16%; }
+.blip-34 { top: 51%; left: 14%; }
 
 .radar-footer {
   margin-top: 1rem; 
