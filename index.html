@@ -15,7 +15,7 @@
   <header class="masthead">
     <div class="badge-row">
       <span class="pulse-dot"></span>
-      <span class="status-tag">ARCHIVE LOG // 032 CATALOGED</span>
+      <span class="status-tag">ARCHIVE LOG // 033 CATALOGED</span>
       <span class="day-tag">UPDATED DAILY</span>
     </div>
     <h1 class="title">THE PHANTOM ATLAS</h1>
@@ -64,6 +64,7 @@
         <div class="radar-blip blip-30" data-id="stmatthew" title="St. Matthew Island"></div>
         <div class="radar-blip blip-31" data-id="mariatheresa" title="Maria Theresa Reef"></div>
         <div class="radar-blip blip-32" data-id="ernestlegouve" title="Ernest Legouvé Reef"></div>
+        <div class="radar-blip blip-33" data-id="wachusett" title="Wachusett Reef"></div>
       </div>
       <div class="radar-footer">
         <span class="ticker-label">SELECT TARGET //</span>
@@ -100,13 +101,26 @@
           <button class="tab-btn" data-target="stmatthew">30. St. Matthew</button>
           <button class="tab-btn" data-target="mariatheresa">31. Maria Theresa</button>
           <button class="tab-btn" data-target="ernestlegouve">32. Ernest Legouvé</button>
+          <button class="tab-btn" data-target="wachusett">33. Wachusett</button>
         </div>
       </div>
     </section>
 
+    <!-- Ocean Basin Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">FILTER BASIN:</span>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">ALL (33)</button>
+        <button class="filter-pill" data-filter="pacific">PACIFIC</button>
+        <button class="filter-pill" data-filter="atlantic">ATLANTIC</button>
+        <button class="filter-pill" data-filter="southern">SOUTHERN</button>
+        <button class="filter-pill" data-filter="arctic">ARCTIC</button>
+      </div>
+    </div>
+
     <!-- Dossier Feed -->
     <section class="dossier-feed" id="dossiers">
-      <article class="card featured" id="card-bermeja">
+      <article class="card featured" id="card-bermeja" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #001</span>
           <span class="era-tag">MAPPED 1539 – 1997</span>
@@ -126,7 +140,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-hybrasil">
+      <article class="card" id="card-hybrasil" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #002</span>
           <span class="era-tag">MAPPED 1325 – 1865</span>
@@ -145,7 +159,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-kong">
+      <article class="card" id="card-kong" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #003</span>
           <span class="era-tag">MAPPED 1798 – 1889</span>
@@ -164,7 +178,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-sandy">
+      <article class="card" id="card-sandy" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #004</span>
           <span class="era-tag">MAPPED 1876 – 2012</span>
@@ -184,7 +198,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-crocker">
+      <article class="card" id="card-crocker" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #005</span>
           <span class="era-tag">MAPPED 1906 – 1914</span>
@@ -204,7 +218,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-frisland">
+      <article class="card" id="card-frisland" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #006</span>
           <span class="era-tag">MAPPED 1558 – 1860s</span>
@@ -224,7 +238,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-aurora">
+      <article class="card" id="card-aurora" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #007</span>
           <span class="era-tag">MAPPED 1762 – 1870s</span>
@@ -244,7 +258,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-saxemberg">
+      <article class="card" id="card-saxemberg" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #008</span>
           <span class="era-tag">MAPPED 1670 – 1888</span>
@@ -264,7 +278,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-rupes">
+      <article class="card" id="card-rupes" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #009</span>
           <span class="era-tag">MAPPED 1569 – 1650s</span>
@@ -284,7 +298,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-mayda">
+      <article class="card" id="card-mayda" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #010</span>
           <span class="era-tag">MAPPED 1367 – 1906</span>
@@ -304,7 +318,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-pepys">
+      <article class="card" id="card-pepys" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #011</span>
           <span class="era-tag">MAPPED 1684 – 1838</span>
@@ -324,7 +338,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-dougherty">
+      <article class="card" id="card-dougherty" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #012</span>
           <span class="era-tag">MAPPED 1841 – 1937</span>
@@ -344,7 +358,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-emerald">
+      <article class="card" id="card-emerald" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #013</span>
           <span class="era-tag">MAPPED 1821 – 1909</span>
@@ -364,7 +378,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-jardines">
+      <article class="card" id="card-jardines" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #014</span>
           <span class="era-tag">MAPPED 1528 – 1973</span>
@@ -387,7 +401,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-byers">
+      <article class="card" id="card-byers" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #015</span>
           <span class="era-tag">MAPPED 1825 – 1920s</span>
@@ -410,7 +424,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-groclant">
+      <article class="card" id="card-groclant" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #016</span>
           <span class="era-tag">MAPPED 1569 – 1630s</span>
@@ -433,7 +447,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-sarahann">
+      <article class="card" id="card-sarahann" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #017</span>
           <span class="era-tag">MAPPED 1858 – 1937</span>
@@ -456,7 +470,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-thompson">
+      <article class="card" id="card-thompson" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #018</span>
           <span class="era-tag">MAPPED 1825 – 1898</span>
@@ -479,7 +493,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-demons">
+      <article class="card" id="card-demons" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #019</span>
           <span class="era-tag">MAPPED 1508 – mid-1600s</span>
@@ -502,7 +516,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-antillia">
+      <article class="card" id="card-antillia" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #020</span>
           <span class="era-tag">MAPPED 1424 – late 1500s</span>
@@ -525,7 +539,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-sanborondon">
+      <article class="card" id="card-sanborondon" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #021</span>
           <span class="era-tag">MAPPED 512 – 1759</span>
@@ -548,7 +562,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-satanazes">
+      <article class="card" id="card-satanazes" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #022</span>
           <span class="era-tag">MAPPED 1424 – early 1500s</span>
@@ -571,7 +585,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-morrell">
+      <article class="card" id="card-morrell" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #023</span>
           <span class="era-tag">MAPPED 1823 – 1915</span>
@@ -594,7 +608,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-buss">
+      <article class="card" id="card-buss" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #024</span>
           <span class="era-tag">MAPPED 1578 – 1850s</span>
@@ -617,7 +631,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-podesta">
+      <article class="card" id="card-podesta" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #025</span>
           <span class="era-tag">MAPPED 1879 – 1935</span>
@@ -640,7 +654,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-nimrod">
+      <article class="card" id="card-nimrod" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #026</span>
           <span class="era-tag">MAPPED 1828 – 1919</span>
@@ -663,7 +677,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-royalcompany">
+      <article class="card" id="card-royalcompany" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #027</span>
           <span class="era-tag">MAPPED 1840 – 1912</span>
@@ -686,7 +700,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-islagrande">
+      <article class="card" id="card-islagrande" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #028</span>
           <span class="era-tag">MAPPED 1675 – 1775</span>
@@ -709,7 +723,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-davis">
+      <article class="card" id="card-davis" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #029</span>
           <span class="era-tag">MAPPED 1687 – 1770s</span>
@@ -732,7 +746,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-stmatthew">
+      <article class="card" id="card-stmatthew" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #030</span>
           <span class="era-tag">MAPPED 1516 – 1830s</span>
@@ -755,7 +769,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-mariatheresa">
+      <article class="card" id="card-mariatheresa" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #031</span>
           <span class="era-tag">MAPPED 1843 – 1983</span>
@@ -778,7 +792,7 @@
         </div>
       </article>
 
-      <article class="card" id="card-ernestlegouve">
+      <article class="card" id="card-ernestlegouve" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #032</span>
           <span class="era-tag">MAPPED 1902 – 1983</span>
@@ -800,6 +814,29 @@
           <div><span class="stat-label">Disproven By</span><span class="stat-val alert">HMNZS Tui &amp; French Navy (1983)</span></div>
         </div>
       </article>
+
+      <article class="card" id="card-wachusett" data-basin="pacific">
+        <div class="card-meta">
+          <span class="case-num">CASE #033</span>
+          <span class="era-tag">MAPPED 1842 – 1983</span>
+        </div>
+        <h2 class="card-title">Wachusett Reef</h2>
+        <p class="location-tag">South Pacific Ocean // ~32°18′S 151°08′W (Between New Zealand &amp; Austral Islands)</p>
+        <p class="card-body">
+          On June 4, 1842, Captain Lambert of the American whaling ship <em>Wachusett</em> was cruising through the high-seas desert of the South Pacific. The lookout shouted down a warning of shallow coral reefs dead ahead. Lambert recorded a distinct coral formation spanning nearly 500 feet in length, over which ocean swells broke into frothing white combers, with surrounding waters discolored by subterranean shallows.
+        </p>
+        <p class="card-body">
+          Lambert estimated the water over the shoal was not deeper than 5 to 6 fathoms. Published in naval notices, the hazard was integrated into British Admiralty charts (Chart No. 783) and the official gazetteers of the United States Hydrographic Office. Together with Maria Theresa Reef and Ernest Legouvé Reef, Wachusett completed the notorious "phantom reef triad" of the South Pacific.
+        </p>
+        <div class="evidence-box">
+          <strong>The Abyssal Multi-Beam Sweep:</strong> For 141 years, navigators avoided the quadrant. In 1983, the Royal New Zealand Navy hydrographic vessel HMNZS <em>Tui</em> surveyed the entire 20-nautical-mile grid of Wachusett's coordinates with modern echo sounders and satellite navigation. Soundings revealed no seabed feature shallower than 13,800 feet (4,200 meters). The reef was definitively purged by the International Hydrographic Organization that year.
+        </div>
+        <div class="card-footer-stats">
+          <div><span class="stat-label">Lifespan on Maps</span><span class="stat-val alert">141 YEARS</span></div>
+          <div><span class="stat-label">First Sighted</span><span class="stat-val">Capt. Lambert (Whaler Wachusett, 1842)</span></div>
+          <div><span class="stat-label">Sounded Depth</span><span class="stat-val alert">13,800 FT OPEN ABYSS</span></div>
+        </div>
+      </article>
     </section>
 
     <!-- Next Anomaly Incoming Notice -->
@@ -809,7 +846,7 @@
         <span class="beacon-icon">✦</span>
         <div>
           <h3>NEXT SECTOR UNLOCKING TOMORROW</h3>
-          <p>Analyzing incoming survey: <em>Wachusett Reef</em> — reported in 1842 by Captain Lambert of the American whaler <em>Wachusett</em> (~32°18′S 151°08′W); completing the infamous South Pacific "phantom reef triangle" alongside Maria Theresa and Ernest Legouvé, until modern multibeam sonar sounded an unbroken abyssal void.</p>
+          <p>Analyzing incoming survey: <em>Filippo Reef</em> — reported in 1886 by the Italian barque <em>Filippo</em> (~05°30′S 151°47′W); documented as churning breakers over a 1-mile coral reef before disappearing under satellite altimetry.</p>
         </div>
       </div>
       <button id="bookmark-hint-btn" class="action-btn">Bookmark Archive</button>

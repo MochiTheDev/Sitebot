@@ -31,12 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     davis: '27°20′S 90°00′W',
     stmatthew: '01°50′S 08°00′W',
     mariatheresa: '37°00′S 151°13′W',
-    ernestlegouve: '35°15′S 150°40′W'
+    ernestlegouve: '35°15′S 150°40′W',
+    wachusett: '32°18′S 151°08′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
   const tabs = document.querySelectorAll('.tab-btn');
   const blips = document.querySelectorAll('.radar-blip');
+  const cards = document.querySelectorAll('.card');
+  const filterPills = document.querySelectorAll('.filter-pill');
 
   function activateTarget(id) {
     // Update readout
@@ -54,10 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
       blip.classList.toggle('active', blip.dataset.id === id);
     });
 
-    // Highlight & scroll card smoothly
+    // Ensure target card is visible if hidden by filter
     const card = document.getElementById(`card-${id}`);
     if (card) {
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('active-target'));
+      if (card.classList.contains('hidden-by-filter')) {
+        // Reset filter to all so the target is viewable
+        filterPills.forEach(p => p.classList.toggle('active', p.dataset.filter === 'all'));
+        cards.forEach(c => c.classList.remove('hidden-by-filter'));
+      }
+
+      cards.forEach(c => c.classList.remove('active-target'));
       card.classList.add('active-target');
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
@@ -74,6 +83,22 @@ document.addEventListener('DOMContentLoaded', () => {
   blips.forEach(blip => {
     blip.addEventListener('click', () => {
       activateTarget(blip.dataset.id);
+    });
+  });
+
+  // Ocean Basin Filter
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const filter = pill.dataset.filter;
+      filterPills.forEach(p => p.classList.toggle('active', p === pill));
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.basin === filter) {
+          card.classList.remove('hidden-by-filter');
+        } else {
+          card.classList.add('hidden-by-filter');
+        }
+      });
     });
   });
 

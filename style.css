@@ -112,7 +112,7 @@ body {
   border: 1px solid var(--surface-border);
   border-radius: 12px;
   padding: 1.25rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   position: relative;
   overflow: hidden;
 }
@@ -217,6 +217,7 @@ body {
 .blip-30 { top: 54%; left: 50%; }
 .blip-31 { top: 69%; left: 14%; }
 .blip-32 { top: 67%; left: 15%; }
+.blip-33 { top: 63%; left: 16%; }
 
 .radar-footer {
   margin-top: 1rem; 
@@ -257,6 +258,56 @@ body {
   border-color: var(--accent);
 }
 
+/* Ocean Basin Filter Bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  background: rgba(17, 22, 31, 0.7);
+  border: 1px solid var(--surface-border);
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+}
+
+.filter-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill:hover {
+  color: var(--text-main);
+  border-color: var(--accent);
+}
+
+.filter-pill.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
 /* Dossier Cards */
 .dossier-feed {
   display: flex;
@@ -269,7 +320,11 @@ body {
   border: 1px solid var(--surface-border);
   border-radius: 12px;
   padding: 1.75rem;
-  transition: transform 0.2s, border-color 0.2s;
+  transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.card.hidden-by-filter {
+  display: none;
 }
 
 .card.active-target {

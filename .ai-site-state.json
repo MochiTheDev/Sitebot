@@ -120,6 +120,10 @@
     {
       "date": "2026-09-12",
       "summary": "Unseal Case #032: Ernest Legouvé Reef (South Pacific), add radar coordinate blip, and update incoming sector preview."
+    },
+    {
+      "date": "2026-09-12",
+      "summary": "Unseal Case #033 Wachusett Reef (South Pacific) with radar blip and add an interactive Ocean Basin filter bar for rapid dossier navigation."
     }
   ]
 }
