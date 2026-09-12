@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     islagrande: '45°00′S 45°00′W',
     davis: '27°20′S 90°00′W',
     stmatthew: '01°50′S 08°00′W',
-    mariatheresa: '37°00′S 151°13′W'
+    mariatheresa: '37°00′S 151°13′W',
+    ernestlegouve: '35°15′S 150°40′W'
   };
 
   const coordsDisplay = document.getElementById('selected-coords');
