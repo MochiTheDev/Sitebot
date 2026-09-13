@@ -1,4 +1,4 @@
-name: AI Daily Website Update
+name: Five Layer Update
 
 on:
   workflow_dispatch:
