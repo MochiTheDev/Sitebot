@@ -24,17 +24,18 @@
 
   <main class="container">
     <!-- Interactive Scope / Radar Summary -->
-    <section class="radar-panel">
+    <section class="radar-panel" id="radar-scope">
       <div class="panel-header">
         <span class="terminal-prompt">&gt; COORD_RADAR_ACTIVE</span>
         <div class="panel-controls">
           <button id="random-target-btn" class="random-btn" title="Jump to random phantom entity">🎲 RANDOM JUMP</button>
-          <span id="selected-coords" class="coords-readout">22°33′N 91°22′W</span>
+          <span id="selected-coords" class="coords-readout" title="Click to copy coordinates">22°33′N 91°22′W</span>
         </div>
       </div>
-      <div class="radar-display">
+      <div class="radar-display" id="radar-viewport">
         <div class="grid-rings"></div>
         <div class="sweep-line"></div>
+        <div id="radar-tooltip" class="radar-tooltip"></div>
         <div class="radar-blip blip-1 active" data-id="bermeja" title="Bermeja Island"></div>
         <div class="radar-blip blip-2" data-id="hybrasil" title="Hy-Brasil"></div>
         <div class="radar-blip blip-3" data-id="kong" title="Mountains of Kong"></div>
@@ -111,15 +112,20 @@
       </div>
     </section>
 
-    <!-- Ocean Basin Filter Bar -->
+    <!-- Ocean Basin Filter Bar & Live Search -->
     <div class="filter-bar">
-      <span class="filter-label">FILTER BASIN:</span>
-      <div class="filter-pills">
-        <button class="filter-pill active" data-filter="all">ALL (34)</button>
-        <button class="filter-pill" data-filter="pacific">PACIFIC</button>
-        <button class="filter-pill" data-filter="atlantic">ATLANTIC</button>
-        <button class="filter-pill" data-filter="southern">SOUTHERN</button>
-        <button class="filter-pill" data-filter="arctic">ARCTIC</button>
+      <div class="filter-left">
+        <span class="filter-label">FILTER BASIN:</span>
+        <div class="filter-pills">
+          <button class="filter-pill active" data-filter="all">ALL (34)</button>
+          <button class="filter-pill" data-filter="pacific">PACIFIC</button>
+          <button class="filter-pill" data-filter="atlantic">ATLANTIC</button>
+          <button class="filter-pill" data-filter="southern">SOUTHERN</button>
+          <button class="filter-pill" data-filter="arctic">ARCTIC</button>
+        </div>
+      </div>
+      <div class="search-wrapper">
+        <input type="text" id="dossier-search" class="search-input" placeholder="Search archives..." aria-label="Search archives by name or keyword">
       </div>
     </div>
 
@@ -128,7 +134,10 @@
       <article class="card featured" id="card-bermeja" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #001</span>
-          <span class="era-tag">MAPPED 1539 – 1997</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1539 – 1997</span>
+          </div>
         </div>
         <h2 class="card-title">Isla Bermeja</h2>
         <p class="location-tag">Gulf of Mexico // 100 nautical miles off Yucatán</p>
@@ -148,7 +157,10 @@
       <article class="card" id="card-hybrasil" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #002</span>
-          <span class="era-tag">MAPPED 1325 – 1865</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1325 – 1865</span>
+          </div>
         </div>
         <h2 class="card-title">Hy-Brasil</h2>
         <p class="location-tag">North Atlantic // West of Galway Bay, Ireland</p>
@@ -167,7 +179,10 @@
       <article class="card" id="card-kong" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #003</span>
-          <span class="era-tag">MAPPED 1798 – 1889</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1798 – 1889</span>
+          </div>
         </div>
         <h2 class="card-title">The Mountains of Kong</h2>
         <p class="location-tag">West Africa // Supposed ridge from Guinea to Central Africa</p>
@@ -186,7 +201,10 @@
       <article class="card" id="card-sandy" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #004</span>
-          <span class="era-tag">MAPPED 1876 – 2012</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1876 – 2012</span>
+          </div>
         </div>
         <h2 class="card-title">Sandy Island (Île de Sable)</h2>
         <p class="location-tag">Coral Sea // Between Australia &amp; New Caledonia</p>
@@ -206,7 +224,10 @@
       <article class="card" id="card-crocker" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #005</span>
-          <span class="era-tag">MAPPED 1906 – 1914</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1906 – 1914</span>
+          </div>
         </div>
         <h2 class="card-title">Crocker Land</h2>
         <p class="location-tag">Arctic Ocean // North of Ellesmere Island, Nunavut</p>
@@ -226,7 +247,10 @@
       <article class="card" id="card-frisland" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #006</span>
-          <span class="era-tag">MAPPED 1558 – 1860s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1558 – 1860s</span>
+          </div>
         </div>
         <h2 class="card-title">Frisland (Frislandia)</h2>
         <p class="location-tag">North Atlantic // South of Iceland / East of Greenland</p>
@@ -246,7 +270,10 @@
       <article class="card" id="card-aurora" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #007</span>
-          <span class="era-tag">MAPPED 1762 – 1870s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1762 – 1870s</span>
+          </div>
         </div>
         <h2 class="card-title">The Aurora Islands</h2>
         <p class="location-tag">South Atlantic // Between Falkland Islands &amp; South Georgia</p>
@@ -266,7 +293,10 @@
       <article class="card" id="card-saxemberg" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #008</span>
-          <span class="era-tag">MAPPED 1670 – 1888</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1670 – 1888</span>
+          </div>
         </div>
         <h2 class="card-title">Saxemberg Island</h2>
         <p class="location-tag">South Atlantic // ~30°45′S 19°30′W (Midway to Tristan da Cunha)</p>
@@ -286,7 +316,10 @@
       <article class="card" id="card-rupes" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #009</span>
-          <span class="era-tag">MAPPED 1569 – 1650s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1569 – 1650s</span>
+          </div>
         </div>
         <h2 class="card-title">Rupes Nigra (The Black Rock)</h2>
         <p class="location-tag">Geographic North Pole // Exact Arctic Center</p>
@@ -306,7 +339,10 @@
       <article class="card" id="card-mayda" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #010</span>
-          <span class="era-tag">MAPPED 1367 – 1906</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1367 – 1906</span>
+          </div>
         </div>
         <h2 class="card-title">Mayda (Isle of Mam)</h2>
         <p class="location-tag">North Atlantic // Southwest of Ireland (~46°24′N 37°18′W)</p>
@@ -326,7 +362,10 @@
       <article class="card" id="card-pepys" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #011</span>
-          <span class="era-tag">MAPPED 1684 – 1838</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1684 – 1838</span>
+          </div>
         </div>
         <h2 class="card-title">Pepys Island</h2>
         <p class="location-tag">South Atlantic // ~47°00′S 64°00′W (~230 miles north of Falklands)</p>
@@ -346,7 +385,10 @@
       <article class="card" id="card-dougherty" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #012</span>
-          <span class="era-tag">MAPPED 1841 – 1937</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1841 – 1937</span>
+          </div>
         </div>
         <h2 class="card-title">Dougherty Island</h2>
         <p class="location-tag">South Pacific Ocean // ~59°20′S 120°20′W (Midway Cape Horn &amp; New Zealand)</p>
@@ -366,7 +408,10 @@
       <article class="card" id="card-emerald" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #013</span>
-          <span class="era-tag">MAPPED 1821 – 1909</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1821 – 1909</span>
+          </div>
         </div>
         <h2 class="card-title">Emerald Island</h2>
         <p class="location-tag">Southern Ocean // ~57°30′S 162°12′E (South of Macquarie Island)</p>
@@ -386,7 +431,10 @@
       <article class="card" id="card-jardines" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #014</span>
-          <span class="era-tag">MAPPED 1528 – 1973</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1528 – 1973</span>
+          </div>
         </div>
         <h2 class="card-title">Los Jardines (The Gardens)</h2>
         <p class="location-tag">North Pacific Ocean // ~21°30′N 153°00′E (East of Mariana Islands)</p>
@@ -409,7 +457,10 @@
       <article class="card" id="card-byers" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #015</span>
-          <span class="era-tag">MAPPED 1825 – 1920s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1825 – 1920s</span>
+          </div>
         </div>
         <h2 class="card-title">Byers Island</h2>
         <p class="location-tag">North Pacific Ocean // ~28°32′N 177°04′E (West of Midway Atoll)</p>
@@ -432,7 +483,10 @@
       <article class="card" id="card-groclant" data-basin="arctic">
         <div class="card-meta">
           <span class="case-num">CASE #016</span>
-          <span class="era-tag">MAPPED 1569 – 1630s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1569 – 1630s</span>
+          </div>
         </div>
         <h2 class="card-title">Groclant</h2>
         <p class="location-tag">Arctic North Atlantic // ~65°00′N 60°00′W (West of Greenland / Davis Strait)</p>
@@ -455,7 +509,10 @@
       <article class="card" id="card-sarahann" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #017</span>
-          <span class="era-tag">MAPPED 1858 – 1937</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1858 – 1937</span>
+          </div>
         </div>
         <h2 class="card-title">Sarah Ann Island</h2>
         <p class="location-tag">Equatorial Pacific Ocean // ~04°00′N 154°22′W (Northwest of Christmas Island)</p>
@@ -478,7 +535,10 @@
       <article class="card" id="card-thompson" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #018</span>
-          <span class="era-tag">MAPPED 1825 – 1898</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1825 – 1898</span>
+          </div>
         </div>
         <h2 class="card-title">Thompson Island</h2>
         <p class="location-tag">Sub-Antarctic South Atlantic // ~54°26′S 03°24′E (~45 miles NE of Bouvet Island)</p>
@@ -501,7 +561,10 @@
       <article class="card" id="card-demons" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #019</span>
-          <span class="era-tag">MAPPED 1508 – mid-1600s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1508 – mid-1600s</span>
+          </div>
         </div>
         <h2 class="card-title">Isle of Demons (Isle des Démons)</h2>
         <p class="location-tag">North Atlantic // ~50°45′N 55°30′W (Strait of Belle Isle, Newfoundland)</p>
@@ -524,7 +587,10 @@
       <article class="card" id="card-antillia" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #020</span>
-          <span class="era-tag">MAPPED 1424 – late 1500s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1424 – late 1500s</span>
+          </div>
         </div>
         <h2 class="card-title">Antillia (Isle of Seven Cities)</h2>
         <p class="location-tag">Central Atlantic Ocean // ~39°30′N 36°30′W (West of the Azores)</p>
@@ -547,7 +613,10 @@
       <article class="card" id="card-sanborondon" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #021</span>
-          <span class="era-tag">MAPPED 512 – 1759</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 512 – 1759</span>
+          </div>
         </div>
         <h2 class="card-title">San Borondón (Saint Brendan's Isle)</h2>
         <p class="location-tag">North Atlantic // West of Canary Islands (~28°00′N 20°30′W)</p>
@@ -570,7 +639,10 @@
       <article class="card" id="card-satanazes" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #022</span>
-          <span class="era-tag">MAPPED 1424 – early 1500s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1424 – early 1500s</span>
+          </div>
         </div>
         <h2 class="card-title">Satanazes (The Hand of Satan / Isle of Devils)</h2>
         <p class="location-tag">Central Atlantic Ocean // ~41°30′N 36°30′W (Directly north of Antillia)</p>
@@ -593,7 +665,10 @@
       <article class="card" id="card-morrell" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #023</span>
-          <span class="era-tag">MAPPED 1823 – 1915</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1823 – 1915</span>
+          </div>
         </div>
         <h2 class="card-title">New South Greenland (Morrell's Land)</h2>
         <p class="location-tag">Weddell Sea // Antarctic Ocean (~65°00′S 48°00′W)</p>
@@ -616,7 +691,10 @@
       <article class="card" id="card-buss" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #024</span>
-          <span class="era-tag">MAPPED 1578 – 1850s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1578 – 1850s</span>
+          </div>
         </div>
         <h2 class="card-title">Buss Island (The Sunken Land of Buss)</h2>
         <p class="location-tag">North Atlantic Ocean // ~58°30′N 28°30′W (Between Ireland &amp; Cape Farewell)</p>
@@ -639,7 +717,10 @@
       <article class="card" id="card-podesta" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #025</span>
-          <span class="era-tag">MAPPED 1879 – 1935</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1879 – 1935</span>
+          </div>
         </div>
         <h2 class="card-title">Podesta Island</h2>
         <p class="location-tag">South Pacific Ocean // ~32°14′S 89°08′W (~870 miles west of Valparaíso, Chile)</p>
@@ -662,7 +743,10 @@
       <article class="card" id="card-nimrod" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #026</span>
-          <span class="era-tag">MAPPED 1828 – 1919</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1828 – 1919</span>
+          </div>
         </div>
         <h2 class="card-title">The Nimrod Islands</h2>
         <p class="location-tag">Sub-Antarctic South Pacific // ~56°30′S 158°30′W (Between New Zealand &amp; Cape Horn)</p>
@@ -685,7 +769,10 @@
       <article class="card" id="card-royalcompany" data-basin="southern">
         <div class="card-meta">
           <span class="case-num">CASE #027</span>
-          <span class="era-tag">MAPPED 1840 – 1912</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1840 – 1912</span>
+          </div>
         </div>
         <h2 class="card-title">Royal Company's Islands</h2>
         <p class="location-tag">Southern Ocean // ~50°20′S 142°50′E (~400 miles SW of Tasmania)</p>
@@ -708,7 +795,10 @@
       <article class="card" id="card-islagrande" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #028</span>
-          <span class="era-tag">MAPPED 1675 – 1775</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1675 – 1775</span>
+          </div>
         </div>
         <h2 class="card-title">Isla Grande (La Roché's Land)</h2>
         <p class="location-tag">South Atlantic Ocean // ~45°00′S 45°00′W (East of Patagonia)</p>
@@ -731,7 +821,10 @@
       <article class="card" id="card-davis" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #029</span>
-          <span class="era-tag">MAPPED 1687 – 1770s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1687 – 1770s</span>
+          </div>
         </div>
         <h2 class="card-title">Davis Land</h2>
         <p class="location-tag">South Pacific Ocean // ~27°20′S 90°00′W (~500 miles east of Easter Island)</p>
@@ -754,7 +847,10 @@
       <article class="card" id="card-stmatthew" data-basin="atlantic">
         <div class="card-meta">
           <span class="case-num">CASE #030</span>
-          <span class="era-tag">MAPPED 1516 – 1830s</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1516 – 1830s</span>
+          </div>
         </div>
         <h2 class="card-title">St. Matthew Island (São Mateus)</h2>
         <p class="location-tag">Tropical South Atlantic // ~01°50′S 08°00′W (Northeast of Ascension Island)</p>
@@ -777,7 +873,10 @@
       <article class="card" id="card-mariatheresa" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #031</span>
-          <span class="era-tag">MAPPED 1843 – 1983</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1843 – 1983</span>
+          </div>
         </div>
         <h2 class="card-title">Maria Theresa Reef (Tabor Island)</h2>
         <p class="location-tag">South Pacific Ocean // ~37°00′S 151°13′W (South of French Polynesia)</p>
@@ -800,7 +899,10 @@
       <article class="card" id="card-ernestlegouve" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #032</span>
-          <span class="era-tag">MAPPED 1902 – 1983</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1902 – 1983</span>
+          </div>
         </div>
         <h2 class="card-title">Ernest Legouvé Reef</h2>
         <p class="location-tag">South Pacific Ocean // ~35°15′S 150°40′W (South of Tuamotu Archipelago)</p>
@@ -823,7 +925,10 @@
       <article class="card" id="card-wachusett" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #033</span>
-          <span class="era-tag">MAPPED 1842 – 1983</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1842 – 1983</span>
+          </div>
         </div>
         <h2 class="card-title">Wachusett Reef</h2>
         <p class="location-tag">South Pacific Ocean // ~32°18′S 151°08′W (Between New Zealand &amp; Austral Islands)</p>
@@ -846,7 +951,10 @@
       <article class="card" id="card-filippo" data-basin="pacific">
         <div class="card-meta">
           <span class="case-num">CASE #034</span>
-          <span class="era-tag">MAPPED 1886 – 2015</span>
+          <div class="meta-tags-right">
+            <span class="read-time">~1 MIN READ</span>
+            <span class="era-tag">MAPPED 1886 – 2015</span>
+          </div>
         </div>
         <h2 class="card-title">Filippo Reef</h2>
         <p class="location-tag">Central South Pacific // ~05°30′S 151°47′W (~280 miles east of Starbuck Island)</p>
@@ -880,6 +988,9 @@
       <button id="bookmark-hint-btn" class="action-btn">Bookmark Archive</button>
     </section>
   </main>
+
+  <!-- Floating Quick Jump Button -->
+  <button id="scroll-top-btn" class="scroll-top-btn" aria-label="Return to Radar Scope">↑ RADAR</button>
 
   <footer class="footer">
     <p>THE PHANTOM ATLAS is updated daily with verified records of erased geography, historical cartographic errors, and oceanic anomalies.</p>

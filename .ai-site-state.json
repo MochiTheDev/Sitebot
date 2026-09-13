@@ -128,6 +128,10 @@
     {
       "date": "2026-09-12",
       "summary": "Unseal Case #034 Filippo Reef (South Pacific) with radar coordinate blip, and add a 'Random Anomaly' fast-jump selector button with styling."
+    },
+    {
+      "date": "2026-09-13",
+      "summary": "Implement five focused UI and interaction improvements: live keyword search, radar blip interactive tooltip, coordinate click-to-copy, reading time meta tags, and a floating jump-to-radar button."
     }
   ]
 }

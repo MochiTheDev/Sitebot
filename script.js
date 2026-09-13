@@ -42,36 +42,57 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.querySelectorAll('.card');
   const filterPills = document.querySelectorAll('.filter-pill');
   const randomBtn = document.getElementById('random-target-btn');
+  const searchInput = document.getElementById('dossier-search');
+  const scrollTopBtn = document.getElementById('scroll-top-btn');
+  const radarViewport = document.getElementById('radar-viewport');
+  const radarTooltip = document.getElementById('radar-tooltip');
+
+  let activeBasinFilter = 'all';
+  let activeSearchTerm = '';
 
   function activateTarget(id) {
-    // Update readout
     if (coordsMap[id]) {
       coordsDisplay.textContent = coordsMap[id];
+      coordsDisplay.classList.remove('copied');
     }
 
-    // Update tabs
     tabs.forEach(tab => {
       tab.classList.toggle('active', tab.dataset.target === id);
     });
 
-    // Update blips
     blips.forEach(blip => {
       blip.classList.toggle('active', blip.dataset.id === id);
     });
 
-    // Ensure target card is visible if hidden by filter
     const card = document.getElementById(`card-${id}`);
     if (card) {
       if (card.classList.contains('hidden-by-filter')) {
-        // Reset filter to all so the target is viewable
+        activeBasinFilter = 'all';
+        activeSearchTerm = '';
+        if (searchInput) searchInput.value = '';
         filterPills.forEach(p => p.classList.toggle('active', p.dataset.filter === 'all'));
-        cards.forEach(c => c.classList.remove('hidden-by-filter'));
+        applyFiltering();
       }
 
       cards.forEach(c => c.classList.remove('active-target'));
       card.classList.add('active-target');
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+  }
+
+  function applyFiltering() {
+    cards.forEach(card => {
+      const basin = card.dataset.basin;
+      const text = card.textContent.toLowerCase();
+      const matchesBasin = (activeBasinFilter === 'all' || basin === activeBasinFilter);
+      const matchesSearch = (!activeSearchTerm || text.includes(activeSearchTerm));
+
+      if (matchesBasin && matchesSearch) {
+        card.classList.remove('hidden-by-filter');
+      } else {
+        card.classList.add('hidden-by-filter');
+      }
+    });
   }
 
   // Wire up tabs
@@ -81,10 +102,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Wire up blips
+  // Wire up blips and blip tooltips
   blips.forEach(blip => {
     blip.addEventListener('click', () => {
       activateTarget(blip.dataset.id);
+    });
+
+    blip.addEventListener('mouseenter', (e) => {
+      const id = blip.dataset.id;
+      const title = blip.getAttribute('title') || id;
+      const coord = coordsMap[id] || '';
+      radarTooltip.textContent = `${title} [${coord}]`;
+      radarTooltip.classList.add('visible');
+      
+      const rect = blip.getBoundingClientRect();
+      const parentRect = radarViewport.getBoundingClientRect();
+      const x = rect.left - parentRect.left + 8;
+      const y = rect.top - parentRect.top - 24;
+      radarTooltip.style.left = `${Math.max(10, Math.min(x, parentRect.width - 150))}px`;
+      radarTooltip.style.top = `${Math.max(6, y)}px`;
+    });
+
+    blip.addEventListener('mouseleave', () => {
+      radarTooltip.classList.remove('visible');
     });
   });
 
@@ -103,18 +143,52 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ocean Basin Filter
   filterPills.forEach(pill => {
     pill.addEventListener('click', () => {
-      const filter = pill.dataset.filter;
+      activeBasinFilter = pill.dataset.filter;
       filterPills.forEach(p => p.classList.toggle('active', p === pill));
-
-      cards.forEach(card => {
-        if (filter === 'all' || card.dataset.basin === filter) {
-          card.classList.remove('hidden-by-filter');
-        } else {
-          card.classList.add('hidden-by-filter');
-        }
-      });
+      applyFiltering();
     });
   });
+
+  // Live search input handler
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      activeSearchTerm = e.target.value.trim().toLowerCase();
+      applyFiltering();
+    });
+  }
+
+  // Click-to-copy coordinates
+  if (coordsDisplay) {
+    coordsDisplay.addEventListener('click', () => {
+      const text = coordsDisplay.textContent;
+      if (!text || text.includes('COPIED')) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = text;
+        coordsDisplay.textContent = 'COPIED!';
+        coordsDisplay.classList.add('copied');
+        setTimeout(() => {
+          coordsDisplay.textContent = original;
+          coordsDisplay.classList.remove('copied');
+        }, 1500);
+      }).catch(() => {});
+    });
+  }
+
+  // Floating jump-to-radar button
+  const radarScope = document.getElementById('radar-scope');
+  if (scrollTopBtn && radarScope) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    }, { passive: true });
+
+    scrollTopBtn.addEventListener('click', () => {
+      radarScope.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 
   // Bookmark / Share button trigger
   const bookmarkBtn = document.getElementById('bookmark-hint-btn');
