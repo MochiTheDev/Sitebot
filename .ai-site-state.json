@@ -8,6 +8,10 @@
     {
       "date": "2026-09-24",
       "summary": "Added audio output gain slider, demodulation mode switcher (AM/USB/LSB), copy telemetry coordinates with toast, phonetic cipher decoder reference tool, and CRT scanlines visual effects."
+    },
+    {
+      "date": "2026-09-24",
+      "summary": "Added an ionospheric QRN atmospheric static generator to the audio tuner and introduced an interactive historical cipher intercept breakdown module."
     }
   ]
 }

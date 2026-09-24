@@ -31,7 +31,10 @@
         <div class="frequency-readout">
           <span class="label">MONITOR FREQ:</span>
           <span id="freqValue" class="mono-accent">4625.0 kHz</span>
-          <button id="modeToggleBtn" class="signal-mode" title="Click to toggle demodulation mode">MODE: AM</button>
+          <div class="tuner-toggles">
+            <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
+            <button id="modeToggleBtn" class="signal-mode" title="Click to toggle demodulation mode">MODE: AM</button>
+          </div>
         </div>
       </div>
       <div class="tuner-controls">
@@ -123,6 +126,37 @@
         </ul>
       </div>
     </article>
+
+    <!-- Interactive Intercept Decryptor Section -->
+    <section class="intercept-module">
+      <div class="intercept-header">
+        <span class="terminal-prompt">SIGNAL RECON &bull; RECORDED INTERCEPT</span>
+        <span class="terminal-status">STATION CALLSIGN IDENT</span>
+      </div>
+      <div class="intercept-terminal">
+        <div class="intercept-raw">
+          <span class="terminal-prefix">&gt; RAW INTERCEPT:</span>
+          <code class="terminal-code">МДЖБ 76 497 ПОПЛАВОК 84 45 92 10</code>
+        </div>
+        <div id="decryptedBreakdown" class="decrypted-breakdown hidden">
+          <div class="breakdown-row">
+            <span class="tag-pill">CALLSIGN</span>
+            <span class="tag-val"><strong>МДЖБ (MDZhB)</strong> &mdash; Mikhail Dmitry Zhenya Boris (Western Military District)</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="tag-pill">CODEWORD</span>
+            <span class="tag-val"><strong>ПОПЛАВОК (POPLAVOK / Float)</strong> &mdash; Operational readiness drill codeword</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="tag-pill">ONE-TIME PAD</span>
+            <span class="tag-val"><code>84 45 92 10</code> &mdash; Sealed decipher key valid for single use only</span>
+          </div>
+        </div>
+        <button id="decryptBtn" class="btn-decrypt">
+          ⚡ Analyze Intercept Telemetry
+        </button>
+      </div>
+    </section>
 
     <!-- Coming Tomorrow Teaser -->
     <section class="tomorrow-preview">

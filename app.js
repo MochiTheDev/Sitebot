@@ -10,13 +10,21 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// QRN Static Audio State
+let qrnActive = false;
+let noiseNode = null;
+let noiseGainNode = null;
+
 const playBtn = document.getElementById('playSignalBtn');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
 const modeToggleBtn = document.getElementById('modeToggleBtn');
+const qrnToggleBtn = document.getElementById('qrnToggleBtn');
 const copyCoordsBtn = document.getElementById('copyCoordsBtn');
 const toggleDecoderBtn = document.getElementById('toggleDecoderBtn');
 const decoderBox = document.getElementById('decoderBox');
+const decryptBtn = document.getElementById('decryptBtn');
+const decryptedBreakdown = document.getElementById('decryptedBreakdown');
 const toastNotification = document.getElementById('toastNotification');
 
 const canvas = document.getElementById('oscilloscope');
@@ -64,7 +72,8 @@ function drawScope() {
 
   canvasCtx.beginPath();
   const amplitude = isPlaying ? 22 * volumeLevel : 6;
-  const noiseAmp = isPlaying ? (currentModeIndex === 0 ? 2 : 1) : 0.8;
+  const baseNoise = qrnActive ? 4.5 : 1.2;
+  const noiseAmp = isPlaying ? (currentModeIndex === 0 ? baseNoise + 2 : baseNoise) : baseNoise * 0.7;
 
   for (let x = 0; x < width; x++) {
     const normalX = x / width;
@@ -86,6 +95,61 @@ function drawScope() {
   phase += isPlaying ? (currentModeIndex === 1 ? 0.28 : 0.2) : 0.04;
 }
 drawScope();
+
+// Atmospheric Static (QRN) Generator via Web Audio Buffer
+function createNoiseNode(ctx) {
+  const bufferSize = 2 * ctx.sampleRate;
+  const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + white * 0.0555179;
+    b1 = 0.99332 * b1 + white * 0.0750759;
+    b2 = 0.96900 * b2 + white * 0.1538520;
+    b3 = 0.86650 * b3 + white * 0.3104856;
+    b4 = 0.55000 * b4 + white * 0.5329522;
+    b5 = -0.7616 * b5 - white * 0.0168980;
+    output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.08;
+    b6 = white * 0.115926;
+  }
+
+  const whiteNoise = ctx.createBufferSource();
+  whiteNoise.buffer = noiseBuffer;
+  whiteNoise.loop = true;
+  return whiteNoise;
+}
+
+function setupQrnAudio() {
+  if (!audioCtx || !masterGainNode) return;
+  if (qrnActive) {
+    try {
+      noiseGainNode = audioCtx.createGain();
+      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel, audioCtx.currentTime);
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1400, audioCtx.currentTime);
+      filter.Q.setValueAtTime(1.2, audioCtx.currentTime);
+
+      noiseNode = createNoiseNode(audioCtx);
+      noiseNode.connect(filter);
+      filter.connect(noiseGainNode);
+      noiseGainNode.connect(masterGainNode);
+      noiseNode.start();
+    } catch(e) {}
+  } else {
+    if (noiseNode) {
+      try { noiseNode.stop(); } catch(e) {}
+      noiseNode.disconnect();
+      noiseNode = null;
+    }
+    if (noiseGainNode) {
+      noiseGainNode.disconnect();
+      noiseGainNode = null;
+    }
+  }
+}
 
 // Web Audio Synthesizer for UVB-76 Buzzer Emulation
 function startAudio() {
@@ -113,6 +177,10 @@ function startAudio() {
   osc.connect(gainNode);
   osc.start();
 
+  if (qrnActive) {
+    setupQrnAudio();
+  }
+
   // Buzz pulse loop
   function triggerBuzz() {
     if (!isPlaying) return;
@@ -133,6 +201,11 @@ function stopAudio() {
   if (gainNode && audioCtx) {
     gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
+  }
+  if (noiseNode) {
+    try { noiseNode.stop(); } catch(e) {}
+    noiseNode.disconnect();
+    noiseNode = null;
   }
   if (osc) {
     try { osc.stop(); } catch(e) {}
@@ -165,6 +238,9 @@ if (volumeSlider) {
     if (masterGainNode && audioCtx) {
       masterGainNode.gain.setValueAtTime(volumeLevel, audioCtx.currentTime);
     }
+    if (noiseGainNode && audioCtx) {
+      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel, audioCtx.currentTime);
+    }
   });
 }
 
@@ -180,6 +256,18 @@ if (modeToggleBtn) {
       const freqs = [140, 165, 120];
       osc.type = oscTypes[currentModeIndex];
       osc.frequency.setValueAtTime(freqs[currentModeIndex], audioCtx.currentTime);
+    }
+  });
+}
+
+// QRN Static Noise Switcher
+if (qrnToggleBtn) {
+  qrnToggleBtn.addEventListener('click', () => {
+    qrnActive = !qrnActive;
+    qrnToggleBtn.textContent = qrnActive ? 'QRN NOISE: ON' : 'QRN NOISE: OFF';
+    qrnToggleBtn.classList.toggle('active', qrnActive);
+    if (isPlaying) {
+      setupQrnAudio();
     }
   });
 }
@@ -214,6 +302,20 @@ if (toggleDecoderBtn && decoderBox) {
     toggleDecoderBtn.textContent = decoderBox.classList.contains('hidden')
       ? '🔍 Phonetic Cipher Reference'
       : '✖ Hide Cipher Reference';
+  });
+}
+
+// Intercept Decryption Breakdown Toggle
+if (decryptBtn && decryptedBreakdown) {
+  decryptBtn.addEventListener('click', () => {
+    decryptedBreakdown.classList.toggle('hidden');
+    const isHidden = decryptedBreakdown.classList.contains('hidden');
+    decryptBtn.textContent = isHidden
+      ? '⚡ Analyze Intercept Telemetry'
+      : '✖ Conceal Intercept Telemetry';
+    if (!isHidden) {
+      showToast('Intercept telemetry analyzed');
+    }
   });
 }
 
