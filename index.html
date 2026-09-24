@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Phantom Frequency | Daily Log of Acoustic Oddities</title>
+  <meta name="description" content="A daily chronicle of mysterious radio stations, deep-sea acoustics, and electromagnetic anomalies caught on tape.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="badge-row">
+      <span class="pulse-indicator"></span>
+      <span class="status-text">TRANSMISSION ACTIVE &bull; DAY 001</span>
+    </div>
+    <h1 class="glitch-title">The Phantom Frequency</h1>
+    <p class="tagline">A daily dispatch excavating unverified radio signals, deep-trench acoustic ghosts, and stray cosmic echoes.</p>
+  </header>
+
+  <main class="container">
+    <!-- Interactive Tuner Banner -->
+    <section class="tuner-card">
+      <div class="tuner-screen">
+        <canvas id="oscilloscope" width="600" height="80"></canvas>
+        <div class="frequency-readout">
+          <span class="label">MONITOR FREQ:</span>
+          <span id="freqValue" class="mono-accent">4625.0 kHz</span>
+          <span class="signal-mode">AM / USB</span>
+        </div>
+      </div>
+      <div class="tuner-controls">
+        <button id="playSignalBtn" class="btn btn-primary" aria-label="Synthesize signal audio">
+          <span class="icon">&#9654;</span> <span class="btn-text">Synthesize Carrier Tone</span>
+        </button>
+        <p class="tuner-note">Generates synthetic live drone simulation via Web Audio API.</p>
+      </div>
+    </section>
+
+    <!-- Main Daily Feature -->
+    <article class="daily-feature">
+      <div class="entry-meta">
+        <span class="entry-date">OCTOBER LOG &bull; ENTRY #01</span>
+        <span class="entry-tag">STATION: UVB-76 / THE BUZZER</span>
+      </div>
+      <h2>The 40-Year Heartbeat of Povarovo</h2>
+      <div class="coordinates-bar">
+        <span>LOC: 56°5′0″N 37°6′37″E</span>
+        <span>BAND: 4625 kHz</span>
+        <span>SINCE: ~1973</span>
+      </div>
+
+      <p class="lead">
+        Somewhere in the cold marshland northwest of Moscow, a relentless shortwave drone has ticked like a wounded clock every two seconds without interruption across six decades.
+      </p>
+
+      <div class="intel-grid">
+        <div class="intel-box">
+          <h3>The Signature</h3>
+          <p>A monotone buzz repeated ~25 to 30 times per minute, 24 hours a day. During rare intervals, the buzzing cuts out abruptly and cold, hurried human voices recite Russian names and military cipher strings: <em>"Ya hydroplane 45 78 92 01."</em></p>
+        </div>
+        <div class="intel-box">
+          <h3>The Dead Man's Switch Myth</h3>
+          <p>Popular folklore posits it as the trigger for the Soviet <em>Perimetr</em> system (a nuclear retaliatory fail-safe). However, ionospheric radio engineers point to something more plausible yet equally strange: an atmospheric probe monitoring ion density over European skies.</p>
+        </div>
+      </div>
+
+      <div class="deep-dive">
+        <h3>Three Documented Anomalies in the Feed</h3>
+        <ul class="anomaly-list">
+          <li>
+            <span class="marker">1997-12-24</span>
+            <div>
+              <strong>The Voice of Christmas Eve</strong>
+              <p>The buzzer halted completely. A human voice whispered numerical callsigns into a hot mic before laughter echoed in the background and the monotone drone slammed back on.</p>
+            </div>
+          </li>
+          <li>
+            <span class="marker">2010-09-01</span>
+            <div>
+              <strong>The Relocation Flit</strong>
+              <p>The entire transmission vanished for 72 hours, then roared back to life from an entirely different triangulation point in western Russia near Pskov.</p>
+            </div>
+          </li>
+          <li>
+            <span class="marker">2020-05-11</span>
+            <div>
+              <strong>The Phantom Ballet</strong>
+              <p>For roughly three minutes, Swan Lake played over the carrier wave at low fidelity, distorted by magnetic flutter, before dissolving back into buzz pulses.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Coming Tomorrow Teaser -->
+    <section class="tomorrow-preview">
+      <div class="badge-small">DISPATCH #002 PREVIEW</div>
+      <h3>Next Frequency: The 52-Hertz Wanderer</h3>
+      <p>Tracking the loneliest call in the North Pacific Ocean &mdash; a marine acoustic anomaly that sings at a pitch no other whale can hear or answer.</p>
+      <div class="countdown-box">
+        <span>Next signal opens in:</span>
+        <strong id="countdownTimer">23:59:59</strong>
+      </div>
+    </section>
+
+    <!-- Archive Index (Grows Daily) -->
+    <section class="archive-section">
+      <h3>Archive Registry</h3>
+      <div class="archive-list">
+        <div class="archive-item active">
+          <span class="item-num">#001</span>
+          <div class="item-info">
+            <span class="item-title">UVB-76 (The Buzzer)</span>
+            <span class="item-desc">4625 kHz shortwave military cipher loop</span>
+          </div>
+          <span class="badge-status">ACTIVE</span>
+        </div>
+        <div class="archive-item locked">
+          <span class="item-num">#002</span>
+          <div class="item-info">
+            <span class="item-title">52-Hertz Whale & The Pacific Hydrophones</span>
+            <span class="item-desc">SOSUS submarine tracking arrays, 1989</span>
+          </div>
+          <span class="badge-status">LOCKED</span>
+        </div>
+        <div class="archive-item locked">
+          <span class="item-num">#003</span>
+          <div class="item-info">
+            <span class="item-title">The Lincolnshire Poacher</span>
+            <span class="item-desc">MI6 numbers station using an electronic music box</span>
+          </div>
+          <span class="badge-status">LOCKED</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; The Phantom Frequency. Built as a daily catalog of unvarnished terrestrial and cosmic acoustic oddities.</p>
+    <p class="disclaimer">Signal soundscapes are synthesized client-side via Web Audio. Zero tracking cookies. New transmission logged daily.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
