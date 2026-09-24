@@ -4,6 +4,10 @@
     {
       "date": "2026-09-24",
       "summary": "Launched an interactive daily-updating archive of mysterious radio broadcasts, deep-ocean anomalies, and acoustic ghosts with an interactive Web Audio signal synthesizer."
+    },
+    {
+      "date": "2026-09-24",
+      "summary": "Added audio output gain slider, demodulation mode switcher (AM/USB/LSB), copy telemetry coordinates with toast, phonetic cipher decoder reference tool, and CRT scanlines visual effects."
     }
   ]
 }

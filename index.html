@@ -24,17 +24,27 @@
     <!-- Interactive Tuner Banner -->
     <section class="tuner-card">
       <div class="tuner-screen">
-        <canvas id="oscilloscope" width="600" height="80"></canvas>
+        <div class="canvas-wrapper">
+          <canvas id="oscilloscope" width="600" height="80"></canvas>
+          <div class="scanlines"></div>
+        </div>
         <div class="frequency-readout">
           <span class="label">MONITOR FREQ:</span>
           <span id="freqValue" class="mono-accent">4625.0 kHz</span>
-          <span class="signal-mode">AM / USB</span>
+          <button id="modeToggleBtn" class="signal-mode" title="Click to toggle demodulation mode">MODE: AM</button>
         </div>
       </div>
       <div class="tuner-controls">
-        <button id="playSignalBtn" class="btn btn-primary" aria-label="Synthesize signal audio">
-          <span class="icon">&#9654;</span> <span class="btn-text">Synthesize Carrier Tone</span>
-        </button>
+        <div class="control-row">
+          <button id="playSignalBtn" class="btn btn-primary" aria-label="Synthesize signal audio">
+            <span class="icon">&#9654;</span> <span class="btn-text">Synthesize Carrier Tone</span>
+          </button>
+        </div>
+        <div class="volume-control-row">
+          <label for="volumeSlider" class="volume-label">OUTPUT GAIN:</label>
+          <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider" aria-label="Output Gain Volume">
+          <span id="volumeValue" class="volume-readout">70%</span>
+        </div>
         <p class="tuner-note">Generates synthetic live drone simulation via Web Audio API.</p>
       </div>
     </section>
@@ -50,6 +60,9 @@
         <span>LOC: 56°5′0″N 37°6′37″E</span>
         <span>BAND: 4625 kHz</span>
         <span>SINCE: ~1973</span>
+        <button id="copyCoordsBtn" class="copy-coords-btn" title="Copy Telemetry Coordinates">
+          <span class="copy-icon">📋</span> Copy Telemetry
+        </button>
       </div>
 
       <p class="lead">
@@ -59,7 +72,23 @@
       <div class="intel-grid">
         <div class="intel-box">
           <h3>The Signature</h3>
-          <p>A monotone buzz repeated ~25 to 30 times per minute, 24 hours a day. During rare intervals, the buzzing cuts out abruptly and cold, hurried human voices recite Russian names and military cipher strings: <em>"Ya hydroplane 45 78 92 01."</em></p>
+          <p>A monotone buzz repeated ~25 to 30 times per minute, 24 hours a day. During rare intervals, the buzzing cuts out abruptly and cold, hurried human voices recite Russian names and military cipher strings: <em>&quot;Ya hydroplane 45 78 92 01.&quot;</em></p>
+          <button id="toggleDecoderBtn" class="decoder-toggle-btn">
+            🔍 Phonetic Cipher Reference
+          </button>
+          <div id="decoderBox" class="decoder-box hidden">
+            <h4>Phonetic Cipher Key</h4>
+            <div class="decoder-grid">
+              <span><strong>ANNA</strong> = A</span>
+              <span><strong>BORIS</strong> = B</span>
+              <span><strong>VASILY</strong> = V</span>
+              <span><strong>GALINA</strong> = G</span>
+              <span><strong>DMITRY</strong> = D</span>
+              <span><strong>ELENA</strong> = E</span>
+              <span><strong>ZHENYA</strong> = Zh</span>
+              <span><strong>ZINAIDA</strong> = Z</span>
+            </div>
+          </div>
         </div>
         <div class="intel-box">
           <h3>The Dead Man's Switch Myth</h3>
@@ -121,7 +150,7 @@
         <div class="archive-item locked">
           <span class="item-num">#002</span>
           <div class="item-info">
-            <span class="item-title">52-Hertz Whale & The Pacific Hydrophones</span>
+            <span class="item-title">52-Hertz Whale &amp; The Pacific Hydrophones</span>
             <span class="item-desc">SOSUS submarine tracking arrays, 1989</span>
           </div>
           <span class="badge-status">LOCKED</span>
@@ -142,6 +171,8 @@
     <p>&copy; The Phantom Frequency. Built as a daily catalog of unvarnished terrestrial and cosmic acoustic oddities.</p>
     <p class="disclaimer">Signal soundscapes are synthesized client-side via Web Audio. Zero tracking cookies. New transmission logged daily.</p>
   </footer>
+
+  <div id="toastNotification" class="toast hidden">Telemetry copied to clipboard!</div>
 
   <script src="app.js"></script>
 </body>

@@ -104,12 +104,31 @@ h1.glitch-title {
   margin-bottom: 1rem;
 }
 
+.canvas-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
 #oscilloscope {
   width: 100%;
   height: 70px;
   display: block;
   background: #040608;
   border-radius: 4px;
+}
+
+.scanlines {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.25) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
 }
 
 .frequency-readout {
@@ -131,14 +150,22 @@ h1.glitch-title {
   color: var(--accent-cyan);
   font-size: 0.75rem;
   border: 1px solid var(--accent-cyan);
-  padding: 0.1rem 0.4rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: all 0.2s ease;
+}
+
+.signal-mode:hover {
+  background: rgba(0, 240, 255, 0.15);
 }
 
 .tuner-controls {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .btn {
@@ -153,6 +180,7 @@ h1.glitch-title {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 100%;
   transition: all 0.2s ease;
 }
 
@@ -169,6 +197,37 @@ h1.glitch-title {
 .btn-primary.playing {
   background: #ff5555;
   color: white;
+}
+
+/* Volume Slider Controls */
+.volume-control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-tertiary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.volume-label {
+  white-space: nowrap;
+}
+
+.volume-slider {
+  flex: 1;
+  accent-color: var(--accent-amber);
+  cursor: pointer;
+  height: 4px;
+}
+
+.volume-readout {
+  color: var(--accent-amber);
+  min-width: 2.5rem;
+  text-align: right;
+  font-weight: 700;
 }
 
 .tuner-note {
@@ -207,6 +266,7 @@ h1.glitch-title {
 .coordinates-bar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.75rem;
   background: var(--bg-tertiary);
   padding: 0.4rem 0.75rem;
@@ -215,6 +275,26 @@ h1.glitch-title {
   font-size: 0.72rem;
   color: var(--accent-cyan);
   margin-bottom: 1.25rem;
+}
+
+.copy-coords-btn {
+  margin-left: auto;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.copy-coords-btn:hover {
+  background: rgba(0, 240, 255, 0.25);
 }
 
 .lead {
@@ -254,6 +334,54 @@ h1.glitch-title {
 .intel-box p {
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+/* Phonetic Decoder Box */
+.decoder-toggle-btn {
+  margin-top: 0.75rem;
+  background: rgba(255, 184, 48, 0.1);
+  border: 1px solid rgba(255, 184, 48, 0.4);
+  color: var(--accent-amber);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.decoder-toggle-btn:hover {
+  background: rgba(255, 184, 48, 0.2);
+}
+
+.decoder-box {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #0d1117;
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+}
+
+.decoder-box.hidden {
+  display: none;
+}
+
+.decoder-box h4 {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.5rem;
+}
+
+.decoder-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-primary);
 }
 
 .deep-dive h3 {
@@ -418,4 +546,33 @@ h1.glitch-title {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   opacity: 0.7;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #12161f;
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast.hidden {
+  display: block;
 }
