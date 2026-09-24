@@ -201,7 +201,7 @@ jobs:
             exit 1
           fi
 
-          git diff --staged --quiet || git commit -m "AI daily site update 🌱"
+          git diff --staged --quiet || git commit -m "AI daily site update"
           git push
 
       - name: Prepare Pages deploy folder
