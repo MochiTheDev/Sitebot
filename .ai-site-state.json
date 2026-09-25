@@ -12,6 +12,10 @@
     {
       "date": "2026-09-24",
       "summary": "Added an ionospheric QRN atmospheric static generator to the audio tuner and introduced an interactive historical cipher intercept breakdown module."
+    },
+    {
+      "date": "2026-09-25",
+      "summary": "Added an interactive S-Meter signal strength gauge to the receiver tuner and introduced an ionospheric propagation telemetry section with solar flux monitoring."
     }
   ]
 }

@@ -26,11 +26,13 @@ const decoderBox = document.getElementById('decoderBox');
 const decryptBtn = document.getElementById('decryptBtn');
 const decryptedBreakdown = document.getElementById('decryptedBreakdown');
 const toastNotification = document.getElementById('toastNotification');
+const sMeterBars = document.getElementById('sMeterBars');
+const sMeterReadout = document.getElementById('sMeterReadout');
 
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
-// Oscilloscope waveform simulation
+// Oscilloscope waveform simulation & Dynamic S-Meter update
 let phase = 0;
 function drawScope() {
   requestAnimationFrame(drawScope);
@@ -93,7 +95,30 @@ function drawScope() {
   canvasCtx.shadowBlur = 0;
 
   phase += isPlaying ? (currentModeIndex === 1 ? 0.28 : 0.2) : 0.04;
+
+  // Update Signal Gauge (S-Meter)
+  updateSMeter();
 }
+
+function updateSMeter() {
+  if (!sMeterBars || !sMeterReadout) return;
+  let level = 2; // Ambient base
+  if (qrnActive) level += 2;
+  if (isPlaying) {
+    const pulsePeak = Math.sin(phase * 3) > 0.3 ? 3 : 1;
+    level += Math.floor(volumeLevel * 3) + pulsePeak;
+  }
+  level = Math.min(8, Math.max(1, level));
+
+  const bars = sMeterBars.querySelectorAll('.s-bar');
+  bars.forEach((bar, idx) => {
+    bar.classList.toggle('active', idx < level);
+  });
+
+  const labels = ['S1', 'S2', 'S3', 'S5', 'S7', 'S9', 'S9+10dB', 'S9+30dB'];
+  sMeterReadout.textContent = labels[level - 1] || 'S3';
+}
+
 drawScope();
 
 // Atmospheric Static (QRN) Generator via Web Audio Buffer
@@ -318,6 +343,22 @@ if (decryptBtn && decryptedBreakdown) {
     }
   });
 }
+
+// Periodic Ionospheric Telemetry Fluctuation Simulation
+function simulatePropChanges() {
+  const sfiEl = document.getElementById('sfiVal');
+  const kIndexEl = document.getElementById('kIndexVal');
+  if (sfiEl) {
+    const sfiBase = 148;
+    const jitter = Math.floor((Math.random() - 0.5) * 6);
+    sfiEl.textContent = `${sfiBase + jitter} SFU`;
+  }
+  if (kIndexEl) {
+    const kVal = Math.random() > 0.85 ? 3 : 2;
+    kIndexEl.textContent = `${kVal} (${kVal > 2 ? 'UNSETTLED' : 'QUIET'})`;
+  }
+}
+setInterval(simulatePropChanges, 12000);
 
 // Midnight rollover countdown for daily refresh feeling
 function updateCountdown() {

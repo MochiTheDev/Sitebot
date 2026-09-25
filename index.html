@@ -24,6 +24,22 @@
     <!-- Interactive Tuner Banner -->
     <section class="tuner-card">
       <div class="tuner-screen">
+        <div class="tuner-top-bar">
+          <div class="s-meter">
+            <span class="s-label">SIGNAL:</span>
+            <div class="s-meter-bars" id="sMeterBars">
+              <span class="s-bar" data-level="1"></span>
+              <span class="s-bar" data-level="2"></span>
+              <span class="s-bar" data-level="3"></span>
+              <span class="s-bar" data-level="4"></span>
+              <span class="s-bar" data-level="5"></span>
+              <span class="s-bar" data-level="6"></span>
+              <span class="s-bar red" data-level="7"></span>
+              <span class="s-bar red" data-level="8"></span>
+            </div>
+            <span id="sMeterReadout" class="s-val">S3</span>
+          </div>
+        </div>
         <div class="canvas-wrapper">
           <canvas id="oscilloscope" width="600" height="80"></canvas>
           <div class="scanlines"></div>
@@ -49,6 +65,32 @@
           <span id="volumeValue" class="volume-readout">70%</span>
         </div>
         <p class="tuner-note">Generates synthetic live drone simulation via Web Audio API.</p>
+      </div>
+    </section>
+
+    <!-- Atmospheric Ionospheric Telemetry Widget -->
+    <section class="propagation-card">
+      <div class="prop-header">
+        <span class="prop-icon">📡</span>
+        <span class="prop-title">IONOSPHERIC TELEMETRY</span>
+        <span class="prop-live-badge"><span class="tiny-pulse"></span> SOL-TERRA FEED</span>
+      </div>
+      <div class="prop-grid">
+        <div class="prop-stat">
+          <span class="prop-label">SOLAR FLUX (SFI)</span>
+          <span class="prop-val" id="sfiVal">148 SFU</span>
+          <span class="prop-sub">Enhanced Skywave Reflection</span>
+        </div>
+        <div class="prop-stat">
+          <span class="prop-label">K-INDEX GEOMAG</span>
+          <span class="prop-val" id="kIndexVal">2 (QUIET)</span>
+          <span class="prop-sub">Low Magnetic Distortion</span>
+        </div>
+        <div class="prop-stat">
+          <span class="prop-label">DUCTING LAYER</span>
+          <span class="prop-val">F2-LAYER ACTIVE</span>
+          <span class="prop-sub">Shortwave Range &gt; 3,500km</span>
+        </div>
       </div>
     </section>
 

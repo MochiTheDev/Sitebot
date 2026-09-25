@@ -92,7 +92,7 @@ h1.glitch-title {
   border: 1px solid var(--border-bright);
   border-radius: 12px;
   padding: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -102,6 +102,56 @@ h1.glitch-title {
   border-radius: 8px;
   padding: 0.75rem;
   margin-bottom: 1rem;
+}
+
+.tuner-top-bar {
+  margin-bottom: 0.5rem;
+}
+
+.s-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.s-label {
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+.s-meter-bars {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex: 1;
+}
+
+.s-bar {
+  height: 8px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  transition: background 0.1s ease;
+}
+
+.s-bar.active {
+  background: var(--accent-green);
+  box-shadow: 0 0 4px var(--accent-green);
+}
+
+.s-bar.red.active {
+  background: #ff4444;
+  box-shadow: 0 0 4px #ff4444;
+}
+
+.s-val {
+  color: var(--accent-green);
+  font-weight: 700;
+  min-width: 3.5rem;
+  text-align: right;
 }
 
 .canvas-wrapper {
@@ -249,6 +299,93 @@ h1.glitch-title {
   color: var(--text-muted);
   text-align: center;
   font-family: var(--font-mono);
+}
+
+/* Propagation Telemetry Section */
+.propagation-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.prop-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--border-dim);
+}
+
+.prop-icon {
+  font-size: 0.9rem;
+}
+
+.prop-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.prop-live-badge {
+  margin-left: auto;
+  color: var(--accent-green);
+  font-size: 0.68rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tiny-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  display: inline-block;
+  animation: pulse 1.5s infinite;
+}
+
+.prop-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 520px) {
+  .prop-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.prop-stat {
+  background: var(--bg-tertiary);
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.prop-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.prop-val {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.prop-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
 }
 
 /* Daily Feature */
