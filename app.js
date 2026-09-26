@@ -10,6 +10,10 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// Frequency Tuning State (Base 4625.0 kHz)
+const baseFreq = 4625.0;
+let currentFreq = 4625.0;
+
 // QRN Static Audio State
 let qrnActive = false;
 let noiseNode = null;
@@ -28,6 +32,22 @@ const decryptedBreakdown = document.getElementById('decryptedBreakdown');
 const toastNotification = document.getElementById('toastNotification');
 const sMeterBars = document.getElementById('sMeterBars');
 const sMeterReadout = document.getElementById('sMeterReadout');
+const freqValueEl = document.getElementById('freqValue');
+const freqDownBtn = document.getElementById('freqDownBtn');
+const freqResetBtn = document.getElementById('freqResetBtn');
+const freqUpBtn = document.getElementById('freqUpBtn');
+
+// SWL Log Elements
+const logInterceptBtn = document.getElementById('logInterceptBtn');
+const swlTicket = document.getElementById('swlTicket');
+const copyTicketBtn = document.getElementById('copyTicketBtn');
+const swlZoneSelect = document.getElementById('swlZoneSelect');
+const swlRstSelect = document.getElementById('swlRstSelect');
+const ticketTimestamp = document.getElementById('ticketTimestamp');
+const ticketFreq = document.getElementById('ticketFreq');
+const ticketRst = document.getElementById('ticketRst');
+const ticketZone = document.getElementById('ticketZone');
+const ticketHash = document.getElementById('ticketHash');
 
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
@@ -73,7 +93,11 @@ function drawScope() {
   canvasCtx.shadowColor = isPlaying ? activeColor : '#ffb830';
 
   canvasCtx.beginPath();
-  const amplitude = isPlaying ? 22 * volumeLevel : 6;
+  
+  // Amplitude diminishes if detuned off 4625.0 kHz
+  const detuneDist = Math.abs(currentFreq - baseFreq);
+  const detuneFactor = Math.max(0.2, 1 - (detuneDist / 3));
+  const amplitude = isPlaying ? 22 * volumeLevel * detuneFactor : 6;
   const baseNoise = qrnActive ? 4.5 : 1.2;
   const noiseAmp = isPlaying ? (currentModeIndex === 0 ? baseNoise + 2 : baseNoise) : baseNoise * 0.7;
 
@@ -81,11 +105,13 @@ function drawScope() {
     const normalX = x / width;
     const noise = (Math.random() - 0.5) * noiseAmp;
     let freqMult = currentModeIndex === 1 ? 32 : currentModeIndex === 2 ? 18 : 24;
-    let y = height / 2 + Math.sin(normalX * freqMult + phase) * amplitude + noise;
+    // Frequency detune adds secondary ripple flutter
+    const detuneRipple = detuneDist > 0 ? Math.sin(normalX * 60 + phase * 2) * (detuneDist * 3) : 0;
+    let y = height / 2 + Math.sin(normalX * freqMult + phase) * amplitude + noise + detuneRipple;
     
     // If buzzing pulse emulation
     if (isPlaying && Math.floor((phase * 4) % 10) === 0) {
-      y += (Math.random() - 0.5) * 14;
+      y += (Math.random() - 0.5) * (14 * detuneFactor);
     }
 
     if (x === 0) canvasCtx.moveTo(x, y);
@@ -107,6 +133,9 @@ function updateSMeter() {
   if (isPlaying) {
     const pulsePeak = Math.sin(phase * 3) > 0.3 ? 3 : 1;
     level += Math.floor(volumeLevel * 3) + pulsePeak;
+    // Off-carrier detune reduces received signal strength
+    const detuneOffset = Math.abs(currentFreq - baseFreq);
+    level -= Math.floor(detuneOffset * 2);
   }
   level = Math.min(8, Math.max(1, level));
 
@@ -120,6 +149,14 @@ function updateSMeter() {
 }
 
 drawScope();
+
+// Calculate oscillator frequency taking into account demodulation mode and VFO tuning offset
+function getTunedFrequency() {
+  const freqs = [140, 165, 120];
+  const centerTone = freqs[currentModeIndex] || 140;
+  const offset = (currentFreq - baseFreq) * 90; // heterodyne pitch shift in Hz
+  return Math.max(50, Math.min(900, centerTone + offset));
+}
 
 // Atmospheric Static (QRN) Generator via Web Audio Buffer
 function createNoiseNode(ctx) {
@@ -197,8 +234,7 @@ function startAudio() {
   osc = audioCtx.createOscillator();
   const oscTypes = ['sawtooth', 'square', 'triangle'];
   osc.type = oscTypes[currentModeIndex] || 'sawtooth';
-  const freqs = [140, 165, 120];
-  osc.frequency.setValueAtTime(freqs[currentModeIndex] || 140, audioCtx.currentTime);
+  osc.frequency.setValueAtTime(getTunedFrequency(), audioCtx.currentTime);
   osc.connect(gainNode);
   osc.start();
 
@@ -210,10 +246,12 @@ function startAudio() {
   function triggerBuzz() {
     if (!isPlaying) return;
     const now = audioCtx.currentTime;
+    const detuneDist = Math.abs(currentFreq - baseFreq);
+    const detuneGain = Math.max(0.03, 0.18 - detuneDist * 0.05);
     gainNode.gain.cancelScheduledValues(now);
     gainNode.gain.setValueAtTime(0.001, now);
-    gainNode.gain.linearRampToValueAtTime(0.18, now + 0.05);
-    gainNode.gain.setValueAtTime(0.18, now + 0.8);
+    gainNode.gain.linearRampToValueAtTime(detuneGain, now + 0.05);
+    gainNode.gain.setValueAtTime(detuneGain, now + 0.8);
     gainNode.gain.linearRampToValueAtTime(0.001, now + 0.88);
   }
 
@@ -269,6 +307,40 @@ if (volumeSlider) {
   });
 }
 
+// VFO Frequency Stepper Controls
+function updateFrequency(newFreq) {
+  currentFreq = Math.round(newFreq * 10) / 10;
+  if (currentFreq < 4622.0) currentFreq = 4622.0;
+  if (currentFreq > 4628.0) currentFreq = 4628.0;
+  
+  if (freqValueEl) {
+    freqValueEl.textContent = `${currentFreq.toFixed(1)} kHz`;
+    freqValueEl.classList.toggle('off-carrier', currentFreq !== baseFreq);
+  }
+
+  if (isPlaying && osc && audioCtx) {
+    osc.frequency.setTargetAtTime(getTunedFrequency(), audioCtx.currentTime, 0.05);
+  }
+}
+
+if (freqDownBtn) {
+  freqDownBtn.addEventListener('click', () => {
+    updateFrequency(currentFreq - 0.5);
+  });
+}
+
+if (freqUpBtn) {
+  freqUpBtn.addEventListener('click', () => {
+    updateFrequency(currentFreq + 0.5);
+  });
+}
+
+if (freqResetBtn) {
+  freqResetBtn.addEventListener('click', () => {
+    updateFrequency(baseFreq);
+  });
+}
+
 // Mode Switcher
 if (modeToggleBtn) {
   modeToggleBtn.addEventListener('click', () => {
@@ -278,9 +350,8 @@ if (modeToggleBtn) {
     
     if (isPlaying && osc && audioCtx) {
       const oscTypes = ['sawtooth', 'square', 'triangle'];
-      const freqs = [140, 165, 120];
       osc.type = oscTypes[currentModeIndex];
-      osc.frequency.setValueAtTime(freqs[currentModeIndex], audioCtx.currentTime);
+      osc.frequency.setValueAtTime(getTunedFrequency(), audioCtx.currentTime);
     }
   });
 }
@@ -341,6 +412,48 @@ if (decryptBtn && decryptedBreakdown) {
     if (!isHidden) {
       showToast('Intercept telemetry analyzed');
     }
+  });
+}
+
+// Shortwave Listener (SWL) Reception Log Stamp Handler
+if (logInterceptBtn && swlTicket) {
+  logInterceptBtn.addEventListener('click', () => {
+    swlTicket.classList.remove('hidden');
+    const now = new Date();
+    const timeStr = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+    
+    if (ticketTimestamp) ticketTimestamp.textContent = timeStr;
+    if (ticketFreq) ticketFreq.textContent = `${currentFreq.toFixed(1)} kHz`;
+    if (ticketRst) ticketRst.textContent = swlRstSelect ? swlRstSelect.value : '356';
+    if (ticketZone) ticketZone.textContent = swlZoneSelect ? swlZoneSelect.value.split(' ')[0] : 'Zone 14';
+    
+    const randToken = Math.random().toString(16).substring(2, 6).toUpperCase();
+    const rstVal = swlRstSelect ? swlRstSelect.value : '356';
+    if (ticketHash) {
+      ticketHash.textContent = `PF-${rstVal}-${randToken}-${Math.round(currentFreq)}`;
+    }
+    showToast('Reception log stamped & recorded!');
+  });
+}
+
+if (copyTicketBtn) {
+  copyTicketBtn.addEventListener('click', () => {
+    const rst = ticketRst ? ticketRst.textContent : '356';
+    const zone = ticketZone ? ticketZone.textContent : 'Zone 14';
+    const hash = ticketHash ? ticketHash.textContent : 'PF-4625';
+    const time = ticketTimestamp ? ticketTimestamp.textContent : 'UTC';
+    const ticketText = `[THE PHANTOM FREQUENCY // SWL LOG SLIP]
+Target: UVB-76 (The Buzzer)
+Frequency: ${currentFreq.toFixed(1)} kHz
+RST Signal: ${rst}
+Receiver QTH: ${zone}
+Auth Token: ${hash}
+Timestamp: ${time}`;
+    navigator.clipboard.writeText(ticketText).then(() => {
+      showToast('SWL Reception Slip copied!');
+    }).catch(() => {
+      showToast('Slip copied to clipboard!');
+    });
   });
 }
 

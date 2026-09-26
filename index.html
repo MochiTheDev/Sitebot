@@ -45,8 +45,15 @@
           <div class="scanlines"></div>
         </div>
         <div class="frequency-readout">
-          <span class="label">MONITOR FREQ:</span>
-          <span id="freqValue" class="mono-accent">4625.0 kHz</span>
+          <div class="freq-adjust-group">
+            <span class="label">VFO TUNING:</span>
+            <span id="freqValue" class="mono-accent">4625.0 kHz</span>
+            <div class="freq-step-controls">
+              <button id="freqDownBtn" class="step-btn" title="Tune down 0.5 kHz" aria-label="Tune frequency down">-0.5</button>
+              <button id="freqResetBtn" class="step-btn reset" title="Reset center frequency">CAL</button>
+              <button id="freqUpBtn" class="step-btn" title="Tune up 0.5 kHz" aria-label="Tune frequency up">+0.5</button>
+            </div>
+          </div>
           <div class="tuner-toggles">
             <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
             <button id="modeToggleBtn" class="signal-mode" title="Click to toggle demodulation mode">MODE: AM</button>
@@ -197,6 +204,59 @@
         <button id="decryptBtn" class="btn-decrypt">
           ⚡ Analyze Intercept Telemetry
         </button>
+      </div>
+    </section>
+
+    <!-- Shortwave Listener (SWL) Reception Log Section -->
+    <section class="swl-card">
+      <div class="swl-header">
+        <span class="swl-tag">SWL FIELD LOG</span>
+        <span class="swl-id">FORM 4625-REC</span>
+      </div>
+      <h3>Listener Reception Report</h3>
+      <p class="swl-subtext">Log your shortwave intercept into the telemetry registry using the international standard RST signal audibility metric.</p>
+      
+      <div class="swl-controls">
+        <div class="swl-field">
+          <label for="swlZoneSelect">MONITORING REGION (QTH)</label>
+          <select id="swlZoneSelect" class="swl-select">
+            <option value="Zone 14 (Northern Europe)">Zone 14 (Northern Europe / Baltic)</option>
+            <option value="Zone 05 (Eastern North America)">Zone 05 (Eastern North America)</option>
+            <option value="Zone 03 (Western North America)">Zone 03 (Western North America)</option>
+            <option value="Zone 20 (Eastern Mediterranean)">Zone 20 (Eastern Mediterranean)</option>
+            <option value="Zone 25 (Japan & East Asia)">Zone 25 (Japan & East Asia)</option>
+            <option value="Zone 38 (Southern Africa)">Zone 38 (Southern Africa)</option>
+          </select>
+        </div>
+
+        <div class="swl-field">
+          <label for="swlRstSelect">RST SIGNAL AUDIBILITY</label>
+          <select id="swlRstSelect" class="swl-select">
+            <option value="599">599 &mdash; Perfectly Clear / Extremely Strong</option>
+            <option value="478">478 &mdash; Good Readability / Moderately Strong</option>
+            <option value="356" selected>356 &mdash; Fair / Weak Carrier Flutter</option>
+            <option value="234">234 &mdash; Barely Distinguishable in QRN Static</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="logInterceptBtn" class="btn btn-secondary swl-submit-btn">
+        <span>📝 Record Intercept Stamp</span>
+      </button>
+
+      <div id="swlTicket" class="swl-ticket hidden">
+        <div class="ticket-header">
+          <span class="ticket-title">OFFICIAL SWL RECEPTION SLIP</span>
+          <span id="ticketTimestamp" class="ticket-time"></span>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-row"><span>TARGET:</span><strong>UVB-76 (The Buzzer)</strong></div>
+          <div class="ticket-row"><span>FREQUENCY:</span><strong id="ticketFreq">4625.0 kHz</strong></div>
+          <div class="ticket-row"><span>RST AUDIBILITY:</span><strong id="ticketRst">356</strong></div>
+          <div class="ticket-row"><span>RECEIVER QTH:</span><strong id="ticketZone">Zone 14</strong></div>
+          <div class="ticket-row"><span>AUTH TOKEN:</span><code id="ticketHash">PF-356-8B2A-4625</code></div>
+        </div>
+        <button id="copyTicketBtn" class="copy-ticket-btn">📋 Copy Reception Slip</button>
       </div>
     </section>
 

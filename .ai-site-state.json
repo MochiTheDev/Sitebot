@@ -16,6 +16,10 @@
     {
       "date": "2026-09-25",
       "summary": "Added an interactive S-Meter signal strength gauge to the receiver tuner and introduced an ionospheric propagation telemetry section with solar flux monitoring."
+    },
+    {
+      "date": "2026-09-26",
+      "summary": "Added interactive shortwave receiver frequency step-tuning with live heterodyne pitch shift, and introduced a shortwave listener (SWL) reception report generator."
     }
   ]
 }
