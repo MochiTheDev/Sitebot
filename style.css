@@ -115,6 +115,7 @@ h1.glitch-title {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-muted);
+  flex-wrap: wrap;
 }
 
 .s-label {
@@ -127,6 +128,7 @@ h1.glitch-title {
   gap: 3px;
   align-items: center;
   flex: 1;
+  min-width: 120px;
 }
 
 .s-bar {
@@ -150,7 +152,7 @@ h1.glitch-title {
 .s-val {
   color: var(--accent-green);
   font-weight: 700;
-  min-width: 3.5rem;
+  min-width: 3rem;
   text-align: right;
 }
 
@@ -192,10 +194,77 @@ h1.glitch-title {
   gap: 0.5rem;
 }
 
+.freq-adjust-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .mono-accent {
   color: var(--accent-amber);
   font-weight: 700;
   font-size: 1.05rem;
+}
+
+.segment-display {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 184, 48, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 0 6px rgba(255, 184, 48, 0.15);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.segment-display.off-carrier {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.5);
+  animation: alertPulse 1.5s infinite;
+}
+
+@keyframes alertPulse {
+  0%, 100% { box-shadow: inset 0 0 4px rgba(255, 107, 107, 0.2); }
+  50% { box-shadow: inset 0 0 10px rgba(255, 107, 107, 0.5); }
+}
+
+.freq-step-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.step-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-bright);
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.step-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
+}
+
+.step-btn:active {
+  transform: translateY(1px);
+}
+
+.step-btn.reset {
+  color: var(--accent-amber);
+  border-color: rgba(255, 184, 48, 0.4);
+}
+
+.step-btn.reset:hover {
+  background: rgba(255, 184, 48, 0.15);
+  border-color: var(--accent-amber);
+  box-shadow: 0 0 6px rgba(255, 184, 48, 0.3);
 }
 
 .tuner-toggles {
@@ -214,6 +283,24 @@ h1.glitch-title {
   cursor: pointer;
   font-family: var(--font-mono);
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.signal-mode::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #252e3d;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.signal-mode.active::before {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 6px var(--accent-cyan);
 }
 
 .signal-mode:hover {
@@ -224,6 +311,29 @@ h1.glitch-title {
   background: rgba(255, 184, 48, 0.2);
   border-color: var(--accent-amber);
   color: var(--accent-amber);
+}
+
+.signal-mode.qrn-btn.active::before {
+  background: var(--accent-amber);
+  box-shadow: 0 0 6px var(--accent-amber);
+}
+
+.signal-mode.vis-btn {
+  color: var(--accent-green);
+  border-color: rgba(57, 255, 20, 0.4);
+  margin-left: auto;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+}
+
+.signal-mode.vis-btn.active::before {
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+}
+
+.signal-mode.vis-btn:hover {
+  background: rgba(57, 255, 20, 0.15);
+  border-color: var(--accent-green);
 }
 
 .tuner-controls {

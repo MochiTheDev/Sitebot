@@ -20,6 +20,10 @@
     {
       "date": "2026-09-26",
       "summary": "Added interactive shortwave receiver frequency step-tuning with live heterodyne pitch shift, and introduced a shortwave listener (SWL) reception report generator."
+    },
+    {
+      "date": "2026-09-27",
+      "summary": "Added an interactive real-time shortwave SDR waterfall spectrogram display mode to the receiver visualizer and upgraded the tuner console with tactile indicator LEDs and glowing segment display styling."
     }
   ]
 }

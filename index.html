@@ -38,6 +38,7 @@
               <span class="s-bar red" data-level="8"></span>
             </div>
             <span id="sMeterReadout" class="s-val">S3</span>
+            <button id="visModeBtn" class="signal-mode vis-btn" title="Toggle Oscilloscope / Waterfall Spectrogram">VIS: SCOPE</button>
           </div>
         </div>
         <div class="canvas-wrapper">
@@ -47,7 +48,7 @@
         <div class="frequency-readout">
           <div class="freq-adjust-group">
             <span class="label">VFO TUNING:</span>
-            <span id="freqValue" class="mono-accent">4625.0 kHz</span>
+            <span id="freqValue" class="mono-accent segment-display">4625.0 kHz</span>
             <div class="freq-step-controls">
               <button id="freqDownBtn" class="step-btn" title="Tune down 0.5 kHz" aria-label="Tune frequency down">-0.5</button>
               <button id="freqResetBtn" class="step-btn reset" title="Reset center frequency">CAL</button>
@@ -56,7 +57,7 @@
           </div>
           <div class="tuner-toggles">
             <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
-            <button id="modeToggleBtn" class="signal-mode" title="Click to toggle demodulation mode">MODE: AM</button>
+            <button id="modeToggleBtn" class="signal-mode active" title="Click to toggle demodulation mode">MODE: AM</button>
           </div>
         </div>
       </div>

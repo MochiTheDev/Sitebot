@@ -10,6 +10,17 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// Receiver Visualizer Display Mode ('SCOPE' or 'WATERFALL')
+let visMode = 'SCOPE';
+const visModeBtn = document.getElementById('visModeBtn');
+if (visModeBtn) {
+  visModeBtn.addEventListener('click', () => {
+    visMode = visMode === 'SCOPE' ? 'WATERFALL' : 'SCOPE';
+    visModeBtn.textContent = `VIS: ${visMode}`;
+    visModeBtn.classList.toggle('active', visMode === 'WATERFALL');
+  });
+}
+
 // Frequency Tuning State (Base 4625.0 kHz)
 const baseFreq = 4625.0;
 let currentFreq = 4625.0;
@@ -52,7 +63,7 @@ const ticketHash = document.getElementById('ticketHash');
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
-// Oscilloscope waveform simulation & Dynamic S-Meter update
+// Oscilloscope & SDR Waterfall Spectrogram visualizer loop
 let phase = 0;
 function drawScope() {
   requestAnimationFrame(drawScope);
@@ -60,6 +71,48 @@ function drawScope() {
   const width = canvas.width;
   const height = canvas.height;
 
+  // Waterfall Spectrogram Mode
+  if (visMode === 'WATERFALL') {
+    // Scroll previous canvas image downwards 1px
+    canvasCtx.drawImage(canvas, 0, 0, width, height - 1, 0, 1, width, height - 1);
+    
+    const detuneOffset = (currentFreq - baseFreq) * 50;
+    const carrierCenterX = width / 2 + detuneOffset;
+    
+    // Render top 1px spectrograph row
+    for (let x = 0; x < width; x++) {
+      let intensity = Math.random() * (qrnActive ? 0.35 : 0.08);
+      
+      if (isPlaying) {
+        const dist = Math.abs(x - carrierCenterX);
+        const pulseMod = (Math.sin(phase * 4) > 0 ? 0.85 : 0.25);
+        const carrierPeak = Math.exp(-(dist * dist) / 30) * pulseMod * volumeLevel;
+        intensity += carrierPeak;
+      }
+      
+      intensity = Math.min(1, Math.max(0, intensity));
+      
+      if (intensity < 0.12) {
+        canvasCtx.fillStyle = '#040608';
+      } else if (intensity < 0.35) {
+        const b = Math.floor(intensity * 255);
+        canvasCtx.fillStyle = `rgb(0, ${Math.floor(b * 0.7)}, ${b})`;
+      } else if (intensity < 0.7) {
+        const g = Math.floor(intensity * 255);
+        canvasCtx.fillStyle = `rgb(0, ${g}, ${Math.floor(g * 0.4)})`;
+      } else {
+        const r = Math.floor(intensity * 255);
+        canvasCtx.fillStyle = `rgb(${r}, ${Math.floor(r * 0.8)}, 40)`;
+      }
+      canvasCtx.fillRect(x, 0, 1, 1);
+    }
+
+    phase += isPlaying ? (currentModeIndex === 1 ? 0.28 : 0.2) : 0.04;
+    updateSMeter();
+    return;
+  }
+
+  // Standard Oscilloscope Trace Mode
   canvasCtx.fillStyle = '#040608';
   canvasCtx.fillRect(0, 0, width, height);
 
