@@ -6,7 +6,7 @@
   <title>The Phantom Frequency | Daily Log of Acoustic Oddities</title>
   <meta name="description" content="A daily chronicle of mysterious radio stations, deep-sea acoustics, and electromagnetic anomalies caught on tape.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -56,6 +56,7 @@
             </div>
           </div>
           <div class="tuner-toggles">
+            <button id="filterBandwidthBtn" class="signal-mode filter-btn" title="Toggle DSP Bandpass Filter Bandwidth">DSP: 2.4k (SSB)</button>
             <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
             <button id="modeToggleBtn" class="signal-mode active" title="Click to toggle demodulation mode">MODE: AM</button>
           </div>
@@ -176,6 +177,79 @@
         </ul>
       </div>
     </article>
+
+    <!-- Historical Intercept Logbook Section -->
+    <section class="timeline-card">
+      <div class="timeline-header">
+        <span class="prop-icon">⏱️</span>
+        <span class="prop-title">HISTORICAL INTERCEPT LOGBOOK (1982–2024)</span>
+      </div>
+      <p class="timeline-subtext">Chronological intercepts from the global shortwave listener intelligence network. Filter verified events by telemetry signature.</p>
+      
+      <div class="timeline-filters" id="timelineFilters">
+        <button class="filter-chip active" data-filter="all">All Intercepts</button>
+        <button class="filter-chip" data-filter="voice">Voice Dispatches</button>
+        <button class="filter-chip" data-filter="pirate">Pirate Intrusions</button>
+        <button class="filter-chip" data-filter="relocation">Relocation &amp; Carrier</button>
+      </div>
+
+      <div class="timeline-list" id="timelineList">
+        <div class="timeline-item" data-cat="relocation">
+          <div class="t-meta">
+            <span class="t-year">1982</span>
+            <span class="t-tag tag-reloc">CARRIER ORIGIN</span>
+          </div>
+          <div class="t-body">
+            <strong>First Documented SWL Tape</strong>
+            <p>European amateur monitors log continuous repetitive two-second drone pulses centered at 4625 kHz, originating near military base #430 in Povarovo.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-cat="voice">
+          <div class="t-meta">
+            <span class="t-year">1997</span>
+            <span class="t-tag tag-voice">VOICE DISPATCH</span>
+          </div>
+          <div class="t-body">
+            <strong>First Decoded Callsign &quot;UVB-76&quot;</strong>
+            <p>Female operator breaks regular carrier tone at 21:58 UTC: <em>&quot;Ya UVB-76, Ya UVB-76. 180 08 BROMAL 74 27 99 14.&quot;</em> Confirming voice broadcast capability.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-cat="relocation">
+          <div class="t-meta">
+            <span class="t-year">2010</span>
+            <span class="t-tag tag-reloc">RELOCATION</span>
+          </div>
+          <div class="t-body">
+            <strong>The Povarovo Base Evacuation</strong>
+            <p>Urban explorers document the abandoned military station in Povarovo filled with snowdrifts and logbooks. Triangulation places the new transmission source near Kerro Massif &amp; Naro-Fominsk.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-cat="voice">
+          <div class="t-meta">
+            <span class="t-year">2020</span>
+            <span class="t-tag tag-voice">VOICE DISPATCH</span>
+          </div>
+          <div class="t-body">
+            <strong>Callsign Morph: &quot;ANVF&quot;</strong>
+            <p>After decades of MDZhB identification, the transmitter operator switched primary identification prefix to <em>ANVF (Anna Nikolai Vasily Fedor)</em> accompanied by rapid five-digit cipher trains.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item" data-cat="pirate">
+          <div class="t-meta">
+            <span class="t-year">2022</span>
+            <span class="t-tag tag-pirate">PIRATE INTRUSION</span>
+          </div>
+          <div class="t-body">
+            <strong>Waterfall Spectrogram Hijacking</strong>
+            <p>Decentralized WebSDR enthusiasts exploit high-power pirate transmitters to paint meme graphics and Korean pop audio directly onto the UVB-76 waterfall spectrum.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Interactive Intercept Decryptor Section -->
     <section class="intercept-module">

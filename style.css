@@ -271,6 +271,7 @@ h1.glitch-title {
   display: flex;
   gap: 0.4rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .signal-mode {
@@ -316,6 +317,20 @@ h1.glitch-title {
 .signal-mode.qrn-btn.active::before {
   background: var(--accent-amber);
   box-shadow: 0 0 6px var(--accent-amber);
+}
+
+.signal-mode.filter-btn {
+  color: #c084fc;
+  border-color: rgba(192, 132, 252, 0.5);
+}
+
+.signal-mode.filter-btn::before {
+  background: #c084fc;
+  box-shadow: 0 0 6px #c084fc;
+}
+
+.signal-mode.filter-btn:hover {
+  background: rgba(192, 132, 252, 0.15);
 }
 
 .signal-mode.vis-btn {
@@ -683,6 +698,121 @@ h1.glitch-title {
   color: var(--text-muted);
 }
 
+/* Historical Timeline Dossier */
+.timeline-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.35rem;
+}
+
+.timeline-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.timeline-filters {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filter-chip {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-bright);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.filter-chip.active {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.timeline-item {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-dim);
+  border-left: 3px solid var(--accent-cyan);
+  border-radius: 6px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.timeline-item.hidden {
+  display: none;
+}
+
+.t-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.t-year {
+  color: var(--accent-amber);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.t-tag {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.tag-voice { background: rgba(57, 255, 20, 0.12); color: var(--accent-green); border: 1px solid rgba(57, 255, 20, 0.3); }
+.tag-reloc { background: rgba(255, 184, 48, 0.12); color: var(--accent-amber); border: 1px solid rgba(255, 184, 48, 0.3); }
+.tag-pirate { background: rgba(255, 68, 68, 0.12); color: #ff6b6b; border: 1px solid rgba(255, 68, 68, 0.3); }
+
+.t-body strong {
+  font-size: 0.9rem;
+  color: #fff;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.t-body p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 /* Intercept Lab Module */
 .intercept-module {
   background: #080b10;
@@ -801,6 +931,164 @@ h1.glitch-title {
 
 .btn-decrypt:hover {
   background: rgba(0, 240, 255, 0.1);
+}
+
+/* SWL Reception Card */
+.swl-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.swl-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.swl-tag {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.swl-id {
+  color: var(--text-muted);
+}
+
+.swl-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.35rem;
+}
+
+.swl-subtext {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.swl-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 520px) {
+  .swl-controls {
+    flex-direction: row;
+  }
+  .swl-field {
+    flex: 1;
+  }
+}
+
+.swl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.swl-field label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-amber);
+}
+
+.swl-select {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-bright);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.swl-submit-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+}
+
+.swl-submit-btn:hover {
+  background: rgba(57, 255, 20, 0.15);
+}
+
+.swl-ticket {
+  margin-top: 1rem;
+  background: #030507;
+  border: 1px dashed var(--accent-green);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--font-mono);
+}
+
+.swl-ticket.hidden {
+  display: none;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  border-bottom: 1px dashed rgba(57, 255, 20, 0.3);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ticket-title {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.ticket-time {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.ticket-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  margin-bottom: 0.75rem;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+}
+
+.ticket-row strong {
+  color: #fff;
+}
+
+.ticket-row code {
+  color: var(--accent-cyan);
+}
+
+.copy-ticket-btn {
+  background: transparent;
+  border: 1px solid var(--accent-green);
+  color: var(--accent-green);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.copy-ticket-btn:hover {
+  background: rgba(57, 255, 20, 0.15);
 }
 
 /* Tomorrow Card */

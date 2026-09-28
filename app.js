@@ -5,10 +5,20 @@ let isPlaying = false;
 let osc = null;
 let gainNode = null;
 let masterGainNode = null;
+let dspFilterNode = null;
 let intervalId = null;
 let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
+
+// DSP Filter Bandwidth State (6.0 kHz WIDE, 2.4 kHz SSB, 0.5 kHz CW/NARROW)
+const filterBandwidths = [
+  { label: 'DSP: 2.4k (SSB)', freq: 2400, q: 1.8 },
+  { label: 'DSP: 0.5k (NAR)', freq: 650, q: 4.5 },
+  { label: 'DSP: 6.0k (WIDE)', freq: 6000, q: 0.7 }
+];
+let currentFilterIndex = 0;
+const filterBandwidthBtn = document.getElementById('filterBandwidthBtn');
 
 // Receiver Visualizer Display Mode ('SCOPE' or 'WATERFALL')
 let visMode = 'SCOPE';
@@ -211,6 +221,14 @@ function getTunedFrequency() {
   return Math.max(50, Math.min(900, centerTone + offset));
 }
 
+// Apply DSP bandwidth filter parameters
+function updateDspFilterParams() {
+  if (!dspFilterNode || !audioCtx) return;
+  const filterCfg = filterBandwidths[currentFilterIndex];
+  dspFilterNode.frequency.setTargetAtTime(filterCfg.freq, audioCtx.currentTime, 0.05);
+  dspFilterNode.Q.setTargetAtTime(filterCfg.q, audioCtx.currentTime, 0.05);
+}
+
 // Atmospheric Static (QRN) Generator via Web Audio Buffer
 function createNoiseNode(ctx) {
   const bufferSize = 2 * ctx.sampleRate;
@@ -236,7 +254,7 @@ function createNoiseNode(ctx) {
 }
 
 function setupQrnAudio() {
-  if (!audioCtx || !masterGainNode) return;
+  if (!audioCtx || !masterGainNode || !dspFilterNode) return;
   if (qrnActive) {
     try {
       noiseGainNode = audioCtx.createGain();
@@ -250,7 +268,7 @@ function setupQrnAudio() {
       noiseNode = createNoiseNode(audioCtx);
       noiseNode.connect(filter);
       filter.connect(noiseGainNode);
-      noiseGainNode.connect(masterGainNode);
+      noiseGainNode.connect(dspFilterNode);
       noiseNode.start();
     } catch(e) {}
   } else {
@@ -280,9 +298,17 @@ function startAudio() {
   masterGainNode.gain.setValueAtTime(volumeLevel, audioCtx.currentTime);
   masterGainNode.connect(audioCtx.destination);
 
+  // DSP Bandpass Filtering Node
+  dspFilterNode = audioCtx.createBiquadFilter();
+  dspFilterNode.type = 'lowpass';
+  const filterCfg = filterBandwidths[currentFilterIndex];
+  dspFilterNode.frequency.setValueAtTime(filterCfg.freq, audioCtx.currentTime);
+  dspFilterNode.Q.setValueAtTime(filterCfg.q, audioCtx.currentTime);
+  dspFilterNode.connect(masterGainNode);
+
   gainNode = audioCtx.createGain();
   gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
-  gainNode.connect(masterGainNode);
+  gainNode.connect(dspFilterNode);
 
   osc = audioCtx.createOscillator();
   const oscTypes = ['sawtooth', 'square', 'triangle'];
@@ -345,6 +371,17 @@ playBtn.addEventListener('click', () => {
     playBtn.querySelector('.btn-text').textContent = 'Synthesize Carrier Tone';
   }
 });
+
+// DSP Filter Bandwidth Toggle Handler
+if (filterBandwidthBtn) {
+  filterBandwidthBtn.addEventListener('click', () => {
+    currentFilterIndex = (currentFilterIndex + 1) % filterBandwidths.length;
+    const active = filterBandwidths[currentFilterIndex];
+    filterBandwidthBtn.textContent = active.label;
+    updateDspFilterParams();
+    showToast(`Receiver DSP: ${active.label.replace('DSP: ', '')}`);
+  });
+}
 
 // Gain Slider Control
 if (volumeSlider) {
@@ -468,6 +505,29 @@ if (decryptBtn && decryptedBreakdown) {
   });
 }
 
+// Timeline Filter Chips Handler
+const filterChips = document.querySelectorAll('#timelineFilters .filter-chip');
+const timelineItems = document.querySelectorAll('#timelineList .timeline-item');
+
+if (filterChips.length && timelineItems.length) {
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filterVal = chip.getAttribute('data-filter');
+
+      timelineItems.forEach(item => {
+        const cat = item.getAttribute('data-cat');
+        if (filterVal === 'all' || cat === filterVal) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+}
+
 // Shortwave Listener (SWL) Reception Log Stamp Handler
 if (logInterceptBtn && swlTicket) {
   logInterceptBtn.addEventListener('click', () => {
@@ -495,13 +555,7 @@ if (copyTicketBtn) {
     const zone = ticketZone ? ticketZone.textContent : 'Zone 14';
     const hash = ticketHash ? ticketHash.textContent : 'PF-4625';
     const time = ticketTimestamp ? ticketTimestamp.textContent : 'UTC';
-    const ticketText = `[THE PHANTOM FREQUENCY // SWL LOG SLIP]
-Target: UVB-76 (The Buzzer)
-Frequency: ${currentFreq.toFixed(1)} kHz
-RST Signal: ${rst}
-Receiver QTH: ${zone}
-Auth Token: ${hash}
-Timestamp: ${time}`;
+    const ticketText = `[THE PHANTOM FREQUENCY // SWL LOG SLIP]\nTarget: UVB-76 (The Buzzer)\nFrequency: ${currentFreq.toFixed(1)} kHz\nRST Signal: ${rst}\nReceiver QTH: ${zone}\nAuth Token: ${hash}\nTimestamp: ${time}`;
     navigator.clipboard.writeText(ticketText).then(() => {
       showToast('SWL Reception Slip copied!');
     }).catch(() => {

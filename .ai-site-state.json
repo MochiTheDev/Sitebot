@@ -24,6 +24,10 @@
     {
       "date": "2026-09-27",
       "summary": "Added an interactive real-time shortwave SDR waterfall spectrogram display mode to the receiver visualizer and upgraded the tuner console with tactile indicator LEDs and glowing segment display styling."
+    },
+    {
+      "date": "2026-09-28",
+      "summary": "Added a DSP bandpass bandwidth filter (6.0k / 2.4k / 0.5k) to the audio tuner and introduced an interactive historical intercept logbook with category filtering."
     }
   ]
 }
