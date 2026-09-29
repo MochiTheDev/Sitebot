@@ -308,6 +308,21 @@ h1.glitch-title {
   background: rgba(0, 240, 255, 0.15);
 }
 
+.signal-mode.att-btn {
+  color: #ff9f43;
+  border-color: rgba(255, 159, 67, 0.5);
+}
+
+.signal-mode.att-btn.active {
+  background: rgba(255, 159, 67, 0.2);
+  border-color: #ff9f43;
+}
+
+.signal-mode.att-btn.active::before {
+  background: #ff9f43;
+  box-shadow: 0 0 6px #ff9f43;
+}
+
 .signal-mode.qrn-btn.active {
   background: rgba(255, 184, 48, 0.2);
   border-color: var(--accent-amber);
@@ -696,6 +711,240 @@ h1.glitch-title {
 
 .anomaly-list p {
   color: var(--text-muted);
+}
+
+/* Triangulation Recon Matrix Section */
+.recon-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.recon-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.35rem;
+}
+
+.recon-badge {
+  margin-left: auto;
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--accent-cyan);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+.recon-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.recon-tabs {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.recon-tab {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-bright);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.recon-tab:hover {
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+}
+
+.recon-tab.active {
+  background: rgba(255, 184, 48, 0.15);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+  font-weight: 700;
+}
+
+.recon-details {
+  background: #06090e;
+  border: 1px solid #1c2433;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.recon-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.recon-site-title {
+  font-size: 0.92rem;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.recon-status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.recon-status-badge.status-active {
+  background: rgba(57, 255, 20, 0.12);
+  color: var(--accent-green);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+}
+
+.recon-status-badge.status-decom {
+  background: rgba(255, 68, 68, 0.12);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.recon-coords-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-tertiary);
+  padding: 0.4rem 0.65rem;
+  border-radius: 5px;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  flex-wrap: wrap;
+}
+
+.recon-coords-label {
+  color: var(--text-muted);
+}
+
+.recon-coords-code {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.recon-copy-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.recon-copy-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+}
+
+.recon-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.recon-meta-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+}
+
+@media (min-width: 480px) {
+  .recon-meta-item {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+}
+
+.meta-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  min-width: 110px;
+}
+
+.meta-val {
+  color: #d1d5db;
+}
+
+.recon-bearings-box {
+  background: #020406;
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.recon-bearings-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--accent-amber);
+  border-bottom: 1px dashed var(--border-dim);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.recon-bearing-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.recon-bearing-row:last-child {
+  border-bottom: none;
+}
+
+.b-station {
+  flex: 1;
+}
+
+.mono-num {
+  color: var(--accent-cyan);
+  width: 75px;
+  text-align: right;
+}
+
+.recon-notes {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  border-left: 2px solid var(--accent-amber);
+  padding-left: 0.6rem;
 }
 
 /* Historical Timeline Dossier */

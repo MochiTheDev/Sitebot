@@ -56,6 +56,7 @@
             </div>
           </div>
           <div class="tuner-toggles">
+            <button id="attToggleBtn" class="signal-mode att-btn" title="Toggle RF Receiver Attenuator">ATT: 0 dB</button>
             <button id="filterBandwidthBtn" class="signal-mode filter-btn" title="Toggle DSP Bandpass Filter Bandwidth">DSP: 2.4k (SSB)</button>
             <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
             <button id="modeToggleBtn" class="signal-mode active" title="Click to toggle demodulation mode">MODE: AM</button>
@@ -177,6 +178,26 @@
         </ul>
       </div>
     </article>
+
+    <!-- Direction Finding (DF) Transmitter Triangulation Matrix Section -->
+    <section class="recon-card">
+      <div class="recon-header">
+        <span class="prop-icon">🧭</span>
+        <span class="recon-title">TRANSMITTER TRIANGULATION MATRIX</span>
+        <span class="recon-badge">DF RECON</span>
+      </div>
+      <p class="recon-subtext">Multi-point radio direction finding (DF) telemetry of confirmed and historical UVB-76 transmitter installations.</p>
+
+      <div class="recon-tabs" id="reconTabs">
+        <button class="recon-tab active" data-site="kerro">Site 60 (Kerro / North)</button>
+        <button class="recon-tab" data-site="naro">Site 43 (Naro-Fominsk)</button>
+        <button class="recon-tab" data-site="povarovo">Bunker 430 (Povarovo)</button>
+      </div>
+
+      <div id="reconDetails" class="recon-details">
+        <!-- Dynamically injected via app.js -->
+      </div>
+    </section>
 
     <!-- Historical Intercept Logbook Section -->
     <section class="timeline-card">

@@ -11,6 +11,15 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// RF Front-End Attenuator State (0 dB, -10 dB, -20 dB)
+const attLevels = [
+  { label: 'ATT: 0 dB', mult: 1.0, sDrop: 0 },
+  { label: 'ATT: -10 dB', mult: 0.32, sDrop: 2 },
+  { label: 'ATT: -20 dB', mult: 0.1, sDrop: 4 }
+];
+let currentAttIndex = 0;
+const attToggleBtn = document.getElementById('attToggleBtn');
+
 // DSP Filter Bandwidth State (6.0 kHz WIDE, 2.4 kHz SSB, 0.5 kHz CW/NARROW)
 const filterBandwidths = [
   { label: 'DSP: 2.4k (SSB)', freq: 2400, q: 1.8 },
@@ -80,6 +89,7 @@ function drawScope() {
 
   const width = canvas.width;
   const height = canvas.height;
+  const attFactor = attLevels[currentAttIndex].mult;
 
   // Waterfall Spectrogram Mode
   if (visMode === 'WATERFALL') {
@@ -91,12 +101,12 @@ function drawScope() {
     
     // Render top 1px spectrograph row
     for (let x = 0; x < width; x++) {
-      let intensity = Math.random() * (qrnActive ? 0.35 : 0.08);
+      let intensity = Math.random() * (qrnActive ? 0.35 : 0.08) * attFactor;
       
       if (isPlaying) {
         const dist = Math.abs(x - carrierCenterX);
         const pulseMod = (Math.sin(phase * 4) > 0 ? 0.85 : 0.25);
-        const carrierPeak = Math.exp(-(dist * dist) / 30) * pulseMod * volumeLevel;
+        const carrierPeak = Math.exp(-(dist * dist) / 30) * pulseMod * volumeLevel * attFactor;
         intensity += carrierPeak;
       }
       
@@ -157,11 +167,11 @@ function drawScope() {
 
   canvasCtx.beginPath();
   
-  // Amplitude diminishes if detuned off 4625.0 kHz
+  // Amplitude diminishes if detuned off 4625.0 kHz and with ATT active
   const detuneDist = Math.abs(currentFreq - baseFreq);
   const detuneFactor = Math.max(0.2, 1 - (detuneDist / 3));
-  const amplitude = isPlaying ? 22 * volumeLevel * detuneFactor : 6;
-  const baseNoise = qrnActive ? 4.5 : 1.2;
+  const amplitude = isPlaying ? 22 * volumeLevel * detuneFactor * attFactor : 6 * attFactor;
+  const baseNoise = (qrnActive ? 4.5 : 1.2) * attFactor;
   const noiseAmp = isPlaying ? (currentModeIndex === 0 ? baseNoise + 2 : baseNoise) : baseNoise * 0.7;
 
   for (let x = 0; x < width; x++) {
@@ -174,7 +184,7 @@ function drawScope() {
     
     // If buzzing pulse emulation
     if (isPlaying && Math.floor((phase * 4) % 10) === 0) {
-      y += (Math.random() - 0.5) * (14 * detuneFactor);
+      y += (Math.random() - 0.5) * (14 * detuneFactor * attFactor);
     }
 
     if (x === 0) canvasCtx.moveTo(x, y);
@@ -200,6 +210,9 @@ function updateSMeter() {
     const detuneOffset = Math.abs(currentFreq - baseFreq);
     level -= Math.floor(detuneOffset * 2);
   }
+  
+  // Front-end RF attenuation drop
+  level -= attLevels[currentAttIndex].sDrop;
   level = Math.min(8, Math.max(1, level));
 
   const bars = sMeterBars.querySelectorAll('.s-bar');
@@ -227,6 +240,13 @@ function updateDspFilterParams() {
   const filterCfg = filterBandwidths[currentFilterIndex];
   dspFilterNode.frequency.setTargetAtTime(filterCfg.freq, audioCtx.currentTime, 0.05);
   dspFilterNode.Q.setTargetAtTime(filterCfg.q, audioCtx.currentTime, 0.05);
+}
+
+// Update Master Gain factoring volume and ATT
+function updateMasterGain() {
+  if (!masterGainNode || !audioCtx) return;
+  const effectiveGain = volumeLevel * attLevels[currentAttIndex].mult;
+  masterGainNode.gain.setValueAtTime(effectiveGain, audioCtx.currentTime);
 }
 
 // Atmospheric Static (QRN) Generator via Web Audio Buffer
@@ -295,7 +315,7 @@ function startAudio() {
   }
 
   masterGainNode = audioCtx.createGain();
-  masterGainNode.gain.setValueAtTime(volumeLevel, audioCtx.currentTime);
+  updateMasterGain();
   masterGainNode.connect(audioCtx.destination);
 
   // DSP Bandpass Filtering Node
@@ -372,6 +392,18 @@ playBtn.addEventListener('click', () => {
   }
 });
 
+// RF Front-End Attenuator Toggle
+if (attToggleBtn) {
+  attToggleBtn.addEventListener('click', () => {
+    currentAttIndex = (currentAttIndex + 1) % attLevels.length;
+    const activeAtt = attLevels[currentAttIndex];
+    attToggleBtn.textContent = activeAtt.label;
+    attToggleBtn.classList.toggle('active', currentAttIndex > 0);
+    updateMasterGain();
+    showToast(`Receiver Front-End: ${activeAtt.label}`);
+  });
+}
+
 // DSP Filter Bandwidth Toggle Handler
 if (filterBandwidthBtn) {
   filterBandwidthBtn.addEventListener('click', () => {
@@ -388,9 +420,7 @@ if (volumeSlider) {
   volumeSlider.addEventListener('input', (e) => {
     volumeLevel = parseFloat(e.target.value) / 100;
     if (volumeValue) volumeValue.textContent = `${e.target.value}%`;
-    if (masterGainNode && audioCtx) {
-      masterGainNode.gain.setValueAtTime(volumeLevel, audioCtx.currentTime);
-    }
+    updateMasterGain();
     if (noiseGainNode && audioCtx) {
       noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel, audioCtx.currentTime);
     }
@@ -479,6 +509,123 @@ if (copyCoordsBtn) {
       showToast("56°5′0″N 37°6′37″E copied!");
     });
   });
+}
+
+// Direction Finding (DF) Transmitter Triangulation Matrix
+const reconSitesData = {
+  kerro: {
+    title: 'Site 60 &bull; 60th Communication Hub (Kerro Massif)',
+    coords: '60°18′49″N 30°16′40″E',
+    location: 'Leningrad Oblast (North of St. Petersburg)',
+    status: 'ACTIVE MAIN TRANSMITTER',
+    statusClass: 'status-active',
+    antenna: 'VGDSh Wideband Horizontal Dipole Array (~40m towers)',
+    transmitter: 'Molniya-2M / Vyaz-M2 10 kW shortwave unit',
+    bearings: [
+      { station: 'Stockholm, Sweden (SDR)', dist: '715 km', az: '082°' },
+      { station: 'Helsinki, Finland', dist: '320 km', az: '097°' },
+      { station: 'Warsaw, Poland', dist: '1,085 km', az: '036°' },
+      { station: 'London, UK (SWL)', dist: '2,130 km', az: '058°' }
+    ],
+    notes: 'Primary transmitter hub since the September 2010 migration. Transmits continuous 4625 kHz skywave covering the Baltic basin and Nordic maritime borders.'
+  },
+  naro: {
+    title: 'Site 43 &bull; 43rd Communications Centre (Naro-Fominsk)',
+    coords: '55°25′35″N 36°42′33″E',
+    location: 'Moscow Oblast (Southwest of Moscow)',
+    status: 'ACTIVE SECONDARY / BACKUP',
+    statusClass: 'status-active',
+    antenna: 'Dual-feed Inverted VEE &amp; Horizontal T-Dipole',
+    transmitter: 'PKV-50 Military HF Transceiver suite',
+    bearings: [
+      { station: 'Kyiv, Ukraine', dist: '690 km', az: '032°' },
+      { station: 'Stockholm, Sweden', dist: '1,190 km', az: '108°' },
+      { station: 'Berlin, Germany', dist: '1,560 km', az: '077°' },
+      { station: 'London, UK (SWL)', dist: '2,475 km', az: '074°' }
+    ],
+    notes: 'Secondary transmitter cluster co-located with Western Military District garrison command. Provides groundwave fallback when northern atmospheric conditions fluctuate.'
+  },
+  povarovo: {
+    title: 'Bunker 430 &bull; Historical Military Garrison (Povarovo)',
+    coords: '56°05′00″N 37°06′37″E',
+    location: 'Solnechnogorsky District, Moscow Oblast',
+    status: 'DECOMMISSIONED (1982–2010)',
+    statusClass: 'status-decom',
+    antenna: 'Remnants of Russian VGDSh mast guywires &amp; feedlines',
+    transmitter: 'Soviet-era tube oscillator transmitter (dismantled)',
+    bearings: [
+      { station: 'Moscow Center', dist: '48 km', az: '315°' },
+      { station: 'Saint Petersburg', dist: '590 km', az: '144°' },
+      { station: 'Warsaw, Poland', dist: '1,110 km', az: '068°' },
+      { station: 'London, UK (SWL)', dist: '2,480 km', az: '072°' }
+    ],
+    notes: 'The legendary birthplace of the Buzzer. Abandoned abruptly during August 2010 storms. Urban explorers uncovered empty message pads, Soviet tubes, and logbooks in the frozen shelter.'
+  }
+};
+
+function renderReconSite(siteKey) {
+  const data = reconSitesData[siteKey];
+  const reconEl = document.getElementById('reconDetails');
+  if (!data || !reconEl) return;
+
+  const bearingsHtml = data.bearings.map(b => `
+    <div class="recon-bearing-row">
+      <span class="b-station">${b.station}</span>
+      <span class="b-dist mono-num">${b.dist}</span>
+      <span class="b-az mono-num">${b.az}</span>
+    </div>
+  `).join('');
+
+  reconEl.innerHTML = `
+    <div class="recon-content">
+      <div class="recon-title-row">
+        <h4 class="recon-site-title">${data.title}</h4>
+        <span class="recon-status-badge ${data.statusClass}">${data.status}</span>
+      </div>
+      <div class="recon-coords-row">
+        <span class="recon-coords-label">GRID COORDS:</span>
+        <code class="recon-coords-code">${data.coords}</code>
+        <button class="recon-copy-btn" onclick="navigator.clipboard.writeText('${data.coords}').then(() => showToast('Transmitter coordinates copied!'))">📋 Copy</button>
+      </div>
+      <div class="recon-meta-grid">
+        <div class="recon-meta-item">
+          <span class="meta-lbl">LOCATION:</span>
+          <span class="meta-val">${data.location}</span>
+        </div>
+        <div class="recon-meta-item">
+          <span class="meta-lbl">ANTENNA RIG:</span>
+          <span class="meta-val">${data.antenna}</span>
+        </div>
+        <div class="recon-meta-item">
+          <span class="meta-lbl">ESTIMATED POWER:</span>
+          <span class="meta-val">${data.transmitter}</span>
+        </div>
+      </div>
+      <div class="recon-bearings-box">
+        <div class="recon-bearings-head">
+          <span>GLOBAL SDR DF BEARING</span>
+          <span>DISTANCE</span>
+          <span>AZIMUTH</span>
+        </div>
+        ${bearingsHtml}
+      </div>
+      <p class="recon-notes">${data.notes}</p>
+    </div>
+  `;
+}
+
+// Initialize Recon Section Tabs
+const reconTabs = document.querySelectorAll('#reconTabs .recon-tab');
+if (reconTabs.length) {
+  reconTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      reconTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const siteKey = tab.getAttribute('data-site');
+      renderReconSite(siteKey);
+    });
+  });
+  renderReconSite('kerro');
 }
 
 // Phonetic Cipher Reference Toggle

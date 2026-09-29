@@ -28,6 +28,10 @@
     {
       "date": "2026-09-28",
       "summary": "Added a DSP bandpass bandwidth filter (6.0k / 2.4k / 0.5k) to the audio tuner and introduced an interactive historical intercept logbook with category filtering."
+    },
+    {
+      "date": "2026-09-29",
+      "summary": "Added an interactive multi-site transmitter triangulation recon dossier and an RF receiver front-end attenuator (ATT: 0/-10/-20 dB) with live audio gain and S-meter scaling."
     }
   ]
 }
