@@ -38,6 +38,12 @@
               <span class="s-bar red" data-level="8"></span>
             </div>
             <span id="sMeterReadout" class="s-val">S3</span>
+            <div class="phosphor-selector" id="phosphorSelector">
+              <button class="phos-btn active phos-green" data-phos="green" title="P1 Green Phosphor" aria-label="Green Phosphor"></button>
+              <button class="phos-btn phos-amber" data-phos="amber" title="P3 Amber Cathode" aria-label="Amber Phosphor"></button>
+              <button class="phos-btn phos-cyan" data-phos="cyan" title="P11 Cyan Matrix" aria-label="Cyan Phosphor"></button>
+              <button class="phos-btn phos-white" data-phos="white" title="P4 Radar White" aria-label="White Phosphor"></button>
+            </div>
             <button id="visModeBtn" class="signal-mode vis-btn" title="Toggle Oscilloscope / Waterfall Spectrogram">VIS: SCOPE</button>
           </div>
         </div>
@@ -59,6 +65,7 @@
             <button id="attToggleBtn" class="signal-mode att-btn" title="Toggle RF Receiver Attenuator">ATT: 0 dB</button>
             <button id="filterBandwidthBtn" class="signal-mode filter-btn" title="Toggle DSP Bandpass Filter Bandwidth">DSP: 2.4k (SSB)</button>
             <button id="qrnToggleBtn" class="signal-mode qrn-btn" title="Toggle Ionospheric Atmospheric Static">QRN NOISE: OFF</button>
+            <button id="qrmToggleBtn" class="signal-mode qrm-btn" title="Toggle Solar Flare QRM Burst Interference">QRM BURST: OFF</button>
             <button id="modeToggleBtn" class="signal-mode active" title="Click to toggle demodulation mode">MODE: AM</button>
           </div>
         </div>

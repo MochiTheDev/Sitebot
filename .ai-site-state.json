@@ -32,6 +32,10 @@
     {
       "date": "2026-09-29",
       "summary": "Added an interactive multi-site transmitter triangulation recon dossier and an RF receiver front-end attenuator (ATT: 0/-10/-20 dB) with live audio gain and S-meter scaling."
+    },
+    {
+      "date": "2026-09-30",
+      "summary": "Added interactive QRM solar burst interference simulator to audio tuner and added CRT phosphor display color palette selector for oscilloscope visualizer."
     }
   ]
 }

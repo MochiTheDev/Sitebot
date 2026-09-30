@@ -11,6 +11,57 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// CRT Phosphor Color Palette Configuration
+const phosphorPalettes = {
+  green: {
+    primary: '#39ff14',
+    grid: 'rgba(57, 255, 20, 0.08)',
+    shadow: '#39ff14',
+    waterfall: (intensity) => {
+      if (intensity < 0.12) return '#040608';
+      if (intensity < 0.35) {
+        const b = Math.floor(intensity * 255);
+        return `rgb(0, ${Math.floor(b * 0.7)}, ${b})`;
+      }
+      const g = Math.floor(intensity * 255);
+      return `rgb(0, ${g}, ${Math.floor(g * 0.3)})`;
+    }
+  },
+  amber: {
+    primary: '#ffb830',
+    grid: 'rgba(255, 184, 48, 0.08)',
+    shadow: '#ffb830',
+    waterfall: (intensity) => {
+      if (intensity < 0.12) return '#040608';
+      const r = Math.floor(intensity * 255);
+      const g = Math.floor(intensity * 170);
+      return `rgb(${r}, ${g}, 15)`;
+    }
+  },
+  cyan: {
+    primary: '#00f0ff',
+    grid: 'rgba(0, 240, 255, 0.08)',
+    shadow: '#00f0ff',
+    waterfall: (intensity) => {
+      if (intensity < 0.12) return '#040608';
+      const b = Math.floor(intensity * 255);
+      const g = Math.floor(intensity * 220);
+      return `rgb(0, ${g}, ${b})`;
+    }
+  },
+  white: {
+    primary: '#e0f4ff',
+    grid: 'rgba(224, 244, 255, 0.08)',
+    shadow: '#ffffff',
+    waterfall: (intensity) => {
+      if (intensity < 0.12) return '#040608';
+      const v = Math.floor(intensity * 255);
+      return `rgb(${v}, ${v}, ${Math.floor(v * 0.95)})`;
+    }
+  }
+};
+let currentPhosphor = 'green';
+
 // RF Front-End Attenuator State (0 dB, -10 dB, -20 dB)
 const attLevels = [
   { label: 'ATT: 0 dB', mult: 1.0, sDrop: 0 },
@@ -44,16 +95,19 @@ if (visModeBtn) {
 const baseFreq = 4625.0;
 let currentFreq = 4625.0;
 
-// QRN Static Audio State
+// QRN Static & QRM Solar Burst Audio State
 let qrnActive = false;
+let qrmActive = false;
 let noiseNode = null;
 let noiseGainNode = null;
+let qrmInterval = null;
 
 const playBtn = document.getElementById('playSignalBtn');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
 const modeToggleBtn = document.getElementById('modeToggleBtn');
 const qrnToggleBtn = document.getElementById('qrnToggleBtn');
+const qrmToggleBtn = document.getElementById('qrmToggleBtn');
 const copyCoordsBtn = document.getElementById('copyCoordsBtn');
 const toggleDecoderBtn = document.getElementById('toggleDecoderBtn');
 const decoderBox = document.getElementById('decoderBox');
@@ -82,6 +136,17 @@ const ticketHash = document.getElementById('ticketHash');
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
+// CRT Phosphor Theme Buttons Listener
+const phosBtns = document.querySelectorAll('.phos-btn');
+phosBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    phosBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPhosphor = btn.getAttribute('data-phos') || 'green';
+    showToast(`CRT Phosphor: ${currentPhosphor.toUpperCase()} mode`);
+  });
+});
+
 // Oscilloscope & SDR Waterfall Spectrogram visualizer loop
 let phase = 0;
 function drawScope() {
@@ -90,6 +155,7 @@ function drawScope() {
   const width = canvas.width;
   const height = canvas.height;
   const attFactor = attLevels[currentAttIndex].mult;
+  const palette = phosphorPalettes[currentPhosphor] || phosphorPalettes.green;
 
   // Waterfall Spectrogram Mode
   if (visMode === 'WATERFALL') {
@@ -102,6 +168,9 @@ function drawScope() {
     // Render top 1px spectrograph row
     for (let x = 0; x < width; x++) {
       let intensity = Math.random() * (qrnActive ? 0.35 : 0.08) * attFactor;
+      if (qrmActive && Math.random() < 0.12) {
+        intensity += Math.random() * 0.5;
+      }
       
       if (isPlaying) {
         const dist = Math.abs(x - carrierCenterX);
@@ -111,19 +180,7 @@ function drawScope() {
       }
       
       intensity = Math.min(1, Math.max(0, intensity));
-      
-      if (intensity < 0.12) {
-        canvasCtx.fillStyle = '#040608';
-      } else if (intensity < 0.35) {
-        const b = Math.floor(intensity * 255);
-        canvasCtx.fillStyle = `rgb(0, ${Math.floor(b * 0.7)}, ${b})`;
-      } else if (intensity < 0.7) {
-        const g = Math.floor(intensity * 255);
-        canvasCtx.fillStyle = `rgb(0, ${g}, ${Math.floor(g * 0.4)})`;
-      } else {
-        const r = Math.floor(intensity * 255);
-        canvasCtx.fillStyle = `rgb(${r}, ${Math.floor(r * 0.8)}, 40)`;
-      }
+      canvasCtx.fillStyle = palette.waterfall(intensity);
       canvasCtx.fillRect(x, 0, 1, 1);
     }
 
@@ -137,7 +194,7 @@ function drawScope() {
   canvasCtx.fillRect(0, 0, width, height);
 
   // Grid lines
-  canvasCtx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+  canvasCtx.strokeStyle = palette.grid;
   canvasCtx.lineWidth = 1;
   for (let x = 0; x < width; x += 40) {
     canvasCtx.beginPath();
@@ -152,18 +209,13 @@ function drawScope() {
     canvasCtx.stroke();
   }
 
-  // Signal trace
+  // Signal trace styling
   canvasCtx.lineWidth = 2;
-  const modeColors = {
-    AM: '#39ff14',
-    USB: '#00f0ff',
-    LSB: '#ffb830'
-  };
-  const activeColor = modeColors[modes[currentModeIndex]] || '#39ff14';
+  const activeColor = palette.primary;
   
-  canvasCtx.strokeStyle = isPlaying ? activeColor : '#ffb830';
+  canvasCtx.strokeStyle = isPlaying ? activeColor : palette.primary;
   canvasCtx.shadowBlur = isPlaying ? 8 : 4;
-  canvasCtx.shadowColor = isPlaying ? activeColor : '#ffb830';
+  canvasCtx.shadowColor = palette.shadow;
 
   canvasCtx.beginPath();
   
@@ -176,7 +228,11 @@ function drawScope() {
 
   for (let x = 0; x < width; x++) {
     const normalX = x / width;
-    const noise = (Math.random() - 0.5) * noiseAmp;
+    let noise = (Math.random() - 0.5) * noiseAmp;
+    if (qrmActive && Math.random() < 0.1) {
+      noise += (Math.random() - 0.5) * 28 * attFactor;
+    }
+
     let freqMult = currentModeIndex === 1 ? 32 : currentModeIndex === 2 ? 18 : 24;
     // Frequency detune adds secondary ripple flutter
     const detuneRipple = detuneDist > 0 ? Math.sin(normalX * 60 + phase * 2) * (detuneDist * 3) : 0;
@@ -203,6 +259,7 @@ function updateSMeter() {
   if (!sMeterBars || !sMeterReadout) return;
   let level = 2; // Ambient base
   if (qrnActive) level += 2;
+  if (qrmActive && Math.random() < 0.3) level += 3;
   if (isPlaying) {
     const pulsePeak = Math.sin(phase * 3) > 0.3 ? 3 : 1;
     level += Math.floor(volumeLevel * 3) + pulsePeak;
@@ -273,6 +330,25 @@ function createNoiseNode(ctx) {
   return whiteNoise;
 }
 
+function triggerQrmBurstSound() {
+  if (!audioCtx || !masterGainNode || !isPlaying || !qrmActive) return;
+  try {
+    const burstOsc = audioCtx.createOscillator();
+    const burstGain = audioCtx.createGain();
+    burstOsc.type = 'sawtooth';
+    burstOsc.frequency.setValueAtTime(300 + Math.random() * 800, audioCtx.currentTime);
+    burstOsc.frequency.exponentialRampToValueAtTime(80 + Math.random() * 120, audioCtx.currentTime + 0.12);
+    
+    burstGain.gain.setValueAtTime(0.12 * volumeLevel, audioCtx.currentTime);
+    burstGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+    
+    burstOsc.connect(burstGain);
+    burstGain.connect(masterGainNode);
+    burstOsc.start();
+    burstOsc.stop(audioCtx.currentTime + 0.15);
+  } catch (e) {}
+}
+
 function setupQrnAudio() {
   if (!audioCtx || !masterGainNode || !dspFilterNode) return;
   if (qrnActive) {
@@ -341,6 +417,14 @@ function startAudio() {
     setupQrnAudio();
   }
 
+  // Periodic QRM burst trigger
+  if (qrmInterval) clearInterval(qrmInterval);
+  qrmInterval = setInterval(() => {
+    if (qrmActive && Math.random() < 0.6) {
+      triggerQrmBurstSound();
+    }
+  }, 1800);
+
   // Buzz pulse loop
   function triggerBuzz() {
     if (!isPlaying) return;
@@ -360,6 +444,7 @@ function startAudio() {
 
 function stopAudio() {
   if (intervalId) clearInterval(intervalId);
+  if (qrmInterval) clearInterval(qrmInterval);
   if (gainNode && audioCtx) {
     gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
@@ -485,6 +570,16 @@ if (qrnToggleBtn) {
     if (isPlaying) {
       setupQrnAudio();
     }
+  });
+}
+
+// QRM Solar Flare Burst Interference Switcher
+if (qrmToggleBtn) {
+  qrmToggleBtn.addEventListener('click', () => {
+    qrmActive = !qrmActive;
+    qrmToggleBtn.textContent = qrmActive ? 'QRM BURST: ON' : 'QRM BURST: OFF';
+    qrmToggleBtn.classList.toggle('active', qrmActive);
+    showToast(qrmActive ? 'QRM Solar Flare Burst Simulation: ACTIVE' : 'QRM Burst Simulation: OFF');
   });
 }
 

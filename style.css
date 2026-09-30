@@ -128,7 +128,7 @@ h1.glitch-title {
   gap: 3px;
   align-items: center;
   flex: 1;
-  min-width: 120px;
+  min-width: 100px;
 }
 
 .s-bar {
@@ -152,9 +152,47 @@ h1.glitch-title {
 .s-val {
   color: var(--accent-green);
   font-weight: 700;
-  min-width: 3rem;
+  min-width: 2.2rem;
   text-align: right;
 }
+
+/* CRT Phosphor Color Selector */
+.phosphor-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-dim);
+}
+
+.phos-btn {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.phos-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.15);
+}
+
+.phos-btn.active {
+  opacity: 1;
+  transform: scale(1.25);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.phos-green { background: #39ff14; color: #39ff14; border-color: rgba(57, 255, 20, 0.6); }
+.phos-amber { background: #ffb830; color: #ffb830; border-color: rgba(255, 184, 48, 0.6); }
+.phos-cyan { background: #00f0ff; color: #00f0ff; border-color: rgba(0, 240, 255, 0.6); }
+.phos-white { background: #e0f4ff; color: #e0f4ff; border-color: rgba(224, 244, 255, 0.6); }
 
 .canvas-wrapper {
   position: relative;
@@ -332,6 +370,25 @@ h1.glitch-title {
 .signal-mode.qrn-btn.active::before {
   background: var(--accent-amber);
   box-shadow: 0 0 6px var(--accent-amber);
+}
+
+.signal-mode.qrm-btn {
+  color: #ff5555;
+  border-color: rgba(255, 85, 85, 0.5);
+}
+
+.signal-mode.qrm-btn.active {
+  background: rgba(255, 85, 85, 0.2);
+  border-color: #ff5555;
+}
+
+.signal-mode.qrm-btn.active::before {
+  background: #ff5555;
+  box-shadow: 0 0 6px #ff5555;
+}
+
+.signal-mode.qrm-btn:hover {
+  background: rgba(255, 85, 85, 0.15);
 }
 
 .signal-mode.filter-btn {
