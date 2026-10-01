@@ -36,6 +36,10 @@
     {
       "date": "2026-09-30",
       "summary": "Added interactive QRM solar burst interference simulator to audio tuner and added CRT phosphor display color palette selector for oscilloscope visualizer."
+    },
+    {
+      "date": "2026-10-01",
+      "summary": "Added a global WebSDR receiver node selector to simulate reception across international listening posts, and upgraded the tuner console with military chassis hardware screws, serial nameplate, and CRT shadow styling."
     }
   ]
 }

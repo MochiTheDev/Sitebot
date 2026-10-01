@@ -23,6 +23,15 @@
   <main class="container">
     <!-- Interactive Tuner Banner -->
     <section class="tuner-card">
+      <!-- Tactile Chassis Hardware Styling -->
+      <span class="chassis-screw top-left" aria-hidden="true"></span>
+      <span class="chassis-screw top-right" aria-hidden="true"></span>
+      <span class="chassis-screw bottom-left" aria-hidden="true"></span>
+      <span class="chassis-screw bottom-right" aria-hidden="true"></span>
+      <div class="chassis-plate">
+        <span class="chassis-dot"></span> HF SURVEILLANCE RECEIVER &bull; SPEC R-4625 / NO. 0497-K <span class="chassis-dot"></span>
+      </div>
+
       <div class="tuner-screen">
         <div class="tuner-top-bar">
           <div class="s-meter">
@@ -47,6 +56,19 @@
             <button id="visModeBtn" class="signal-mode vis-btn" title="Toggle Oscilloscope / Waterfall Spectrogram">VIS: SCOPE</button>
           </div>
         </div>
+
+        <!-- Global WebSDR Receiver Node Relay -->
+        <div class="sdr-node-row">
+          <span class="sdr-label">SDR RELAY:</span>
+          <div class="sdr-node-buttons" id="sdrNodeButtons">
+            <button class="sdr-btn active" data-sdr="spb" title="St. Petersburg KiwiSDR (145 km - Groundwave)">St. Petersburg</button>
+            <button class="sdr-btn" data-sdr="twente" title="University of Twente WebSDR (1,820 km - 1-Hop Skywave)">Twente (NL)</button>
+            <button class="sdr-btn" data-sdr="london" title="London SWL Post (2,480 km - 2-Hop Skywave)">London (UK)</button>
+            <button class="sdr-btn" data-sdr="hokkaido" title="Hokkaido WebSDR (6,950 km - Trans-Polar)">Hokkaido (JP)</button>
+          </div>
+          <span id="sdrLatencyReadout" class="sdr-latency">0.5 ms &bull; Groundwave</span>
+        </div>
+
         <div class="canvas-wrapper">
           <canvas id="oscilloscope" width="600" height="80"></canvas>
           <div class="scanlines"></div>

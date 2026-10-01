@@ -11,6 +11,44 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// Global WebSDR Receiver Node Profiles
+const sdrNodes = {
+  spb: {
+    name: 'St. Petersburg KiwiSDR',
+    dist: '145 km',
+    path: 'Groundwave',
+    baseS: 6,
+    noiseScale: 0.8,
+    latencyText: '0.5 ms • Groundwave'
+  },
+  twente: {
+    name: 'Univ. of Twente WebSDR',
+    dist: '1,820 km',
+    path: '1-Hop Skywave',
+    baseS: 4,
+    noiseScale: 1.3,
+    latencyText: '6.2 ms • Skywave F2'
+  },
+  london: {
+    name: 'London SWL Post',
+    dist: '2,480 km',
+    path: '2-Hop Skywave',
+    baseS: 3,
+    noiseScale: 1.6,
+    latencyText: '8.4 ms • Multi-Hop'
+  },
+  hokkaido: {
+    name: 'Hokkaido WebSDR',
+    dist: '6,950 km',
+    path: 'Trans-Polar',
+    baseS: 1,
+    noiseScale: 2.2,
+    latencyText: '23.5 ms • Polar Duct'
+  }
+};
+let currentSdr = 'spb';
+const sdrLatencyReadout = document.getElementById('sdrLatencyReadout');
+
 // CRT Phosphor Color Palette Configuration
 const phosphorPalettes = {
   green: {
@@ -136,6 +174,23 @@ const ticketHash = document.getElementById('ticketHash');
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
+// SDR Node Button Selection Listener
+const sdrBtns = document.querySelectorAll('.sdr-btn');
+sdrBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    sdrBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sdrKey = btn.getAttribute('data-sdr') || 'spb';
+    currentSdr = sdrKey;
+    const nodeInfo = sdrNodes[sdrKey];
+    if (sdrLatencyReadout && nodeInfo) {
+      sdrLatencyReadout.textContent = nodeInfo.latencyText;
+    }
+    showToast(`Relayed via ${nodeInfo.name} (${nodeInfo.dist})`);
+    updateSMeter();
+  });
+});
+
 // CRT Phosphor Theme Buttons Listener
 const phosBtns = document.querySelectorAll('.phos-btn');
 phosBtns.forEach(btn => {
@@ -156,6 +211,7 @@ function drawScope() {
   const height = canvas.height;
   const attFactor = attLevels[currentAttIndex].mult;
   const palette = phosphorPalettes[currentPhosphor] || phosphorPalettes.green;
+  const sdrNode = sdrNodes[currentSdr] || sdrNodes.spb;
 
   // Waterfall Spectrogram Mode
   if (visMode === 'WATERFALL') {
@@ -165,9 +221,9 @@ function drawScope() {
     const detuneOffset = (currentFreq - baseFreq) * 50;
     const carrierCenterX = width / 2 + detuneOffset;
     
-    // Render top 1px spectrograph row
+    // Render top 1px spectrograph row factoring SDR receiver distance
     for (let x = 0; x < width; x++) {
-      let intensity = Math.random() * (qrnActive ? 0.35 : 0.08) * attFactor;
+      let intensity = Math.random() * (qrnActive ? 0.35 : 0.08) * attFactor * sdrNode.noiseScale * 0.7;
       if (qrmActive && Math.random() < 0.12) {
         intensity += Math.random() * 0.5;
       }
@@ -223,7 +279,7 @@ function drawScope() {
   const detuneDist = Math.abs(currentFreq - baseFreq);
   const detuneFactor = Math.max(0.2, 1 - (detuneDist / 3));
   const amplitude = isPlaying ? 22 * volumeLevel * detuneFactor * attFactor : 6 * attFactor;
-  const baseNoise = (qrnActive ? 4.5 : 1.2) * attFactor;
+  const baseNoise = (qrnActive ? 4.5 : 1.2) * attFactor * sdrNode.noiseScale;
   const noiseAmp = isPlaying ? (currentModeIndex === 0 ? baseNoise + 2 : baseNoise) : baseNoise * 0.7;
 
   for (let x = 0; x < width; x++) {
@@ -257,12 +313,13 @@ function drawScope() {
 
 function updateSMeter() {
   if (!sMeterBars || !sMeterReadout) return;
-  let level = 2; // Ambient base
-  if (qrnActive) level += 2;
-  if (qrmActive && Math.random() < 0.3) level += 3;
+  const sdrNode = sdrNodes[currentSdr] || sdrNodes.spb;
+  let level = sdrNode.baseS; // Node propagation baseline
+  if (qrnActive) level += 1;
+  if (qrmActive && Math.random() < 0.3) level += 2;
   if (isPlaying) {
-    const pulsePeak = Math.sin(phase * 3) > 0.3 ? 3 : 1;
-    level += Math.floor(volumeLevel * 3) + pulsePeak;
+    const pulsePeak = Math.sin(phase * 3) > 0.3 ? 2 : 1;
+    level += Math.floor(volumeLevel * 2) + pulsePeak;
     // Off-carrier detune reduces received signal strength
     const detuneOffset = Math.abs(currentFreq - baseFreq);
     level -= Math.floor(detuneOffset * 2);
@@ -354,7 +411,8 @@ function setupQrnAudio() {
   if (qrnActive) {
     try {
       noiseGainNode = audioCtx.createGain();
-      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel, audioCtx.currentTime);
+      const sdrNode = sdrNodes[currentSdr] || sdrNodes.spb;
+      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel * sdrNode.noiseScale, audioCtx.currentTime);
 
       const filter = audioCtx.createBiquadFilter();
       filter.type = 'bandpass';
@@ -507,7 +565,8 @@ if (volumeSlider) {
     if (volumeValue) volumeValue.textContent = `${e.target.value}%`;
     updateMasterGain();
     if (noiseGainNode && audioCtx) {
-      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel, audioCtx.currentTime);
+      const sdrNode = sdrNodes[currentSdr] || sdrNodes.spb;
+      noiseGainNode.gain.setValueAtTime(0.04 * volumeLevel * sdrNode.noiseScale, audioCtx.currentTime);
     }
   });
 }
