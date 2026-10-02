@@ -30,6 +30,7 @@
       <span class="chassis-screw bottom-right" aria-hidden="true"></span>
       <div class="chassis-plate">
         <span class="chassis-dot"></span> HF SURVEILLANCE RECEIVER &bull; SPEC R-4625 / NO. 0497-K <span class="chassis-dot"></span>
+        <span class="pilot-lamp" title="Power Supply: 24V DC Filament OK" aria-label="Receiver Power Lamp"><span class="pilot-filament"></span></span>
       </div>
 
       <div class="tuner-screen">
@@ -72,6 +73,7 @@
         <div class="canvas-wrapper">
           <canvas id="oscilloscope" width="600" height="80"></canvas>
           <div class="scanlines"></div>
+          <div class="crt-glare"></div>
         </div>
         <div class="frequency-readout">
           <div class="freq-adjust-group">
@@ -131,6 +133,54 @@
           <span class="prop-sub">Shortwave Range &gt; 3,500km</span>
         </div>
       </div>
+    </section>
+
+    <!-- Ionospheric Grayline Twilight Surge Predictor -->
+    <section class="grayline-card">
+      <div class="grayline-header">
+        <span class="prop-icon">🌅</span>
+        <span class="grayline-title">GRAYLINE TWILIGHT SURGE PREDICTOR (60-METER HF)</span>
+        <span class="gl-tag">TERMINATOR DX</span>
+      </div>
+      <p class="grayline-subtext">
+        Shortwave at 4625 kHz reacts sharply to the solar terminator. When dawn or dusk sweeps across the transmitter-receiver path, lower D-layer absorption collapses, triggering massive +20 dB skywave signal surges.
+      </p>
+
+      <div class="grayline-controls">
+        <label for="graylinePhaseSelect" class="gl-select-label">SOLAR TERMINATOR PHASE:</label>
+        <select id="graylinePhaseSelect" class="gl-select">
+          <option value="dusk" selected>Dusk Terminator (17:30–19:30 UTC) &mdash; Peak Grayline Ducting</option>
+          <option value="dawn">Dawn Twilight (04:30–06:30 UTC) &mdash; Sunrise Refraction Surge</option>
+          <option value="noon">High Noon (12:00 UTC) &mdash; Heavy D-Layer Solar Attenuation</option>
+          <option value="night">Full Night (01:00 UTC) &mdash; Deep F2 Skywave Multipath</option>
+        </select>
+      </div>
+
+      <div class="grayline-stats-grid">
+        <div class="gl-stat-box">
+          <span class="gl-label">D-LAYER ABSORPTION</span>
+          <span id="glDLayer" class="gl-val">-1.4 dB (Minimal)</span>
+        </div>
+        <div class="gl-stat-box">
+          <span class="gl-label">ESTIMATED PATH REACH</span>
+          <span id="glReach" class="gl-val mono-num">8,800 km</span>
+        </div>
+        <div class="gl-stat-box">
+          <span class="gl-label">4625 kHz AUDIBILITY</span>
+          <span id="glScore" class="gl-val prop-surge">96% • PEAK TRANSMISSION</span>
+        </div>
+      </div>
+
+      <div class="gl-notes-box">
+        <span class="gl-notes-label">IONOSPHERIC ANALYSIS:</span>
+        <p id="glNotes" class="gl-notes-text">
+          Rapid electron depletion in D-layer leaves upper F2-layer intact. 4625 kHz bounces between earth and ionosphere with near-zero attenuation, enabling trans-oceanic intercept.
+        </p>
+      </div>
+
+      <button id="testSurgeBtn" class="gl-surge-btn" title="Simulate Grayline Signal Peak on Tuner">
+        ⚡ Simulate Terminator Surge (+24 dB Peak)
+      </button>
     </section>
 
     <!-- Main Daily Feature -->
@@ -232,7 +282,7 @@
     <section class="timeline-card">
       <div class="timeline-header">
         <span class="prop-icon">⏱️</span>
-        <span class="prop-title">HISTORICAL INTERCEPT LOGBOOK (1982–2024)</span>
+        <span class="timeline-title">HISTORICAL INTERCEPT LOGBOOK (1982–2024)</span>
       </div>
       <p class="timeline-subtext">Chronological intercepts from the global shortwave listener intelligence network. Filter verified events by telemetry signature.</p>
       

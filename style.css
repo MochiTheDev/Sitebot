@@ -123,7 +123,7 @@ h1.glitch-title {
 .chassis-screw.bottom-left { bottom: 8px; left: 8px; }
 .chassis-screw.bottom-right { bottom: 8px; right: 8px; }
 
-/* Military Nameplate */
+/* Military Nameplate & Glowing Vacuum Pilot Lamp */
 .chassis-plate {
   text-align: center;
   font-family: var(--font-mono);
@@ -145,6 +145,34 @@ h1.glitch-title {
   background: var(--accent-amber);
   display: inline-block;
   box-shadow: 0 0 4px var(--accent-amber);
+}
+
+.pilot-lamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #2a0b02;
+  border: 1px solid #5a1e09;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.8), inset 0 0 2px #ff4500;
+  margin-left: 0.35rem;
+}
+
+.pilot-filament {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff7700;
+  box-shadow: 0 0 5px #ff7700, 0 0 9px #ff3700;
+  animation: filamentGlow 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes filamentGlow {
+  0% { opacity: 0.75; box-shadow: 0 0 3px #ff7700; }
+  50% { opacity: 1; box-shadow: 0 0 7px #ff8800, 0 0 11px #ff3700; }
+  100% { opacity: 0.85; box-shadow: 0 0 4px #ff7700; }
 }
 
 .tuner-screen {
@@ -308,8 +336,9 @@ h1.glitch-title {
 .canvas-wrapper {
   position: relative;
   overflow: hidden;
-  border-radius: 4px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+  border-radius: 6px;
+  border: 1px solid #1a2230;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 #oscilloscope {
@@ -330,6 +359,23 @@ h1.glitch-title {
     transparent 1px,
     transparent 2px
   );
+  pointer-events: none;
+}
+
+/* CRT Convex Glass Glare Sheen */
+.crt-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 60%,
+    transparent 100%
+  );
+  border-radius: 6px 6px 0 0;
   pointer-events: none;
 }
 
@@ -616,11 +662,12 @@ h1.glitch-title {
   border: 1px solid var(--border-dim);
   border-radius: 10px;
   padding: 1rem 1.25rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .prop-header {
-  display: flex;  align-items: center;
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -694,6 +741,163 @@ h1.glitch-title {
 .prop-sub {
   font-size: 0.7rem;
   color: var(--text-muted);
+}
+
+/* Ionospheric Grayline Twilight Surge Predictor Card */
+.grayline-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.grayline-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.35rem;
+}
+
+.grayline-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.gl-tag {
+  margin-left: auto;
+  background: rgba(255, 184, 48, 0.15);
+  border: 1px solid rgba(255, 184, 48, 0.4);
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.grayline-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.grayline-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.gl-select-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.gl-select {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-bright);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.grayline-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (min-width: 500px) {
+  .grayline-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gl-stat-box {
+  background: #06090e;
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  padding: 0.55rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.gl-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.gl-val {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.gl-val.prop-surge {
+  color: var(--accent-green);
+}
+
+.gl-val.prop-low {
+  color: #ff6b6b;
+}
+
+.gl-val.prop-med {
+  color: var(--accent-amber);
+}
+
+.gl-notes-box {
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.6rem 0.75rem;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 1rem;
+}
+
+.gl-notes-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent-amber);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.gl-notes-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.gl-surge-btn {
+  background: transparent;
+  border: 1px dashed var(--accent-amber);
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.gl-surge-btn:hover {
+  background: rgba(255, 184, 48, 0.15);
 }
 
 /* Daily Feature */
@@ -1030,8 +1234,7 @@ h1.glitch-title {
 }
 
 .recon-meta-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: grid;  grid-template-columns: 1fr;
   gap: 0.4rem;
   margin-bottom: 0.75rem;
 }

@@ -40,6 +40,10 @@
     {
       "date": "2026-10-01",
       "summary": "Added a global WebSDR receiver node selector to simulate reception across international listening posts, and upgraded the tuner console with military chassis hardware screws, serial nameplate, and CRT shadow styling."
+    },
+    {
+      "date": "2026-10-02",
+      "summary": "Added an interactive Ionospheric Grayline Twilight Surge Predictor section and upgraded the tuner console visual styling with an illuminated vacuum pilot lamp and CRT glass glare."
     }
   ]
 }

@@ -175,7 +175,7 @@ const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
 // SDR Node Button Selection Listener
-const sdrBtns = document.querySelectorAll('.sdr-btn');
+sdrBtns = document.querySelectorAll('.sdr-btn');
 sdrBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     sdrBtns.forEach(b => b.classList.remove('active'));
@@ -780,6 +780,80 @@ if (reconTabs.length) {
     });
   });
   renderReconSite('kerro');
+}
+
+// Ionospheric Grayline Twilight Surge Predictor State
+const graylinePhases = {
+  dusk: {
+    name: 'Dusk Terminator (Prime Grayline)',
+    dLoss: '-1.4 dB (Minimal)',
+    reach: '8,800 km (Global DX)',
+    score: '96% • PEAK TRANSMISSION',
+    scoreClass: 'prop-surge',
+    notes: 'Rapid electron depletion in D-layer leaves upper F2-layer intact. 4625 kHz bounces between earth and ionosphere with near-zero attenuation, enabling trans-oceanic intercept.'
+  },
+  dawn: {
+    name: 'Dawn Twilight (Grayline)',
+    dLoss: '-3.2 dB (Low)',
+    reach: '6,400 km',
+    score: '88% • STRONG SURGE',
+    scoreClass: 'prop-surge',
+    notes: 'D-layer recombination beginning. Ionospheric refraction angle shifts, creating rapid skywave focusing across Baltic and Scandinavian listening stations.'
+  },
+  noon: {
+    name: 'Solar Peak Noon (Sun Zenith)',
+    dLoss: '-26.8 dB (Severe)',
+    reach: '380 km (Groundwave)',
+    score: '18% • SFI D-LAYER LOSS',
+    scoreClass: 'prop-low',
+    notes: 'Intense ultraviolet radiation saturates the lower D-layer (60–90 km alt), absorbing 4625 kHz waves before they can reach the reflective F-layer.'
+  },
+  night: {
+    name: 'Full Night Darkness (01:00 UTC)',
+    dLoss: '-0.5 dB (None)',
+    reach: '4,900 km',
+    score: '74% • MODERATE MULTIPATH',
+    scoreClass: 'prop-med',
+    notes: 'Clean propagation path, but subject to multi-hop phase cancellation and geomagnetic auroral flutter over sub-arctic latitudes.'
+  }
+};
+
+const graylinePhaseSelect = document.getElementById('graylinePhaseSelect');
+const glDLayerEl = document.getElementById('glDLayer');
+const glReachEl = document.getElementById('glReach');
+const glScoreEl = document.getElementById('glScore');
+const glNotesEl = document.getElementById('glNotes');
+const testSurgeBtn = document.getElementById('testSurgeBtn');
+
+function updateGrayline(phaseKey) {
+  const p = graylinePhases[phaseKey] || graylinePhases.dusk;
+  if (glDLayerEl) glDLayerEl.textContent = p.dLoss;
+  if (glReachEl) glReachEl.textContent = p.reach;
+  if (glScoreEl) {
+    glScoreEl.textContent = p.score;
+    glScoreEl.className = 'gl-val ' + p.scoreClass;
+  }
+  if (glNotesEl) glNotesEl.textContent = p.notes;
+}
+
+if (graylinePhaseSelect) {
+  graylinePhaseSelect.addEventListener('change', (e) => {
+    updateGrayline(e.target.value);
+    const selected = graylinePhases[e.target.value];
+    if (selected) showToast(`Terminator Phase: ${selected.name}`);
+  });
+}
+
+if (testSurgeBtn) {
+  testSurgeBtn.addEventListener('click', () => {
+    showToast('Simulating Grayline Surge (+24 dB RF peak)...');
+    if (sMeterBars && sMeterReadout) {
+      const bars = sMeterBars.querySelectorAll('.s-bar');
+      bars.forEach(b => b.classList.add('active'));
+      sMeterReadout.textContent = 'S9+30dB';
+      setTimeout(updateSMeter, 2600);
+    }
+  });
 }
 
 // Phonetic Cipher Reference Toggle
