@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -77,7 +77,7 @@
         </div>
         <div class="frequency-readout">
           <div class="freq-adjust-group">
-            <span class="label">VFO TUNING:</span>
+            <span class="label="VFO">VFO TUNING:</span>
             <span id="freqValue" class="mono-accent segment-display">4625.0 kHz</span>
             <div class="freq-step-controls">
               <button id="freqDownBtn" class="step-btn" title="Tune down 0.5 kHz" aria-label="Tune frequency down">-0.5</button>
@@ -440,6 +440,20 @@
       <div class="badge-small">DISPATCH #002 PREVIEW</div>
       <h3>Next Frequency: The 52-Hertz Wanderer</h3>
       <p>Tracking the loneliest call in the North Pacific Ocean &mdash; a marine acoustic anomaly that sings at a pitch no other whale can hear or answer.</p>
+      
+      <!-- Interactive 52Hz Whale Acoustic Reconstruction Module -->
+      <div class="whale-recon-box">
+        <div class="recon-subtext">ACOUSTIC MODELER: 52Hz SUB-SURFACE HYDROPHONE MATRIX</div>
+        <button id="playWhaleBtn" class="btn-whale-synth" aria-label="Synthesize 52-Hz whale song">
+          <span class="whale-icon">🐋</span> <span id="whaleBtnText">Synthesize 52-Hz Hydrophone Audio</span>
+        </button>
+        <div class="sonar-ping-radar">
+          <div class="ping-ring"></div>
+          <div class="ping-ring delays"></div>
+          <span class="telemetry-status-tag">RECEIVER: DEEP OCEAN VLF BUOY B-19</span>
+        </div>
+      </div>
+
       <div class="countdown-box">
         <span>Next signal opens in:</span>
         <strong id="countdownTimer">23:59:59</strong>

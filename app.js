@@ -11,6 +11,14 @@ let currentModeIndex = 0;
 const modes = ['AM', 'USB', 'LSB'];
 let volumeLevel = 0.7;
 
+// 52-Hertz Whale Simulator Variables
+let whaleIsPlaying = false;
+let whaleOsc1 = null;
+let whaleOsc2 = null;
+let whaleFilter = null;
+let whaleGain = null;
+let sonarIntervalId = null;
+
 // Global WebSDR Receiver Node Profiles
 const sdrNodes = {
   spb: {
@@ -123,6 +131,7 @@ let visMode = 'SCOPE';
 const visModeBtn = document.getElementById('visModeBtn');
 if (visModeBtn) {
   visModeBtn.addEventListener('click', () => {
+    playClick();
     visMode = visMode === 'SCOPE' ? 'WATERFALL' : 'SCOPE';
     visModeBtn.textContent = `VIS: ${visMode}`;
     visModeBtn.classList.toggle('active', visMode === 'WATERFALL');
@@ -174,10 +183,45 @@ const ticketHash = document.getElementById('ticketHash');
 const canvas = document.getElementById('oscilloscope');
 const canvasCtx = canvas.getContext('2d');
 
+// Tactile Switch Sound Synthesizer (Improvement 2)
+function playClick() {
+  if (!audioCtx) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContext();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  try {
+    const clickOsc = audioCtx.createOscillator();
+    const clickGain = audioCtx.createGain();
+    const clickFilter = audioCtx.createBiquadFilter();
+
+    clickOsc.type = 'triangle';
+    clickOsc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+    clickOsc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+
+    clickFilter.type = 'bandpass';
+    clickFilter.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+    clickGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+
+    clickOsc.connect(clickFilter);
+    clickFilter.connect(clickGain);
+    clickGain.connect(audioCtx.destination);
+
+    clickOsc.start();
+    clickOsc.stop(audioCtx.currentTime + 0.04);
+  } catch (e) {}
+}
+
 // SDR Node Button Selection Listener
 sdrBtns = document.querySelectorAll('.sdr-btn');
 sdrBtns.forEach(btn => {
   btn.addEventListener('click', () => {
+    playClick();
     sdrBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const sdrKey = btn.getAttribute('data-sdr') || 'spb';
@@ -195,6 +239,7 @@ sdrBtns.forEach(btn => {
 const phosBtns = document.querySelectorAll('.phos-btn');
 phosBtns.forEach(btn => {
   btn.addEventListener('click', () => {
+    playClick();
     phosBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentPhosphor = btn.getAttribute('data-phos') || 'green';
@@ -520,6 +565,7 @@ function stopAudio() {
 }
 
 playBtn.addEventListener('click', () => {
+  playClick();
   if (!isPlaying) {
     startAudio();
     isPlaying = true;
@@ -538,6 +584,7 @@ playBtn.addEventListener('click', () => {
 // RF Front-End Attenuator Toggle
 if (attToggleBtn) {
   attToggleBtn.addEventListener('click', () => {
+    playClick();
     currentAttIndex = (currentAttIndex + 1) % attLevels.length;
     const activeAtt = attLevels[currentAttIndex];
     attToggleBtn.textContent = activeAtt.label;
@@ -550,6 +597,7 @@ if (attToggleBtn) {
 // DSP Filter Bandwidth Toggle Handler
 if (filterBandwidthBtn) {
   filterBandwidthBtn.addEventListener('click', () => {
+    playClick();
     currentFilterIndex = (currentFilterIndex + 1) % filterBandwidths.length;
     const active = filterBandwidths[currentFilterIndex];
     filterBandwidthBtn.textContent = active.label;
@@ -572,7 +620,7 @@ if (volumeSlider) {
 }
 
 // VFO Frequency Stepper Controls
-function updateFrequency(newFreq) {
+function updateFrequency(newFreq) { 
   currentFreq = Math.round(newFreq * 10) / 10;
   if (currentFreq < 4622.0) currentFreq = 4622.0;
   if (currentFreq > 4628.0) currentFreq = 4628.0;
@@ -589,18 +637,21 @@ function updateFrequency(newFreq) {
 
 if (freqDownBtn) {
   freqDownBtn.addEventListener('click', () => {
+    playClick();
     updateFrequency(currentFreq - 0.5);
   });
 }
 
 if (freqUpBtn) {
   freqUpBtn.addEventListener('click', () => {
+    playClick();
     updateFrequency(currentFreq + 0.5);
   });
 }
 
 if (freqResetBtn) {
   freqResetBtn.addEventListener('click', () => {
+    playClick();
     updateFrequency(baseFreq);
   });
 }
@@ -608,6 +659,7 @@ if (freqResetBtn) {
 // Mode Switcher
 if (modeToggleBtn) {
   modeToggleBtn.addEventListener('click', () => {
+    playClick();
     currentModeIndex = (currentModeIndex + 1) % modes.length;
     const newMode = modes[currentModeIndex];
     modeToggleBtn.textContent = `MODE: ${newMode}`;
@@ -623,6 +675,7 @@ if (modeToggleBtn) {
 // QRN Static Noise Switcher
 if (qrnToggleBtn) {
   qrnToggleBtn.addEventListener('click', () => {
+    playClick();
     qrnActive = !qrnActive;
     qrnToggleBtn.textContent = qrnActive ? 'QRN NOISE: ON' : 'QRN NOISE: OFF';
     qrnToggleBtn.classList.toggle('active', qrnActive);
@@ -635,6 +688,7 @@ if (qrnToggleBtn) {
 // QRM Solar Flare Burst Interference Switcher
 if (qrmToggleBtn) {
   qrmToggleBtn.addEventListener('click', () => {
+    playClick();
     qrmActive = !qrmActive;
     qrmToggleBtn.textContent = qrmActive ? 'QRM BURST: ON' : 'QRM BURST: OFF';
     qrmToggleBtn.classList.toggle('active', qrmActive);
@@ -643,7 +697,7 @@ if (qrmToggleBtn) {
 }
 
 // Copy Telemetry Coords
-function showToast(msg) {
+function showToast(msg) { 
   if (!toastNotification) return;
   toastNotification.textContent = msg;
   toastNotification.classList.remove('hidden');
@@ -656,6 +710,7 @@ function showToast(msg) {
 
 if (copyCoordsBtn) {
   copyCoordsBtn.addEventListener('click', () => {
+    playClick();
     const textToCopy = "56°5′0″N 37°6′37″E | 4625.0 kHz (UVB-76)";
     navigator.clipboard.writeText(textToCopy).then(() => {
       showToast("Telemetry coordinates copied!");
@@ -668,7 +723,7 @@ if (copyCoordsBtn) {
 // Direction Finding (DF) Transmitter Triangulation Matrix
 const reconSitesData = {
   kerro: {
-    title: 'Site 60 &bull; 60th Communication Hub (Kerro Massif)',
+    title: 'Site 60 & bull; 60th Communication Hub (Kerro Massif)',
     coords: '60°18′49″N 30°16′40″E',
     location: 'Leningrad Oblast (North of St. Petersburg)',
     status: 'ACTIVE MAIN TRANSMITTER',
@@ -684,12 +739,12 @@ const reconSitesData = {
     notes: 'Primary transmitter hub since the September 2010 migration. Transmits continuous 4625 kHz skywave covering the Baltic basin and Nordic maritime borders.'
   },
   naro: {
-    title: 'Site 43 &bull; 43rd Communications Centre (Naro-Fominsk)',
+    title: 'Site 43 & bull; 43rd Communications Centre (Naro-Fominsk)',
     coords: '55°25′35″N 36°42′33″E',
     location: 'Moscow Oblast (Southwest of Moscow)',
     status: 'ACTIVE SECONDARY / BACKUP',
     statusClass: 'status-active',
-    antenna: 'Dual-feed Inverted VEE &amp; Horizontal T-Dipole',
+    antenna: 'Dual-feed Inverted VEE & amp; Horizontal T-Dipole',
     transmitter: 'PKV-50 Military HF Transceiver suite',
     bearings: [
       { station: 'Kyiv, Ukraine', dist: '690 km', az: '032°' },
@@ -700,12 +755,12 @@ const reconSitesData = {
     notes: 'Secondary transmitter cluster co-located with Western Military District garrison command. Provides groundwave fallback when northern atmospheric conditions fluctuate.'
   },
   povarovo: {
-    title: 'Bunker 430 &bull; Historical Military Garrison (Povarovo)',
+    title: 'Bunker 430 & bull; Historical Military Garrison (Povarovo)',
     coords: '56°05′00″N 37°06′37″E',
     location: 'Solnechnogorsky District, Moscow Oblast',
     status: 'DECOMMISSIONED (1982–2010)',
     statusClass: 'status-decom',
-    antenna: 'Remnants of Russian VGDSh mast guywires &amp; feedlines',
+    antenna: 'Remnants of Russian VGDSh mast guywires & amp; feedlines',
     transmitter: 'Soviet-era tube oscillator transmitter (dismantled)',
     bearings: [
       { station: 'Moscow Center', dist: '48 km', az: '315°' },
@@ -739,7 +794,7 @@ function renderReconSite(siteKey) {
       <div class="recon-coords-row">
         <span class="recon-coords-label">GRID COORDS:</span>
         <code class="recon-coords-code">${data.coords}</code>
-        <button class="recon-copy-btn" onclick="navigator.clipboard.writeText('${data.coords}').then(() => showToast('Transmitter coordinates copied!'))">📋 Copy</button>
+        <button class="recon-copy-btn" onclick="playClick(); navigator.clipboard.writeText('${data.coords}').then(() => showToast('Transmitter coordinates copied!'))">📋 Copy</button>
       </div>
       <div class="recon-meta-grid">
         <div class="recon-meta-item">
@@ -773,6 +828,7 @@ const reconTabs = document.querySelectorAll('#reconTabs .recon-tab');
 if (reconTabs.length) {
   reconTabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      playClick();
       reconTabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const siteKey = tab.getAttribute('data-site');
@@ -838,6 +894,7 @@ function updateGrayline(phaseKey) {
 
 if (graylinePhaseSelect) {
   graylinePhaseSelect.addEventListener('change', (e) => {
+    playClick();
     updateGrayline(e.target.value);
     const selected = graylinePhases[e.target.value];
     if (selected) showToast(`Terminator Phase: ${selected.name}`);
@@ -846,6 +903,7 @@ if (graylinePhaseSelect) {
 
 if (testSurgeBtn) {
   testSurgeBtn.addEventListener('click', () => {
+    playClick();
     showToast('Simulating Grayline Surge (+24 dB RF peak)...');
     if (sMeterBars && sMeterReadout) {
       const bars = sMeterBars.querySelectorAll('.s-bar');
@@ -859,6 +917,7 @@ if (testSurgeBtn) {
 // Phonetic Cipher Reference Toggle
 if (toggleDecoderBtn && decoderBox) {
   toggleDecoderBtn.addEventListener('click', () => {
+    playClick();
     decoderBox.classList.toggle('hidden');
     toggleDecoderBtn.textContent = decoderBox.classList.contains('hidden')
       ? '🔍 Phonetic Cipher Reference'
@@ -869,6 +928,7 @@ if (toggleDecoderBtn && decoderBox) {
 // Intercept Decryption Breakdown Toggle
 if (decryptBtn && decryptedBreakdown) {
   decryptBtn.addEventListener('click', () => {
+    playClick();
     decryptedBreakdown.classList.toggle('hidden');
     const isHidden = decryptedBreakdown.classList.contains('hidden');
     decryptBtn.textContent = isHidden
@@ -887,6 +947,7 @@ const timelineItems = document.querySelectorAll('#timelineList .timeline-item');
 if (filterChips.length && timelineItems.length) {
   filterChips.forEach(chip => {
     chip.addEventListener('click', () => {
+      playClick();
       filterChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       const filterVal = chip.getAttribute('data-filter');
@@ -906,6 +967,7 @@ if (filterChips.length && timelineItems.length) {
 // Shortwave Listener (SWL) Reception Log Stamp Handler
 if (logInterceptBtn && swlTicket) {
   logInterceptBtn.addEventListener('click', () => {
+    playClick();
     swlTicket.classList.remove('hidden');
     const now = new Date();
     const timeStr = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
@@ -926,6 +988,7 @@ if (logInterceptBtn && swlTicket) {
 
 if (copyTicketBtn) {
   copyTicketBtn.addEventListener('click', () => {
+    playClick();
     const rst = ticketRst ? ticketRst.textContent : '356';
     const zone = ticketZone ? ticketZone.textContent : 'Zone 14';
     const hash = ticketHash ? ticketHash.textContent : 'PF-4625';
@@ -936,6 +999,140 @@ if (copyTicketBtn) {
     }).catch(() => {
       showToast('Slip copied to clipboard!');
     });
+  });
+}
+
+// 52-Hertz Whale Synthesis Logic (Improvement 1)
+const playWhaleBtn = document.getElementById('playWhaleBtn');
+const whaleBtnText = document.getElementById('whaleBtnText');
+
+function triggerSonarPing() {
+  if (!audioCtx || !whaleIsPlaying) return;
+  try {
+    const sonarOsc = audioCtx.createOscillator();
+    const sonarGain = audioCtx.createGain();
+    const sonarFilter = audioCtx.createBiquadFilter();
+
+    sonarOsc.type = 'sine';
+    sonarOsc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    sonarOsc.frequency.exponentialRampToValueAtTime(750, audioCtx.currentTime + 1.2);
+
+    sonarFilter.type = 'bandpass';
+    sonarFilter.frequency.setValueAtTime(800, audioCtx.currentTime);
+    sonarFilter.Q.setValueAtTime(10, audioCtx.currentTime);
+
+    sonarGain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+    sonarGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.0);
+
+    sonarOsc.connect(sonarFilter);
+    sonarFilter.connect(sonarGain);
+    sonarGain.connect(audioCtx.destination);
+
+    sonarOsc.start();
+    sonarOsc.stop(audioCtx.currentTime + 2.2);
+  } catch (e) {}
+}
+
+function startWhaleAudio() {
+  if (!audioCtx) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContext();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
+  whaleOsc1 = audioCtx.createOscillator();
+  whaleOsc2 = audioCtx.createOscillator();
+  whaleFilter = audioCtx.createBiquadFilter();
+  whaleGain = audioCtx.createGain();
+
+  // Famous 52-Hertz primary frequency
+  whaleOsc1.type = 'sine';
+  whaleOsc1.frequency.setValueAtTime(51.8, audioCtx.currentTime);
+
+  // Deep secondary harmonic to make it rich and audible on mobile speakers
+  whaleOsc2.type = 'triangle';
+  whaleOsc2.frequency.setValueAtTime(103.6, audioCtx.currentTime);
+
+  whaleFilter.type = 'lowpass';
+  whaleFilter.frequency.setValueAtTime(140, audioCtx.currentTime);
+
+  whaleGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+  whaleOsc1.connect(whaleFilter);
+  whaleOsc2.connect(whaleFilter);
+  whaleFilter.connect(whaleGain);
+  whaleGain.connect(audioCtx.destination);
+
+  whaleOsc1.start();
+  whaleOsc2.start();
+
+  // Periodic whale moaning loop
+  function scheduleWhaleMoan() {
+    if (!whaleIsPlaying) return;
+    const now = audioCtx.currentTime;
+    
+    // Slowly fluctuate frequency up and down around 52Hz
+    whaleOsc1.frequency.cancelScheduledValues(now);
+    whaleOsc1.frequency.setValueAtTime(51.8, now);
+    whaleOsc1.frequency.linearRampToValueAtTime(54.2, now + 1.5);
+    whaleOsc1.frequency.exponentialRampToValueAtTime(49.5, now + 3.2);
+    whaleOsc1.frequency.linearRampToValueAtTime(51.8, now + 4.5);
+
+    whaleGain.gain.cancelScheduledValues(now);
+    whaleGain.gain.setValueAtTime(0.001, now);
+    whaleGain.gain.linearRampToValueAtTime(0.35, now + 1.2);
+    whaleGain.gain.setValueAtTime(0.35, now + 2.8);
+    whaleGain.gain.exponentialRampToValueAtTime(0.001, now + 4.5);
+  }
+
+  scheduleWhaleMoan();
+  intervalIdWhale = setInterval(scheduleWhaleMoan, 6000);
+
+  // Periodic Submarine Sonar Ping
+  triggerSonarPing();
+  sonarIntervalId = setInterval(triggerSonarPing, 5000);
+}
+
+function stopWhaleAudio() {
+  if (intervalIdWhale) clearInterval(intervalIdWhale);
+  if (sonarIntervalId) clearInterval(sonarIntervalId);
+  if (whaleGain && audioCtx) {
+    whaleGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    whaleGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+  }
+  if (whaleOsc1) {
+    try { whaleOsc1.stop(); } catch(e) {}
+    whaleOsc1.disconnect();
+    whaleOsc1 = null;
+  }
+  if (whaleOsc2) {
+    try { whaleOsc2.stop(); } catch(e) {}
+    whaleOsc2.disconnect();
+    whaleOsc2 = null;
+  }
+}
+
+if (playWhaleBtn) {
+  playWhaleBtn.addEventListener('click', () => {
+    playClick();
+    if (!whaleIsPlaying) {
+      // Halt main receiver if playing to avoid acoustic clash
+      if (isPlaying && playBtn) {
+        playBtn.click();
+      }
+      startWhaleAudio();
+      whaleIsPlaying = true;
+      playWhaleBtn.classList.add('playing');
+      whaleBtnText.textContent = "Halt 52-Hz Hydrophone Telemetry";
+      showToast("Hydrophone Feed Live: Listening to 52Hz Whale");
+    } else {
+      stopWhaleAudio();
+      whaleIsPlaying = false;
+      playWhaleBtn.classList.remove('playing');
+      whaleBtnText.textContent = "Synthesize 52-Hz Hydrophone Audio";
+    }
   });
 }
 
